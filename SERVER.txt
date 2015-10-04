@@ -1,0 +1,4 @@
+DB:
+name: dae_gpe
+user: gpe
+pass: sO6#iS7?
