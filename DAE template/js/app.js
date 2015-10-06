@@ -1,74 +1,40 @@
-﻿var App = new (function(){
-    var appCtrl = this;
-
-    appCtrl.init = function(){
-        appCtrl.initResizableSite();
-        Content.init($("body"));
-    };
-
-    appCtrl.initResizableSite = function() {
-        var resizePageSite = function(){
-            var body = $("body");
-            var navbar = $("body > nav.navbar");
-            var site = $("body > .site");
-            var sidebar = $("body > .site > .sidebar-wrapper");
-            var content = $("body > .site > .content-wrapper");
-
-            body.css("height", "");
-            site.css("height", "");
-            sidebar.css("height", "");
-            content.css("height", "");
-
-            var bodyH = body[0].scrollHeight;
-            var windowH = $(window).height();
-            var navbarH = navbar.outerHeight();
-            var sidebarH = sidebar.outerHeight()
-
-            console.log(bodyH, windowH, navbarH, sidebarH);
-
-            var height;
-            if(bodyH > windowH) height = bodyH;
-            else height = windowH;
-            if(sidebarH + navbarH > height) height = sidebarH + navbarH;
-
-            body.css("height", height);
-            height -= navbarH;
-            site.css("height", height);
-            sidebar.css("height", height);
-            content.css("height", height);
-        }
-
-        $(window).resize(function(){
-            resizePageSite();
-        });
-        resizePageSite();
-    };
-
-})();
-
-
-var Sidebar = new (function(){
+var Sidebar = new(function () {
     var sidebarCtrl = this;
     var sidebar = $("body .sidebar");
 
-    sidebarCtrl.init = function(){
+    sidebarCtrl.init = function () {
+        $(".toggle", sidebar).click(function (e) {
+            e.preventDefault();
+            var parent = $(this).parent();
+            var nestedUl = $("ul", parent);
+            var liCount = $("li", nestedUl).length;
 
-    }
+
+            if (parent.hasClass("open")) {
+                nestedUl.css("height", "0");
+            } else {
+                var liCount = $("li", nestedUl).length;
+                nestedUl.css("height", 46 * liCount);
+            }
+
+            parent.toggleClass("open");
+
+        });
+    };
 
     return sidebarCtrl;
-});
+})();
 
-
-var Content = new (function () {
+var Content = new(function () {
     var contentCtrl = this;
     var element;
 
-    contentCtrl.init = function(elem, onComplete){
+    contentCtrl.init = function (elem, onComplete) {
         element = elem;
         contentCtrl.initTabs();
         contentCtrl.initTooltips();
 
-        if(typeof onComplete !== "undefined")
+        if (typeof onComplete !== "undefined")
             onComplete();
     }
 
@@ -120,18 +86,18 @@ var Content = new (function () {
         if (element.find('select[data-plugin="selector"]').length) {
             element.find('select[data-plugin="selector"]').each(function () {
 
-                var options =
-                {
+                var options = {
                     allowClear: true,
                     minimumResultsForSearch: ($(this).attr('data-selector-search') != undefined && $(this).attr('data-selector-search') == 'no') ? -1 : 0
                 };
 
                 if ($(this).attr('data-selector-picture') != undefined && $(this).attr('data-selector-picture') == 'yes') {
-                    var config =
-                    {
+                    var config = {
                         formatResult: pictureFormater,
                         formatSelection: pictureFormater,
-                        escapeMarkup: function (m) { return m; }
+                        escapeMarkup: function (m) {
+                            return m;
+                        }
                     }
                     options = $.extend({}, options, config);
                 }
@@ -164,9 +130,53 @@ var Content = new (function () {
     return contentCtrl;
 })();
 
+var App = new(function () {
+    var appCtrl = this;
 
+    appCtrl.init = function () {
+        appCtrl.initResizableSite();
+        Sidebar.init();
+        Content.init($("body"));
+    };
 
-$(function(){
+    appCtrl.initResizableSite = function () {
+        var resizePageSite = function () {
+            var body = $("body");
+            var navbar = $("body > nav.navbar");
+            var site = $("body > .site");
+            var sidebar = $("body > .site > .sidebar-wrapper");
+            var content = $("body > .site > .content-wrapper");
+
+            body.css("height", "");
+            site.css("height", "");
+            sidebar.css("height", "");
+            content.css("height", "");
+
+            var bodyH = body[0].scrollHeight;
+            var windowH = $(window).height();
+            var navbarH = navbar.outerHeight();
+            var sidebarH = sidebar.outerHeight()
+
+            var height;
+            if (bodyH > windowH) height = bodyH;
+            else height = windowH;
+            if (sidebarH + navbarH > height) height = sidebarH + navbarH;
+
+            body.css("height", height);
+            height -= navbarH;
+            site.css("height", height);
+            sidebar.css("height", height);
+            content.css("height", height);
+        }
+
+        $(window).resize(function () {
+            resizePageSite();
+        });
+        resizePageSite();
+    };
+
+})();
+
+$(function () {
     App.init();
 });
-

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Beans;
+package Facades;
 
 import Entities.User;
+import Entities.UserRole;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +18,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author joeld
  */
-@Stateless
-public class UserFacade extends AbstractFacade<User> {
+public class UserRoleFacade extends AbstractFacade<UserRole> {
     @PersistenceContext(unitName = "GPE-ejbPU")
     private EntityManager em;
 
@@ -27,27 +27,27 @@ public class UserFacade extends AbstractFacade<User> {
         return em;
     }
 
-    public UserFacade() {
-        super(User.class);
+    public UserRoleFacade() {
+        super(UserRole.class);
     }
     
-    public List<String> Save(User user){
+    
+    public List<String> Save(UserRole userRole){
         List<String> errors = new ArrayList<>();
         
         //TODO - check for errors
         
         if(errors.isEmpty()){
-            if(user.isNew()){
-                user.setDatecreated(new Date());
-                super.create(user);
+            if(userRole.isNew()){
+                userRole.setDatecreated(new Date());
+                super.create(userRole);
             }
             else{
-                user.setDateupdated(new Date());
-                super.edit(user);
+                userRole.setDateupdated(new Date());
+                super.edit(userRole);
             }
         }
         
         return errors;
     }
-    
 }

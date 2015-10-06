@@ -1,278 +1,266 @@
-html.fullscreen-page, 
-html.fullscreen-page body{
-	height: 100%;
-	width: 100%;
-	overflow: hidden;
+html.fullscreen-page,
+html.fullscreen-page body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
-
 .input-group-addon {
-	background: none;
-	border:none; 
+    background: none;
+    border: none;
 }
-
-input.form-control, input.form-control:focus, input.form-control:active, input.form-control:hover{
-	border-top-color: transparent;
-	border-right-color: transparent;
-	border-left-color: transparent;
-	box-shadow: none;
-	border-radius: 0;
-	border-bottom-width: 1px;
+input.form-control,
+input.form-control:focus,
+input.form-control:active,
+input.form-control:hover {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    border-bottom-width: 1px;
 }
-
-.btn.btn-circle{
-	width: 50px;
-	height: 50px;
-	line-height: 50px;
-	text-align: center;
-	font-size: 20px;
-	padding: 0;
-	margin: 0;
-	border-radius: 50%;
-	box-shadow: 0 0 4px #404040;
-	transition: all 0.2s ease;
+.btn.btn-circle {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 4px #404040;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
-
-.btn.btn-circle:hover{
-	box-shadow: 0 0 0px #404040;
-	font-size: 28px;
+.btn.btn-circle:hover {
+    box-shadow: 0 0 0px #404040;
+    font-size: 28px;
 }
-
-.btn.btn-circle.btn-circle-sm{
-	width: 34px;
-	height: 34px;
-	line-height: 34px;
-	font-size: 16px;
+.btn.btn-circle.btn-circle-sm {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    font-size: 16px;
 }
-
-.btn.btn-circle.btn-circle-sm:hover{
-	font-size: 24px;
+.btn.btn-circle.btn-circle-sm:hover {
+    font-size: 24px;
 }
-
-.btn.btn-circle.btn-circle-lg{
-	width: 68px;
-	height: 68px;
-	line-height: 68px;
-	font-size: 24px;
+.btn.btn-circle.btn-circle-lg {
+    width: 68px;
+    height: 68px;
+    line-height: 68px;
+    font-size: 24px;
 }
-
-.btn.btn-circle.btn-circle-sm:hover{
-	font-size: 32px;
+.btn.btn-circle.btn-circle-sm:hover {
+    font-size: 32px;
 }
-
-.navbar{
-	margin-bottom: 0;
+.navbar {
+    background-color: #37474F;
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
 }
-
-.navbar .container-fluid{
-	margin: 0 10px;
+.navbar .container-fluid {
+    margin: 0 10px;
 }
-
-.navbar .brand{
-	display: inline-block;
-	text-align: left;
-	text-decoration: none;
+.navbar .brand {
+    display: inline-block;
+    text-align: left;
+    text-decoration: none;
 }
-
-.navbar .brand h1{
-	padding: 0;
-	margin: 0;
-	line-height: 1.2;
-	font-size: 30px;
-	font-weight: 600;
-	color: #37474f;
+.navbar .brand h1 {
+    padding: 0;
+    margin: 0;
+    line-height: 50px;
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
 }
-.navbar .brand h1 small{
-	font-weight: 600;
-	color: #37474f;
+.navbar .brand h1 small {
+    font-weight: 600;
+    color: white;
 }
-
-.navbar .user-nav{
-	position: absolute;
-	right: 10px;
-	top:5px; 
+.navbar .user-nav {
+    float: right;
 }
-
-.navbar .user-nav img{
-	height: 60px;
-	width: 60px;
+.navbar .user-nav button {
+    color: white;
+    padding: 0;
+    margin: 0;
+    line-height: 50px;
 }
-
-.site{
-	position: relative;
-	width: 100%;
-	height: 100%;
-	padding: 0;
-	margin: 0;
+.navbar .user-nav button:hover,
+.navbar .user-nav button:active,
+.navbar .user-nav button:focus {
+    color: white;
+    text-decoration: underline;
 }
-
-.site .sidebar-wrapper{
-	position: absolute;
-	width: 250px;
-	height: 100%;
-	z-index: 1;
-	background-color: #37474f;
+.site {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
 }
-
-.site .sidebar-wrapper .sidebar{
-	padding: 20px 0 0;
+.sidebar-wrapper {
+    position: absolute;
+    width: 250px;
+    height: 100%;
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0 1px 3px #607d8b
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options{
-	margin-top: 10px;
-	overflow: hidden;
+.sidebar {
+    padding: 0;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options, 
-.site .sidebar-wrapper .sidebar #sidebar-options ul {
-	list-style-type:none;
-	padding: 0px;
-	margin: 0px;
+.sidebar #sidebar-options {
+    margin-top: 10px;
+    overflow: hidden;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options li a{
-	position: relative;
-	display: block;
-	color: #cfd8dc;
-	font-size: 14px;
-	padding: 13px 10px;
-	transition: all 0.1s ease 0s;
-	text-decoration: none;
+.sidebar #sidebar-options,
+.sidebar #sidebar-options ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options li a:hover{
-	background-color: #26a69a;
-	color: #eceff1;
+.sidebar #sidebar-options li a {
+    position: relative;
+    display: block;
+    color: #444;
+    font-size: 14px;
+    padding: 13px 10px;
+    -webkit-transition: all 0.1s ease 0s;
+    transition: all 0.1s ease 0s;
+    text-decoration: none;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options li a i {
-	display: inline-block;
-	font-size: 14px;
-	margin: 0px 10px;
-	text-align: center;
-	width: 20px;
+.sidebar #sidebar-options li a:hover {
+    background-color: #607d8b;
+    color: white;
 }
-
-
-.site .sidebar-wrapper .sidebar #sidebar-options > li.active > a{
-	border-left: 5px solid #26a69a;
-	color: white;
+.sidebar #sidebar-options li a i {
+    display: inline-block;
+    font-size: 14px;
+    margin: 0px 10px;
+    text-align: center;
+    width: 20px;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options > li > a > i {
-	margin: 0px 10px 0 5px;
+.sidebar #sidebar-options > li.active > a {
+    border-left: 5px solid #37474F;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options > li.open > a{
-	background-color: #e0f2f1;
-	color: #232B2D;
+.sidebar #sidebar-options > li > a > i {
+    margin: 0px 10px 0 5px;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options > li.open > a > span > i{
-	transform: rotate(90deg); 
+.sidebar #sidebar-options > li > a > span .fa-minus,
+.sidebar #sidebar-options > li > a > span .fa-plus {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 46px;
+    width: 16px;
+    line-height: 46px;
+    -webkit-transition: font-size 0.3s ease;
+    transition: font-size 0.3s ease;
 }
-
-
-.site .sidebar-wrapper .sidebar #sidebar-options > li > ul{
-	height: 0;
-	overflow: hidden;
-	transition: height 0.3s ease 0;
+.sidebar #sidebar-options > li > a .fa-plus {
+    font-size: 16px;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options > li.open > ul{
-	height: auto;
+.sidebar #sidebar-options > li > a .fa-minus {
+    font-size: 0;
 }
-
-.site .sidebar-wrapper .sidebar #sidebar-options > li > ul li a{
-	background-color: #232B2D;
+.sidebar #sidebar-options > li.open > a {
+    background-color: #eceff1;
+    color: #232B2D;
 }
-
-
-
-
-
-
-
-.site .content-wrapper{
-	position: relative;
-	width: 100%;
-	padding: 250px;
-	height: 100%;
+.sidebar #sidebar-options > li.open > a > span > .fa-plus {
+    font-size: 0;
 }
-
-.vertical-align-container{
-	display: table;
-	width: 100%;
-	height: 100%;
+.sidebar #sidebar-options > li.open > a > span > .fa-minus {
+    font-size: 16px;
 }
-
-.vertical-aligned-content{
-	display: table-cell;
-	text-align: center;
-	vertical-align: middle;
+.sidebar #sidebar-options > li > ul {
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: height 0.5s ease;
+    transition: height 0.5s ease;
 }
-
-.panel{
-	border-radius: 2px;
-	box-shadow: 0 0 2px #aaa;
+.sidebar #sidebar-options > li.open > ul {
+    height: auto;
 }
-
+.sidebar #sidebar-options > li > ul li a {
+    background-color: #b0bec5;
+}
+.content-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 250px;
+    height: 100%;
+    background-color: #eceff1;
+}
+.vertical-align-container {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+.vertical-aligned-content {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+.panel {
+    border-radius: 2px;
+    box-shadow: 0 0 2px #aaa;
+}
 
 /****************************************************/
+
+
 /*                     Pages                        */
+
+
 /****************************************************/
-body .loader{
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #aaa;
-	display: none;
+
+body .loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #aaa;
+    display: none;
 }
-
-body .loader.loading{
-	display: block;
-	z-index: 9999;
+body .loader.loading {
+    display: block;
+    z-index: 9999;
 }
-
-
-body#LoginPage{
-	text-align: center;
-	background: #ddd;
-	background: -moz-linear-gradient(top,  #ddd 50%, #404040 50%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#ddd), color-stop(50%,#404040));
-	background: -webkit-linear-gradient(top,  #ddd 50%,#404040 50%);
-	background: -o-linear-gradient(top,  #ddd 50%,#404040 50%);
-	background: -ms-linear-gradient(top,  #ddd 50%,#404040 50%);
-	background: linear-gradient(to bottom,  #ddd 50%,#404040 50%);
-	color: #5E5E5E;
+body#LoginPage {
+    text-align: center;
+    background: #ECEFF1;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(50%, #ECEFF1), color-stop(50%, #404040));
+    background: -webkit-linear-gradient(top, #ECEFF1 50%, #404040 50%);
+    background: linear-gradient(to bottom, #ECEFF1 50%, #404040 50%);
+    color: #5E5E5E;
 }
-
-body#LoginPage .panel{
-	position: relative;
-	display: inline-block;
-	width: 400px;
-	height: 160px;
-	margin:0 auto;
-	padding: 10px 0 0;
+body#LoginPage .panel {
+    position: relative;
+    display: inline-block;
+    width: 400px;
+    height: 160px;
+    margin: 0 auto;
+    padding: 10px 0 0;
 }
-
-body#LoginPage img{
-	position: absolute;
-	left: -300px;
-	top: 0;
+body#LoginPage img {
+    position: absolute;
+    left: -300px;
+    top: 0;
 }
-
-body#LoginPage form{
-	padding: 0 30px 0 15px;
+body#LoginPage form {
+    padding: 0 45px 0 15px;
 }
-
-body#LoginPage .form-group{
-	text-align: left;
+body#LoginPage .form-group {
+    text-align: left;
 }
-
-body#LoginPage .btn.btn-circle{
-	position: absolute;
-	right: -25px;
-	top:55px;
+body#LoginPage .btn.btn-circle {
+    position: absolute;
+    right: -25px;
+    top: 55px;
 }

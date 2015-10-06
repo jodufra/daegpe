@@ -3,17 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package AppConfigs;
-
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+package Beans;
 
 /**
  *
  * @author joeld
  */
-@ApplicationPath("")
-public class MVCConfiguration extends Application {
+public abstract class AbstractBean<T,I> {
     
+    public abstract I Transform (T object);
     
 }
