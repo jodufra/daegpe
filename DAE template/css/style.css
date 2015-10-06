@@ -175,6 +175,22 @@ input.form-control, input.form-control:focus, input.form-control:active, input.f
 /****************************************************/
 /*                     Pages                        */
 /****************************************************/
+body .loader{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #aaa;
+	display: none;
+}
+
+body .loader.loading{
+	display: block;
+	z-index: 9999;
+}
+
+
 body#LoginPage{
 	text-align: center;
 	background: #ddd;
