@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entities;
+package entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,8 +30,8 @@ import javax.validation.constraints.Size;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
-    @NamedQuery(name = "User.findByIduser", query = "SELECT u FROM User u WHERE u.iduser = :iduser"),
-    @NamedQuery(name = "User.findByInternalid", query = "SELECT u FROM User u WHERE u.internalid = :internalid"),
+    @NamedQuery(name = "User.findByIduser", query = "SELECT u FROM User u WHERE u.idUser = :iduser"),
+    @NamedQuery(name = "User.findByInternalid", query = "SELECT u FROM User u WHERE u.internalId = :internalid"),
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search")
@@ -66,9 +66,9 @@ public class User extends AbstractEntity implements Serializable {
     private String search;
     @Temporal(TemporalType.DATE)
     private Date dateBirth;
-    @Column(name = "IDUSERROLE")
-    @JoinColumn(name = "IDUSERROLE", referencedColumnName = "IDUSERROLE")
     @ManyToOne(optional = false)
+    @JoinColumn(name = "idUserRole")
+    @NotNull
     private UserRole userRole;
 
     public User() {

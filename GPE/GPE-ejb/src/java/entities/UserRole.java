@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entities;
+package entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -30,7 +29,6 @@ import javax.validation.constraints.Size;
 @Table(name = "user_role")
 @NamedQueries({
     @NamedQuery(name = "UserRole.findAll", query = "SELECT u FROM UserRole u"),
-    @NamedQuery(name = "UserRole.findByIduserrole", query = "SELECT u FROM UserRole u WHERE u.iduserrole = :iduserrole"),
     @NamedQuery(name = "UserRole.findByName", query = "SELECT u FROM UserRole u WHERE u.name = :name")
 })
 public class UserRole extends AbstractEntity implements Serializable {
@@ -38,23 +36,27 @@ public class UserRole extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     private Integer idUserRole;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUserRole")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRole")
     private Collection<User> users;
 
     public UserRole() {
-        users = new ArrayList<>();
+    }
+
+    public UserRole(String name) {
+        this.idUserRole = 0;
+        this.name = name;
+        this.users = new ArrayList<>();
     }
 
     public UserRole(Integer idUserRole, String name) {
         this.idUserRole = idUserRole;
         this.name = name;
-        users = new ArrayList<>();
+        this.users = new ArrayList<>();
     }
 
     public Integer getIdUserRole() {

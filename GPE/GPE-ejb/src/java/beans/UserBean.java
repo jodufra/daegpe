@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Beans;
+package beans;
 
-import DTOs.UserDTO;
-import Entities.User;
+import dtos.UserDTO;
+import entities.User;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,17 +33,12 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     }
 
     @Override
-    protected UserDTO transformToDTO(User entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected UserDTO generateDTO(User entity) {
+        return new UserDTO();
     }
 
     @Override
-    protected User findEntityFromDTO(UserDTO dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<String> Save(UserDTO dto) {
+    public List<String> save(UserDTO dto) {
         List<String> errors = new ArrayList<>();
 
         //TODO: check for errors

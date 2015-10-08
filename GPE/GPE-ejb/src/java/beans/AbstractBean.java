@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Beans;
+package beans;
 
-import DTOs.AbstractDTO;
-import Entities.AbstractEntity;
+import dtos.AbstractDTO;
+import entities.AbstractEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,17 +29,13 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
     }
 
     protected abstract EntityManager getEntityManager();
+    protected abstract DTO generateDTO(Entity entity);
+    public abstract List<String> save(DTO dto);
 
-    protected abstract DTO transformToDTO(Entity entity);
-
-    protected abstract Entity findEntityFromDTO(DTO dto);
-
-    public abstract List<String> Save(DTO dto);
-
-    protected List<DTO> transformToDTOList(List<Entity> list) {
+    protected List<DTO> generateDTOList(List<Entity> entities) {
         List<DTO> results = new ArrayList<>();
-        for (Entity entity : list) {
-            results.add(transformToDTO(entity));
+        for (Entity entity : entities) {
+            results.add(generateDTO(entity));
         }
         return results;
     }
@@ -58,14 +54,18 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         }
     }
 
+    protected Entity findEntityFromDTO(Object id) {
+        return getEntityManager().find(entityClass, id);
+    }
+
     public DTO find(Object id) {
-        return transformToDTO(getEntityManager().find(entityClass, id));
+        return generateDTO(findEntityFromDTO(id));
     }
 
     public List<DTO> findAll() {
         CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
-        return transformToDTOList(getEntityManager().createQuery(cq).getResultList());
+        return generateDTOList(getEntityManager().createQuery(cq).getResultList());
     }
 
     public List<DTO> findRange(int[] range) {
@@ -74,7 +74,7 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
-        return transformToDTOList(q.getResultList());
+        return generateDTOList(q.getResultList());
     }
 
     public int count() {
