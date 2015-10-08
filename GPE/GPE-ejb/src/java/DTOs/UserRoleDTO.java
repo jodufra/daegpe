@@ -5,12 +5,11 @@
  */
 package DTOs;
 
-
 /**
  *
  * @author joeld
  */
-public class UserDTO extends AbstractDTO{
+public class UserRoleDTO extends AbstractDTO {
 
     @Override
     public boolean isNew() {

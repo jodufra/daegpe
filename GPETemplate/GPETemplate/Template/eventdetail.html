@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Evento | Gestão de Presenças</title>
+    <link href="Content/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="Content/plugins/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="Content/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="loader"></div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <a class="brand" href="index.html">
+                <h1>GESTOR <small>DE</small> PRESENÇAS</h1>
+            </a>
+            <span class="user-nav">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        User Name <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="#">Minha Conta</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="login.html">Logout</a></li>
+                    </ul>
+                </div>
+            </span>
+        </div>
+    </nav>
+
+    <div class="site">
+        <div class="sidebar-wrapper">
+            <div class="sidebar">
+                <ul id="sidebar-options">
+                    <li><a href="index.html"><i class="fa fa-home"></i>Dashboard</a></li>
+                    <li class="active">
+                        <a href="#option1" class="toggle">
+                            <i class="fa fa-calendar"></i>Eventos
+                            <span class="pull-right">
+                                <i class="fa fa-plus"></i>
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </a>
+                        <ul id="option1">
+                            <li><a href="eventdetail.html"><i class="fa fa-plus-square"></i>Adicionar</a></li>
+                            <li><a href="/"><i class="fa fa-list"></i>Listar</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#option2" class="toggle">
+                            <i class="fa fa-user"></i>Utilizadores
+                            <span class="pull-right">
+                                <i class="fa fa-plus"></i>
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </a>
+                        <ul id="option2">
+                            <li><a href="/"><i class="fa fa-plus-square"></i>Adicionar</a></li>
+                            <li><a href="/"><i class="fa fa-list"></i>Listar</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="breadcrumb-holder">
+                <ul class="breadcrumb">
+                    <li>Adicionar Evento</li>
+                    <li><a href="index.html">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="content">
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script src="Content/plugins/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="Content/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="Content/js/app.js" type="text/javascript"></script>
+</body>
+
+</html>

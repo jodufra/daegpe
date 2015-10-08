@@ -8,6 +8,7 @@ package Entities;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -36,21 +36,22 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search")
 })
-public class User implements Serializable {
+public class User extends AbstractEntity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    private Integer iduser;
+    private Integer idUser;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    private String internalid;
+    private String internalId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     private String name;
-    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")
+    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Invalid email")
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -64,44 +65,36 @@ public class User implements Serializable {
     @Size(max = 255)
     private String search;
     @Temporal(TemporalType.DATE)
-    private Date datebirth;
-    @Temporal(TemporalType.DATE)
-    private Date datelastlogin;
-    @Basic(optional = false)
-    @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date datecreated;
-    @Temporal(TemporalType.DATE)
-    private Date dateupdated;
+    private Date dateBirth;
+    @Column(name = "IDUSERROLE")
     @JoinColumn(name = "IDUSERROLE", referencedColumnName = "IDUSERROLE")
     @ManyToOne(optional = false)
-    private UserRole iduserrole;
+    private UserRole userRole;
 
     public User() {
     }
 
-    public User(String internalid, String name, String email, String password, Date datecreated) {
-        this.internalid = internalid;
+    public User(String internalid, String name, String email, String password) {
+        this.internalId = internalid;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.datecreated = datecreated;
     }
 
-    public Integer getIduser() {
-        return iduser;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setIduser(Integer iduser) {
-        this.iduser = iduser;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 
-    public String getInternalid() {
-        return internalid;
+    public String getInternalId() {
+        return internalId;
     }
 
-    public void setInternalid(String internalid) {
-        this.internalid = internalid;
+    public void setInternalId(String internalId) {
+        this.internalId = internalId;
     }
 
     public String getName() {
@@ -144,54 +137,31 @@ public class User implements Serializable {
         this.search = search;
     }
 
-    public Date getDatebirth() {
-        return datebirth;
+    public Date getDateBirth() {
+        return dateBirth;
     }
 
-    public void setDatebirth(Date datebirth) {
-        this.datebirth = datebirth;
+    public void setDateBirth(Date dateBirth) {
+        this.dateBirth = dateBirth;
     }
 
-    public Date getDatelastlogin() {
-        return datelastlogin;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setDatelastlogin(Date datelastlogin) {
-        this.datelastlogin = datelastlogin;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
-    public Date getDatecreated() {
-        return datecreated;
-    }
-
-    public void setDatecreated(Date datecreated) {
-        this.datecreated = datecreated;
-    }
-
-    public Date getDateupdated() {
-        return dateupdated;
-    }
-
-    public void setDateupdated(Date dateupdated) {
-        this.dateupdated = dateupdated;
-    }
-
-    public UserRole getIduserrole() {
-        return iduserrole;
-    }
-
-    public void setIduserrole(UserRole iduserrole) {
-        this.iduserrole = iduserrole;
-    }
-    
-    public boolean isNew(){
-        return iduser == 0;
+    @Override
+    public boolean isNew() {
+        return idUser == 0;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (iduser != null ? iduser.hashCode() : 0);
+        hash += (idUser != null ? idUser.hashCode() : 0);
         return hash;
     }
 
@@ -202,7 +172,7 @@ public class User implements Serializable {
             return false;
         }
         User other = (User) object;
-        if ((this.iduser == null && other.iduser != null) || (this.iduser != null && !this.iduser.equals(other.iduser))) {
+        if ((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser))) {
             return false;
         }
         return true;
@@ -210,7 +180,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "Entities.User[ iduser=" + iduser + " ]";
+        return "Entities.User[ iduser=" + idUser + " ]";
     }
-    
+
 }

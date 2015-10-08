@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{77AFB116-892B-45BB-A546-7EEBBB48C325}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GPETemplate</RootNamespace>
+    <AssemblyName>GPETemplate</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Template\Content\plugins\bootstrap\css\bootstrap-theme.css.map" />
+    <None Include="Template\Content\plugins\bootstrap\css\bootstrap.css.map" />
+    <None Include="Template\Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Template\Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="Template\Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Template\Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Template\Content\plugins\flexslider\fonts\flexslider-icon.eot" />
+    <None Include="Template\Content\plugins\flexslider\fonts\flexslider-icon.ttf" />
+    <None Include="Template\Content\plugins\flexslider\fonts\flexslider-icon.woff" />
+    <None Include="Template\Content\plugins\font-awesome\fonts\fontawesome-webfont.eot" />
+    <None Include="Template\Content\plugins\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <None Include="Template\Content\plugins\font-awesome\fonts\fontawesome-webfont.woff" />
+    <None Include="Template\Content\plugins\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <None Include="Template\Content\plugins\font-awesome\fonts\FontAwesome.otf" />
+    <None Include="Template\Content\plugins\font-awesome\less\animated.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\bordered-pulled.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\core.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\fixed-width.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\font-awesome.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\icons.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\larger.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\list.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\mixins.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\path.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\rotated-flipped.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\spinning.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\stacked.less" />
+    <None Include="Template\Content\plugins\font-awesome\less\variables.less" />
+    <None Include="Template\Content\plugins\font-awesome\scss\font-awesome.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_animated.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_bordered-pulled.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_core.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_fixed-width.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_icons.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_larger.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_list.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_mixins.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_path.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_rotated-flipped.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_spinning.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_stacked.scss" />
+    <None Include="Template\Content\plugins\font-awesome\scss\_variables.scss" />
+    <None Include="Template\Content\plugins\selectize\css\selectize.bootstrap3.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Template\Content\css\style.css" />
+    <Content Include="Template\eventdetail.html" />
+    <Content Include="Template\Content\img\logo_ipl_footer.png" />
+    <Content Include="Template\Content\img\logo_ipl_header.png" />
+    <Content Include="Template\Content\img\samples\60x60.png" />
+    <Content Include="Template\index.html" />
+    <Content Include="Template\Content\js\app.js" />
+    <Content Include="Template\login.html" />
+    <Content Include="Template\Content\plugins\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Template\Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Template\Content\plugins\bootstrap\css\bootstrap.css" />
+    <Content Include="Template\Content\plugins\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Template\Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Template\Content\plugins\bootstrap\js\bootstrap.js" />
+    <Content Include="Template\Content\plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Template\Content\plugins\bootstrap\js\npm.js" />
+    <Content Include="Template\Content\plugins\flexslider\flexslider.css" />
+    <Content Include="Template\Content\plugins\flexslider\fonts\flexslider-icon.svg" />
+    <Content Include="Template\Content\plugins\flexslider\images\bg_play_pause.png" />
+    <Content Include="Template\Content\plugins\flexslider\jquery.flexslider-min.js" />
+    <Content Include="Template\Content\plugins\flexslider\jquery.flexslider.js" />
+    <Content Include="Template\Content\plugins\font-awesome\css\font-awesome.css" />
+    <Content Include="Template\Content\plugins\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Template\Content\plugins\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Template\Content\plugins\jquery-2.1.4.min.js" />
+    <Content Include="Template\Content\plugins\jquery-ui\external\jquery\jquery.js" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-icons_222222_256x240.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Template\Content\plugins\jquery-ui\index.html" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.css" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.js" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.min.css" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.structure.css" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.structure.min.css" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.theme.css" />
+    <Content Include="Template\Content\plugins\jquery-ui\jquery-ui.theme.min.css" />
+    <Content Include="Template\Content\plugins\jquery.growl\jquery.growl.css" />
+    <Content Include="Template\Content\plugins\jquery.growl\jquery.growl.js" />
+    <Content Include="Template\Content\plugins\select2\select2-spinner.gif" />
+    <Content Include="Template\Content\plugins\select2\select2.css" />
+    <Content Include="Template\Content\plugins\select2\select2.min.js" />
+    <Content Include="Template\Content\plugins\select2\select2.png" />
+    <Content Include="Template\Content\plugins\select2\select2x2.png" />
+    <Content Include="Template\Content\plugins\selectize\css\selectize.bootstrap2.css" />
+    <Content Include="Template\Content\plugins\selectize\css\selectize.bootstrap3.css" />
+    <Content Include="Template\Content\plugins\selectize\css\selectize.css" />
+    <Content Include="Template\Content\plugins\selectize\css\selectize.default.css" />
+    <Content Include="Template\Content\plugins\selectize\css\selectize.legacy.css" />
+    <Content Include="Template\Content\plugins\selectize\selectize.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

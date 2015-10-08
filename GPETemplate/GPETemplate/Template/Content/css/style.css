@@ -1,0 +1,77 @@
+/****************************************************/
+/*  General CSS                                     */
+/****************************************************/
+html.fullscreen-page,
+html.fullscreen-page body { height: 100%; width: 100%; overflow: hidden; }
+body .loader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #aaa; display: none; }
+    body .loader.loading { display: block; z-index: 9999; }
+
+/****************************************************/
+/*  Plugin Adaptations                              */
+/****************************************************/
+.input-group-addon { background: none; border: none; }
+    .input-group-addon label { font-weight: normal; margin: 0; }
+input.form-control,
+input.form-control:focus,
+input.form-control:active,
+input.form-control:hover { border-top-color: transparent; border-right-color: transparent; border-left-color: transparent; box-shadow: none; border-radius: 0; border-bottom-width: 1px; }
+.btn.btn-circle { width: 50px; height: 50px; line-height: 50px; text-align: center; font-size: 20px; padding: 0; margin: 0; border-radius: 50%; box-shadow: 0 0 4px #404040; -webkit-transition: all 0.2s ease; -moz-transition: all 0.2s ease; -o-transition: all 0.2s ease; transition: all 0.2s ease; }
+    .btn.btn-circle:hover { box-shadow: 0 0 0 #404040; font-size: 28px; }
+    .btn.btn-circle.btn-circle-sm { width: 34px; height: 34px; line-height: 34px; font-size: 16px; }
+        .btn.btn-circle.btn-circle-sm:hover { font-size: 24px; }
+    .btn.btn-circle.btn-circle-lg { width: 68px; height: 68px; line-height: 68px; font-size: 24px; }
+        .btn.btn-circle.btn-circle-lg:hover { font-size: 32px; }
+.vertical-align-container { display: table; width: 100%; height: 100%; }
+    .vertical-align-container > .vertical-aligned-content { display: table-cell; text-align: center; vertical-align: middle; }
+.navbar { background-color: #37474F; margin-bottom: 0; border: none; border-radius: 0; }
+    .navbar .container-fluid { margin: 0 10px; }
+    .navbar .brand { display: inline-block; text-align: left; text-decoration: none; }
+        .navbar .brand h1 { padding: 0; margin: 0; line-height: 50px; font-size: 30px; font-weight: 600; color: white; }
+            .navbar .brand h1 small { font-weight: 600; color: white; }
+    .navbar .user-nav { float: right; }
+        .navbar .user-nav button { color: white; padding: 0; margin: 0; line-height: 50px; }
+            .navbar .user-nav button:hover,
+            .navbar .user-nav button:active,
+            .navbar .user-nav button:focus { color: white; text-decoration: underline; }
+.breadcrumb { border-radius: 0; border-bottom: 1px solid #ddd; padding: 14px 20px; line-height: 1; font-size: 12px; color: #455A64; margin-bottom: 0; }
+    .breadcrumb li:first-child { color: #263238; font-size: 18px; text-transform: uppercase; }
+    .breadcrumb li a { line-height: 1; font-size: 12px; color: #455A64; }
+    .breadcrumb li + li:before { content: "\f104"; display: inline-block; font: normal normal normal 14px/1 FontAwesome; text-align: center; padding: 0 10px; color: #455A64; }
+.panel { border-radius: 2px; box-shadow: 0 0 2px #aaa; }
+
+/****************************************************/
+/*  Site                                            */
+/****************************************************/
+.site { position: relative; width: 100%; height: 100%; padding: 0; margin: 0; }
+.sidebar-wrapper { position: absolute; width: 250px; height: 100%; z-index: 1; background-color: white; box-shadow: 0 1px 3px #607d8b; }
+.sidebar { padding: 0; }
+    .sidebar #sidebar-options { margin-top: 10px; overflow: hidden; }
+        .sidebar #sidebar-options,
+        .sidebar #sidebar-options ul { list-style-type: none; padding: 0; margin: 0; }
+            .sidebar #sidebar-options li a { position: relative; display: block; color: #444; font-size: 14px; padding: 13px 10px; -webkit-transition: all 0.1s ease 0s; -moz-transition: all 0.1s ease 0s; -o-transition: all 0.1s ease 0s; transition: all 0.1s ease 0s; text-decoration: none; }
+                .sidebar #sidebar-options li a:hover { background-color: #607d8b; color: white; }
+                .sidebar #sidebar-options li a i { display: inline-block; font-size: 14px; margin: 0 10px; text-align: center; width: 20px; }
+            .sidebar #sidebar-options > li.active > a { border-left: 5px solid #37474F; }
+            .sidebar #sidebar-options > li > a > i { margin: 0 10px 0 5px; }
+            .sidebar #sidebar-options > li > a > span .fa-minus,
+            .sidebar #sidebar-options > li > a > span .fa-plus { position: absolute; top: 0; right: 0; height: 46px; width: 16px; line-height: 46px; -webkit-transition: font-size 0.3s ease; -moz-transition: font-size 0.3s ease; -o-transition: font-size 0.3s ease; transition: font-size 0.3s ease; }
+            .sidebar #sidebar-options > li > a .fa-plus { font-size: 16px; }
+            .sidebar #sidebar-options > li > a .fa-minus { font-size: 0; }
+            .sidebar #sidebar-options > li.open > a { background-color: #eceff1; color: #232B2D; }
+                .sidebar #sidebar-options > li.open > a > span > .fa-plus { font-size: 0; }
+                .sidebar #sidebar-options > li.open > a > span > .fa-minus { font-size: 16px; }
+            .sidebar #sidebar-options > li > ul { height: 0; overflow: hidden; -webkit-transition: height 0.5s ease; -moz-transition: height 0.5s ease; -o-transition: height 0.5s ease; transition: height 0.5s ease; }
+            .sidebar #sidebar-options > li.open > ul { height: auto; }
+            .sidebar #sidebar-options > li > ul li a { background-color: #b0bec5; }
+.content-wrapper { position: relative; width: 100%; padding-left: 250px; height: 100%; background-color: #eceff1; }
+    .content-wrapper > .content { position: relative; width: 100%; padding: 15px; }
+
+/****************************************************/
+/*  Pages                                           */
+/****************************************************/
+body#LoginPage { text-align: center; background: #ECEFF1; background: -webkit-gradient(linear, left top, left bottom, color-stop(50%, #ECEFF1), color-stop(50%, #404040)); background: -webkit-linear-gradient(top, #ECEFF1 50%, #404040 50%); background: linear-gradient(to bottom, #ECEFF1 50%, #404040 50%); color: #5E5E5E; }
+    body#LoginPage .panel { position: relative; display: inline-block; width: 400px; height: 160px; margin: 0 auto; padding: 10px 0 0; }
+        body#LoginPage .panel img { position: absolute; left: -300px; top: 0; }
+        body#LoginPage .panel form { padding: 0 45px 0 15px; }
+            body#LoginPage .panel form .form-group { text-align: left; }
+            body#LoginPage .panel form button[type="submit"] { position: absolute; right: -25px; top: 55px; }

@@ -5,10 +5,9 @@
  */
 package Beans;
 
-import DTOs.UserDTO;
-import Entities.User;
+import DTOs.UserRoleDTO;
+import Entities.UserRole;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,13 +18,13 @@ import javax.persistence.PersistenceContext;
  * @author joeld
  */
 @Stateless
-public class UserBean extends AbstractBean<User, UserDTO> {
+public class UserRoleBean extends AbstractBean<UserRole, UserRoleDTO> {
 
     @PersistenceContext(unitName = "GPE-ejbPU")
     private EntityManager em;
 
-    public UserBean() {
-        super(User.class);
+    public UserRoleBean() {
+        super(UserRole.class);
     }
 
     @Override
@@ -34,31 +33,30 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     }
 
     @Override
-    protected UserDTO transformToDTO(User entity) {
+    protected UserRoleDTO transformToDTO(UserRole entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    protected User findEntityFromDTO(UserDTO dto) {
+    protected UserRole findEntityFromDTO(UserRoleDTO dto) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<String> Save(UserDTO dto) {
+    public List<String> Save(UserRoleDTO dto) {
         List<String> errors = new ArrayList<>();
 
         //TODO: check for errors
         
         if (errors.isEmpty()) {
-            User user = null;
+            UserRole userRole = null;
             if (dto.isNew()) {
-                super.create(user);
+                super.create(userRole);
             } else {
-                super.edit(user);
+                super.edit(userRole);
             }
         }
 
         return errors;
     }
-
 }
