@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -36,6 +37,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search")
 })
+@Table(name="USERS")
 public class User extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -67,7 +69,7 @@ public class User extends AbstractEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateBirth;
     @ManyToOne(optional = false)
-    @JoinColumn(name = "idUserRole")
+    @JoinColumn(name = "IDUSERROLE")
     @NotNull
     private UserRole userRole;
 

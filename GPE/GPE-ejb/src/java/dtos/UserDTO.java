@@ -7,6 +7,7 @@ package dtos;
 
 import entities.User;
 import java.util.Date;
+import utilities.Security;
 
 /**
  *
@@ -19,6 +20,7 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
     private String name;
     private String email;
     private String password;
+    private String newPassword;
     private String photo;
     private Date dateBirth;
     private UserRoleDTO userRole;
@@ -87,13 +89,21 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPassword() {
-        return password;
+    
+    public boolean isPasswordEqual(String password) {
+        return this.password.equals(Security.GetMD5Hash(newPassword));
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = Security.GetMD5Hash(newPassword);
+    }
+    
+    public boolean hasNewPassword() {
+        return !password.equals(newPassword);
     }
 
     public String getPhoto() {

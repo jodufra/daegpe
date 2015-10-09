@@ -1,29 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-        
-        <h:dataTable var="User" summary="List of all Students" value="#{usersManager.allUsers}" rules="all" cellpadding="5" >
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Name"/>
-                </f:facet>   
-                <h:outputText value="#{User.name}"/>
-            </h:column>
-        </h:dataTable>
-        
-        
+<html class="fullscreen-page" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Login | Gestão de Presenças</title>
+        <h:outputStylesheet library="plugins" name="bootstrap/css/bootstrap.css"/>
+        <h:outputStylesheet library="plugins" name="font-awesome/css/font-awesome.css"/>
+        <h:outputStylesheet library="css" name="style.css"/>
+    </h:head>
+
+    <body id="LoginPage">
+        <div class="vertical-align-container">
+            <div class="vertical-aligned-content">
+                <div class="panel">
+                    <h:graphicImage value="resources/img/logo_ipl_header.png" alt="Instituto Politécnico de Leiria" />
+                    <h:form>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="email" class="form-control" placeholder="Email"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+                                <input type="password" class="form-control" placeholder="Password"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <label class="control-label"><input type="checkbox"/> Lembrar-me</label>   
+                                </span>
+                            </div>
+                        </div>
+                        <h:commandButton type="submit"  action="#{authManager.attemptAuth()}" class="btn btn-danger btn-circle fa" value="&#xf178;"/>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+        <h:outputScript library="plugins" name="jquery-2.1.4.min.js"/>
+        <h:outputScript library="plugins" name="bootstrap/js/bootstrap.min.js"/>
     </body>
 </html>

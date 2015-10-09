@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:body>
+        <ui:composition template="./template.xhtml">
+            <ui:define name="title">Dashboard</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Dashboard"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Dashboard</li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">Some Content</div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -18,7 +18,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class UsersManager {
+public class UsersManager extends AbstractManager {
     
     @EJB 
     private UserBean userBean;

@@ -26,11 +26,11 @@ import javax.validation.constraints.Size;
  * @author joeld
  */
 @Entity
-@Table(name = "user_role")
 @NamedQueries({
     @NamedQuery(name = "UserRole.findAll", query = "SELECT u FROM UserRole u"),
     @NamedQuery(name = "UserRole.findByName", query = "SELECT u FROM UserRole u WHERE u.name = :name")
 })
+@Table(name="USERROLES")
 public class UserRole extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

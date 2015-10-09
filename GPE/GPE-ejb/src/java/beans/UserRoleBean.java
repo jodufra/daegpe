@@ -6,7 +6,6 @@
 package beans;
 
 import dtos.UserRoleDTO;
-import entities.User;
 import entities.UserRole;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -33,6 +31,11 @@ public class UserRoleBean extends AbstractBean<UserRole, UserRoleDTO> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    @Override
+    public UserRole getEntityFromDTO(UserRoleDTO dto) {
+        return getEntity(dto.getIdUserRole());
     }
 
     @Override
@@ -57,7 +60,7 @@ public class UserRoleBean extends AbstractBean<UserRole, UserRoleDTO> {
                 userRole = new UserRole(dto.getName());
                 super.create(userRole);
             } else {
-                userRole = super.findEntityFromDTO(dto.getIdUserRole());
+                userRole = super.getEntity(dto.getIdUserRole());
                 userRole.setName(dto.getName());
                 super.edit(userRole);
             }

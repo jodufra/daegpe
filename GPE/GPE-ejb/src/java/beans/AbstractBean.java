@@ -27,9 +27,13 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
     public AbstractBean(Class<Entity> entityClass) {
         this.entityClass = entityClass;
     }
-
+    
     protected abstract EntityManager getEntityManager();
+
+    protected abstract Entity getEntityFromDTO(DTO dto);
+
     protected abstract DTO generateDTO(Entity entity);
+
     public abstract List<String> save(DTO dto);
 
     protected List<DTO> generateDTOList(List<Entity> entities) {
@@ -50,16 +54,22 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
 
     public void remove(DTO dto) {
         if (!dto.isNew()) {
-            getEntityManager().remove(getEntityManager().merge(findEntityFromDTO(dto)));
+            getEntityManager().remove(getEntityManager().merge(getEntityFromDTO(dto)));
         }
     }
 
-    protected Entity findEntityFromDTO(Object id) {
+    protected Entity getEntity(Object id) {
         return getEntityManager().find(entityClass, id);
     }
 
-    public DTO find(Object id) {
-        return generateDTO(findEntityFromDTO(id));
+    public DTO find(Object obj) {
+        Entity entity;
+        if (obj.getClass().equals(AbstractDTO.class)) {
+            entity = getEntityFromDTO((DTO) obj);
+        } else {
+            entity = getEntity(obj);
+        }
+        return generateDTO(entity);
     }
 
     public List<DTO> findAll() {
