@@ -7,12 +7,17 @@ package dtos;
 
 import entities.User;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import utilities.Security;
 
 /**
  *
  * @author joeld
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class UserDTO extends AbstractDTO<User, UserDTO> {
 
     private Integer idUser;

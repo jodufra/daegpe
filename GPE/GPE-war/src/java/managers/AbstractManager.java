@@ -11,8 +11,14 @@ package managers;
  */
 public class AbstractManager {
 
-    public String Redirect(String url) {
-        return url + (url.contains("?") ? "&" : "?") + "faces-redirect=true";
+    protected String Redirect(String url) {
+        if (url.charAt(0) != '/') {
+            url = "/" + url;
+        }
+
+        url += (url.contains("?") ? "&" : "?") + "faces-redirect=true";
+
+        return url;
     }
 
 }

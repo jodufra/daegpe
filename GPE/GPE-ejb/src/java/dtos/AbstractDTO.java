@@ -6,6 +6,7 @@
 package dtos;
 
 import entities.AbstractEntity;
+import java.io.Serializable;
 
 /**
  *
@@ -13,6 +14,6 @@ import entities.AbstractEntity;
  * @param <Entity>
  * @param <DTO>
  */
-public abstract class AbstractDTO<Entity extends AbstractEntity, DTO extends AbstractDTO> {
+public abstract class AbstractDTO<Entity extends AbstractEntity, DTO extends AbstractDTO> implements Serializable{
     public abstract boolean isNew();
 }

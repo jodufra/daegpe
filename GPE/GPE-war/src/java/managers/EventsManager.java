@@ -11,5 +11,7 @@ package managers;
  */
 public class EventsManager extends AbstractManager{
     
+    public EventsManager() {
+    }
     
 }

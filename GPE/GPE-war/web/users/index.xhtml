@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <ui:composition template="/dashboard.xhtml">
+            <ui:define name="title">Utilizadores</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Utilizadores"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Utilizadores</li>
+                <li><h:link outcome='#{redirectManager.Redirect("/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">
+                    <div class="panel-heading">
+                        Listagem Utilizadores
+                        <a href='#{redirectManager.Redirect("/users/detail")}' class="btn btn-success pull-right" ><i class="fa fa-plus"></i> Adicionar</a>
+                    </div>
+                    
+                    <h:dataTable var="User" value="#{usersManager.userIndexModel.users}" class="table .table-striped" >
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Id"/>
+                            </f:facet>   
+                            <h:outputText value="#{User.internalId}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Name"/>
+                            </f:facet>   
+                            <h:outputText value="#{User.name}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Email"/>
+                            </f:facet>   
+                            <h:outputText value="#{User.email}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value=""/>
+                            </f:facet>   
+                            <h:form>
+                                <h:commandButton action="#{usersManager.removeUser()}" class="pull-right btn btn-link text-danger fa " value="&#xf1f8;"  />
+                                <h:commandButton action="#{usersManager.editUser()}" class="pull-right btn btn-link text-warning fa " value="&#xf040;"  />
+                            </h:form>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -14,14 +14,17 @@ import javax.faces.bean.RequestScoped;
  */
 @ManagedBean
 @RequestScoped
-public class AuthManager extends AbstractManager{
-    
-    public String attemptAuth(){
+public class AuthManager extends AbstractManager {
+
+    public AuthManager() {
+    }
+
+    public String attemptAuth() {
         return Redirect("dashboard");
-    } 
-    
-    public String logout(){
+    }
+
+    public String logout() {
         return Redirect("index");
-    } 
-    
+    }
+
 }

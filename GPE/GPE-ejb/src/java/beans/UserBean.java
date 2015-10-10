@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
 
 /**
  *
@@ -45,9 +46,9 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     @Override
     protected UserDTO generateDTO(User user) {
         UserRoleDTO role = userRoleBean.find(user.getUserRole().getIdUserRole());
-        return new UserDTO(user.getIdUser(), user.getInternalId(), user.getName(), 
-                user.getEmail(), user.getPassword(), user.getPhoto(), 
-                user.getDateBirth(),  role);
+        return new UserDTO(user.getIdUser(), user.getInternalId(), user.getName(),
+                user.getEmail(), user.getPassword(), user.getPhoto(),
+                user.getDateBirth(), role);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             user.setPhoto(dto.getPhoto());
             user.setUserRole(userRoleBean.getEntityFromDTO(dto.getUserRole()));
             user.setSearch(user.getInternalId() + " " + user.getName() + " " + user.getEmail());
-            
+
             if (dto.isNew()) {
                 super.create(user);
             } else {
@@ -81,6 +82,43 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         }
 
         return errors;
+    }
+
+    public enum UserOrderBy {
+
+        InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, EmailAsc, EmailDesc
+    }
+
+    public List<UserDTO> find(int pageId, int pageSize, UserOrderBy orderBy) {
+        String query = "SELECT u FROM User u";
+
+        switch (orderBy) {
+            case EmailAsc:
+                query += " ORDER BY u.email";
+                break;
+            case EmailDesc:
+                query += " ORDER BY u.email desc";
+                break;
+            case InternalIdAsc:
+                query += " ORDER BY u.internalId";
+                break;
+            case InternalIdDesc:
+                query += " ORDER BY u.internalId desc";
+                break;
+            case NameAsc:
+                query += " ORDER BY u.name";
+                break;
+            case NameDesc:
+                query += " ORDER BY u.name desc";
+                break;
+        }
+
+        if (pageId != 0 && pageSize != 0) {
+            int offset = (pageId - 1) * pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
+        }
+
+        return generateDTOList(em.createQuery(query, User.class).getResultList());
     }
 
 }

@@ -6,20 +6,20 @@
       xmlns:h="http://java.sun.com/jsf/html">
 
     <h:body>
-        <ui:composition template="./template.xhtml">
-            <ui:define name="title">Adicionar Evento</ui:define>
+        <ui:composition template="/dashboard.xhtml">
+            <ui:define name="title">Eventos</ui:define>
 
             <ui:define name="active-sidebar-option">
                 <input type="hidden" name="active-sidebar-option" value="Eventos"/>   
             </ui:define>
 
             <ui:define name="breadcrumb">
-                <li>Adicionar Evento</li>
-                <li>Dashboard</li>
+                <li>Eventos</li>
+                <li><h:link outcome='#{redirectManager.Redirect("/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
             <ui:define name="content">
-                <div class="panel">Adicionar eventos</div>
+                <div class="panel">lista de Eventos</div>
             </ui:define>
         </ui:composition>
     </h:body>

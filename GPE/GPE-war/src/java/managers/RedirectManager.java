@@ -15,5 +15,12 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean
 @RequestScoped
 public class RedirectManager extends AbstractManager {
-    
+
+    public RedirectManager() {
+    }
+
+    @Override
+    public String Redirect(String url) {
+        return super.Redirect(url);
+    }
 }
