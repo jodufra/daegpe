@@ -30,21 +30,25 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "UserRole.findAll", query = "SELECT u FROM UserRole u"),
     @NamedQuery(name = "UserRole.findByName", query = "SELECT u FROM UserRole u WHERE u.name = :name")
 })
-@Table(name="USERROLES")
+@Table(name = "USERROLES")
 public class UserRole extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUserRole;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     private String name;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userRole")
     private Collection<User> users;
 
     public UserRole() {
+        this.idUserRole = 0;
+        this.name = "";
+        this.users = new ArrayList<>();
     }
 
     public UserRole(String name) {

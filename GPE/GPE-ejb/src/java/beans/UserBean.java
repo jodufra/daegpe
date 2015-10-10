@@ -14,7 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaQuery;
+import static utilities.Text.GenerateSlug;
 
 /**
  *
@@ -47,8 +47,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     protected UserDTO generateDTO(User user) {
         UserRoleDTO role = userRoleBean.find(user.getUserRole().getIdUserRole());
         return new UserDTO(user.getIdUser(), user.getInternalId(), user.getName(),
-                user.getEmail(), user.getPassword(), user.getPhoto(),
-                user.getDateBirth(), role);
+                user.getEmail(), user.getPassword(), user.getPhoto(), role);
     }
 
     @Override
@@ -69,10 +68,9 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             if (dto.hasNewPassword()) {
                 user.setPassword(dto.getNewPassword());
             }
-            user.setDateBirth(dto.getDateBirth());
             user.setPhoto(dto.getPhoto());
             user.setUserRole(userRoleBean.getEntityFromDTO(dto.getUserRole()));
-            user.setSearch(user.getInternalId() + " " + user.getName() + " " + user.getEmail());
+            user.setSearch(GenerateSlug(user.getInternalId() + " " + user.getName() + " " + user.getEmail(), true, true));
 
             if (dto.isNew()) {
                 super.create(user);
@@ -85,7 +83,6 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     }
 
     public enum UserOrderBy {
-
         InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, EmailAsc, EmailDesc
     }
 

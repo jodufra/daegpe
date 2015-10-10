@@ -36,19 +36,21 @@ public class MigrationBean {
         userRoleBean.save(new UserRoleDTO("Developer"));
 
         UserRoleDTO role = userRoleBean.findByName("Developer");
-        GregorianCalendar calendar = new GregorianCalendar(1990, 3, 12);
-        UserDTO user = new UserDTO("2120189", "Duarte Mateus", "2120189@my.ipleiria.pt", "", "", calendar.getTime(), role);
+        UserDTO user = new UserDTO("dev.gpe", "Developer", "developer@gpe.pt", "", "", role);
         user.setNewPassword("developer");
         userBean.save(user);
 
-        calendar = new GregorianCalendar(1993, 7, 26);
-        user = new UserDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "", "", calendar.getTime(), role);
-        user.setNewPassword("developer");
+        role = userRoleBean.findByName("User");
+        user = new UserDTO("2120189", "Duarte Mateus", "2120189@my.ipleiria.pt", "", "", role);
+        user.setNewPassword("2120189");
         userBean.save(user);
 
-        calendar = new GregorianCalendar(1987, 0, 16);
-        user = new UserDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "", "", calendar.getTime(), role);
-        user.setNewPassword("developer");
+        user = new UserDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "", "", role);
+        user.setNewPassword("2121000");
+        userBean.save(user);
+
+        user = new UserDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "", "", role);
+        user.setNewPassword("2120680");
         userBean.save(user);
 
         System.out.println("DB seeded");

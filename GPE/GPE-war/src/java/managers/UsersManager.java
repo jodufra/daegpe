@@ -22,7 +22,7 @@ public class UsersManager extends AbstractManager {
 
     @EJB
     private UserBean userBean;
-
+    
     private UserIndexModel userIndexModel;
 
     public UsersManager() {

@@ -27,7 +27,6 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
     private String password;
     private String newPassword;
     private String photo;
-    private Date dateBirth;
     private UserRoleDTO userRole;
 
     public UserDTO() {
@@ -37,29 +36,26 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
         this.email = "";
         this.password = "";
         this.photo = "";
-        this.dateBirth = new Date();
         this.userRole = new UserRoleDTO();
     }
 
-    public UserDTO(String internalId, String name, String email, String password, String photo, Date dateBirth, UserRoleDTO userRole) {
+    public UserDTO(String internalId, String name, String email, String password, String photo, UserRoleDTO userRole) {
         this.idUser = 0;
         this.internalId = internalId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.photo = photo;
-        this.dateBirth = dateBirth;
         this.userRole = userRole;
     }
 
-    public UserDTO(Integer idUser, String internalId, String name, String email, String password, String photo, Date dateBirth, UserRoleDTO userRole) {
+    public UserDTO(Integer idUser, String internalId, String name, String email, String password, String photo, UserRoleDTO userRole) {
         this.idUser = idUser;
         this.internalId = internalId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.photo = photo;
-        this.dateBirth = dateBirth;
         this.userRole = userRole;
     }
 
@@ -94,7 +90,7 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public boolean isPasswordEqual(String password) {
         return this.password.equals(Security.GetMD5Hash(newPassword));
     }
@@ -106,7 +102,7 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
     public void setNewPassword(String newPassword) {
         this.newPassword = Security.GetMD5Hash(newPassword);
     }
-    
+
     public boolean hasNewPassword() {
         return !password.equals(newPassword);
     }
@@ -117,14 +113,6 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
 
     public void setPhoto(String photo) {
         this.photo = photo;
-    }
-
-    public Date getDateBirth() {
-        return dateBirth;
-    }
-
-    public void setDateBirth(Date dateBirth) {
-        this.dateBirth = dateBirth;
     }
 
     public UserRoleDTO getUserRole() {

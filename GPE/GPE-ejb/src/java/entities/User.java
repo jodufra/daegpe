@@ -6,9 +6,9 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,9 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -37,41 +36,51 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search")
 })
-@Table(name="USERS")
+@Table(name = "USERS")
 public class User extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer idUser;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     private String internalId;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     private String name;
+
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Invalid email")
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     private String email;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     private String password;
+
     @Size(max = 150)
     private String photo;
+
     @Size(max = 255)
     private String search;
-    @Temporal(TemporalType.DATE)
-    private Date dateBirth;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "IDUSERROLE")
     @NotNull
     private UserRole userRole;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<Enrollment> enrollments;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<Participation> participations;
 
     public User() {
     }
@@ -139,20 +148,28 @@ public class User extends AbstractEntity implements Serializable {
         this.search = search;
     }
 
-    public Date getDateBirth() {
-        return dateBirth;
-    }
-
-    public void setDateBirth(Date dateBirth) {
-        this.dateBirth = dateBirth;
-    }
-
     public UserRole getUserRole() {
         return userRole;
     }
 
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+    public Collection<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(Collection<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    public Collection<Participation> getParticipations() {
+        return participations;
+    }
+
+    public void setParticipations(Collection<Participation> participations) {
+        this.participations = participations;
     }
 
     @Override
