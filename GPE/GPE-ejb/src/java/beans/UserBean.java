@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import utilities.Security;
 import static utilities.Text.GenerateSlug;
 
 /**
@@ -83,7 +84,19 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     }
 
     public enum UserOrderBy {
+
         InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, EmailAsc, EmailDesc
+    }
+
+    public UserDTO find(String username, String password) {
+        password = Security.GetMD5Hash(password);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT u FROM User u WHERE (u.internalId = \"").append(username).append("\" OR u.email = \"").append(username).append("\") ");
+        sb.append("AND u.password = \"").append(password).append("\"");
+        
+        
+        return generateDTO(em.createQuery(sb.toString(), User.class).getSingleResult());
     }
 
     public List<UserDTO> find(int pageId, int pageSize, UserOrderBy orderBy) {

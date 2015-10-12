@@ -42,15 +42,15 @@ public class MigrationBean {
 
         role = userRoleBean.findByName("User");
         user = new UserDTO("2120189", "Duarte Mateus", "2120189@my.ipleiria.pt", "", "", role);
-        user.setNewPassword("2120189");
+        user.setNewPassword("user");
         userBean.save(user);
 
         user = new UserDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "", "", role);
-        user.setNewPassword("2121000");
+        user.setNewPassword("user");
         userBean.save(user);
 
         user = new UserDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "", "", role);
-        user.setNewPassword("2120680");
+        user.setNewPassword("user");
         userBean.save(user);
 
         System.out.println("DB seeded");

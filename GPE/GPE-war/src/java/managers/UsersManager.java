@@ -6,10 +6,14 @@
 package managers;
 
 import beans.UserBean;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.inject.Inject;
+import javax.faces.bean.ViewScoped;
+import models.UserDetailModel;
 import models.UserIndexModel;
 
 /**
@@ -17,33 +21,36 @@ import models.UserIndexModel;
  * @author joeld
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class UsersManager extends AbstractManager {
 
     @EJB
     private UserBean userBean;
     
     private UserIndexModel userIndexModel;
+    private UserDetailModel userDetailModel;
 
-    public UsersManager() {
+    @PostConstruct
+    private void createModels(){
+        userIndexModel = new UserIndexModel(userBean);
+        userDetailModel = new UserDetailModel();
     }
-
-    public String listUsers() {
-        userIndexModel = new UserIndexModel();
-        userIndexModel.users = userBean.find(userIndexModel.pageId, userIndexModel.pageSize, userIndexModel.orderBy);
-        return Redirect("/users/index");
+    
+    public void newUser() {
+        userDetailModel.newUser();
+        try {
+            Redirect("users/detail");
+        } catch (IOException ex) {
+            Logger.getLogger(UsersManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
+    
+    public String saveUser() {
+        return GenerateRelativeURL("/users/detail"); 
+    }
+    
     public String removeUser() {
-        return Redirect("/users/index");
-    }
-
-    public String newUser() {
-        return Redirect("/users/detail");
-    }
-
-    public String editUser() {
-        return Redirect("/users/detail");
+        return GenerateRelativeURL("/users/index"); 
     }
 
     public UserIndexModel getUserIndexModel() {
@@ -54,4 +61,11 @@ public class UsersManager extends AbstractManager {
         this.userIndexModel = userIndexModel;
     }
 
+    public UserDetailModel getUserDetailModel() {
+        return userDetailModel;
+    }
+
+    public void setUserDetailModel(UserDetailModel userDetailModel) {
+        this.userDetailModel = userDetailModel;
+    }
 }

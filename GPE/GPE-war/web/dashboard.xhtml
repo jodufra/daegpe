@@ -25,14 +25,14 @@
                     <div class="btn-group">
                         <h:form>
                             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                User Name <span class="caret"></span>
+                                #{sessionManager.user.name} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="#">Minha Conta</a></li>
                                 <li><a href="#">Another action</a></li>
                                 <li><a href="#">Something else here</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><h:commandLink type="submit" action="#{authManager.logout()}" class="" value="Logout"/></li>
+                                <li><h:commandLink action="#{authManager.logout()}" class="" value="Logout"/></li>
                             </ul>
                         </h:form>
                     </div>
@@ -47,31 +47,9 @@
                         <ui:insert name="active-sidebar-option">
                             <input type="hidden" name="active-sidebar-option" value="Dashboard"/>
                         </ui:insert>
-                        <li><h:link outcome='#{redirectManager.Redirect("/dashboard")}' ><i class="fa fa-home"></i>Dashboard </h:link></li>
-                        <li>
-                            <a href="#events_option" class="toggle"><i class="fa fa-calendar"></i>Eventos
-                                <span class="pull-right">
-                                    <i class="fa fa-plus"></i>
-                                    <i class="fa fa-minus"></i>
-                                </span>
-                            </a>
-                            <ul id="events_option">
-                                <li><h:link outcome='#{redirectManager.Redirect("/events/detail")}' ><i class="fa fa-plus-square"></i>Adicionar</h:link></li>
-                                <li><h:link outcome='#{redirectManager.Redirect("/events/index")}' ><i class="fa fa-list"></i>Listar</h:link></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#users_option" class="toggle"><i class="fa fa-user"></i>Utilizadores
-                                <span class="pull-right">
-                                    <i class="fa fa-plus"></i>
-                                    <i class="fa fa-minus"></i>
-                                </span>
-                            </a>
-                            <ul id="users_option">
-                                <li><h:link outcome='#{usersManager.newUser()}' ><i class="fa fa-plus-square"></i>Adicionar</h:link></li>
-                                <li><h:link outcome='#{usersManager.listUsers()}' ><i class="fa fa-list"></i>Listar</h:link></li>
-                            </ul>
-                        </li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/dashboard")}' ><i class="fa fa-home"></i>Dashboard </h:link></li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/events/index")}' ><i class="fa fa-bell"></i>Eventos</h:link></li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/users/index")}' ><i class="fa fa-users"></i>Utilizadores</h:link></li>
                     </ul>
                 </div>
             </div>

@@ -5,12 +5,12 @@
  */
 package utilities;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -25,11 +25,11 @@ public class Security {
 
         String hash = "";
         try {
-            byte[] bytesOfMessage = input.getBytes("UTF-8");
+            byte[] bytesOfMessage = DatatypeConverter.parseBase64Binary(input);
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] thedigest = md.digest(bytesOfMessage);
-            hash = new String(thedigest, "UTF-8");
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+            hash = DatatypeConverter.printBase64Binary(thedigest);
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(Security.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -37,3 +37,4 @@ public class Security {
     }
 
 }
+ 

@@ -20,7 +20,12 @@ public class RedirectManager extends AbstractManager {
     }
 
     @Override
-    public String Redirect(String url) {
-        return super.Redirect(url);
+    public String GenerateRelativeURL(String url) {
+        return super.GenerateRelativeURL(url);
+    }
+
+    @Override
+    public String GenerateAbsoluteURL(String url) {
+        return super.GenerateAbsoluteURL(url);
     }
 }

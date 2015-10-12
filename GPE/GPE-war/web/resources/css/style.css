@@ -70,8 +70,9 @@ input.form-control:hover { border-top-color: transparent; border-right-color: tr
 /*  Pages                                           */
 /****************************************************/
 body#LoginPage { text-align: center; background: #ECEFF1; background: -webkit-gradient(linear, left top, left bottom, color-stop(50%, #ECEFF1), color-stop(50%, #404040)); background: -webkit-linear-gradient(top, #ECEFF1 50%, #404040 50%); background: linear-gradient(to bottom, #ECEFF1 50%, #404040 50%); color: #5E5E5E; }
-    body#LoginPage .panel { position: relative; display: inline-block; width: 400px; height: 160px; margin: 0 auto; padding: 20px 0 0; }
+    body#LoginPage .panel { position: relative; display: inline-block; width: 400px; min-height: 160px; margin: 0 auto; padding: 20px 0 0; }
         body#LoginPage .panel img { position: absolute; left: -300px; top: 0; }
         body#LoginPage .panel form { padding: 0 45px 0 15px; }
             body#LoginPage .panel form .form-group { text-align: left; }
             body#LoginPage .panel form [type="submit"] { position: absolute; right: -25px; top: 55px; }
+            body#LoginPage .panel form ul { color:#C9302C; }

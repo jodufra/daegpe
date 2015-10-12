@@ -15,12 +15,20 @@
 
             <ui:define name="breadcrumb">
                 <li>Adicionar Utilizador</li>
-                <li><h:link outcome='#{usersManager.listUsers()}' >Utilizadores</h:link></li>
-                <li><h:link outcome='#{redirectManager.Redirect("/dashboard")}' >Dashboard </h:link></li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/users/index")}' >Utilizadores</h:link></li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
             <ui:define name="content">
-                <div class="panel">Adicionar Utilizador</div>
+                <div class="container">
+                    <div class="panel">
+                        <h:form>
+                            <div class="row">
+                                
+                            </div>
+l                        </h:form>
+                    </div>
+                </div>
             </ui:define>
         </ui:composition>
     </h:body>

@@ -5,10 +5,13 @@
  */
 package managers;
 
+import javax.faces.bean.ViewScoped;
+
 /**
  *
  * @author Joel
  */
+@ViewScoped
 public class EventsManager extends AbstractManager{
     
     public EventsManager() {

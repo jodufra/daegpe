@@ -5,20 +5,43 @@
  */
 package managers;
 
+import java.io.IOException;
+import java.io.Serializable;
+import javax.faces.context.FacesContext;
+
 /**
  *
  * @author Joel
  */
-public class AbstractManager {
+public class AbstractManager implements Serializable {
 
-    protected String Redirect(String url) {
+    protected String GenerateURL(String url) {
+        url += (url.contains("?") ? "&" : "?") + "faces-redirect=true";
+        return url;
+    }
+
+    protected String GenerateRelativeURL(String url) {
+        url = GenerateURL(url);
         if (url.charAt(0) != '/') {
             url = "/" + url;
         }
-
-        url += (url.contains("?") ? "&" : "?") + "faces-redirect=true";
-
         return url;
+    }
+
+    protected String GenerateAbsoluteURL(String url) {
+        if (url.charAt(0) != '/') {
+            url = '/' + url;
+        }
+        if (!url.contains(".xhtml")) {
+            url += ".xhtml";
+        }
+        url = FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + url;
+        return url;
+    }
+
+    protected void Redirect(String url) throws IOException {
+        url = GenerateAbsoluteURL(url);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(url);
     }
 
 }

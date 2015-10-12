@@ -16,16 +16,20 @@
 
             <ui:define name="breadcrumb">
                 <li>Utilizadores</li>
-                <li><h:link outcome='#{redirectManager.Redirect("/dashboard")}' >Dashboard </h:link></li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
             <ui:define name="content">
                 <div class="panel">
                     <div class="panel-heading">
                         Listagem Utilizadores
-                        <a href='#{redirectManager.Redirect("/users/detail")}' class="btn btn-success pull-right" ><i class="fa fa-plus"></i> Adicionar</a>
+                        <h:form class="pull-right">
+                            <h:commandLink id="newUser" class="btn btn-success" value="Adicionar" action='#{redirectManager.GenerateRelativeURL("/users/detail")}' >
+                                <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{usersManager.userDetailModel.newUser()}"/>
+                            </h:commandLink>
+                        </h:form>
                     </div>
-                    
+
                     <h:dataTable var="User" value="#{usersManager.userIndexModel.users}" class="table .table-striped" >
                         <h:column> 
                             <f:facet name="header">
@@ -50,8 +54,10 @@
                                 <h:outputText value=""/>
                             </f:facet>   
                             <h:form>
-                                <h:commandButton action="#{usersManager.removeUser()}" class="pull-right btn btn-danger fa " value="&#xf1f8;"  />
-                                <h:commandButton action="#{usersManager.editUser()}" class="pull-right btn btn-primary fa " value="&#xf040;"  />
+                                <h:commandLink actionListener="#{usersManager.removeUser}" class="pull-right btn btn-danger fa " value="&#xf1f8;"  />
+                                <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/users/detail")}' >
+                                    <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{usersManager.userDetailModel.newUser()}"/>
+                                </h:commandLink>
                             </h:form>
                         </h:column>
                     </h:dataTable>

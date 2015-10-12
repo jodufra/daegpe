@@ -5,6 +5,7 @@
  */
 package models;
 
+import beans.UserBean;
 import beans.UserBean.UserOrderBy;
 import dtos.UserDTO;
 import java.util.List;
@@ -14,12 +15,15 @@ import java.util.List;
  * @author Joel
  */
 public class UserIndexModel {
+    private final UserBean userBean;
+    
     public int pageId;    
     public final int pageSize = 20;
     public UserOrderBy orderBy;
     public List<UserDTO> users;
 
-    public UserIndexModel() {
+    public UserIndexModel(UserBean userBean) {
+        this.userBean = userBean;
         this.pageId = 1;
         this.orderBy = UserOrderBy.InternalIdAsc;
     }
@@ -41,11 +45,7 @@ public class UserIndexModel {
     }
 
     public List<UserDTO> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserDTO> users) {
-        this.users = users;
+        return userBean.find(pageId, pageSize, orderBy);
     }
     
     
