@@ -8,10 +8,13 @@ package managers;
 import beans.UserBean;
 import dtos.UserDTO;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -32,7 +35,7 @@ public class AuthManager extends AbstractManager {
 
     public AuthManager() {
     }
-    
+
     @PostConstruct
     public void init() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -46,6 +49,14 @@ public class AuthManager extends AbstractManager {
                 originalURL += "?" + originalQuery;
             }
         }
+
+        if (externalContext.getSessionMap().get("user") != null) {
+            try { 
+                Redirect("/dashboard.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(AuthManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @EJB
@@ -57,7 +68,7 @@ public class AuthManager extends AbstractManager {
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
         UserDTO user = userBean.find(username, password);
-
+        password = "";
         if (user != null) {
             externalContext.getSessionMap().put("user", user);
             externalContext.redirect(originalURL);
@@ -67,6 +78,8 @@ public class AuthManager extends AbstractManager {
     }
 
     public void logout() throws IOException {
+        username = "";
+        password = "";
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         externalContext.invalidateSession();
 

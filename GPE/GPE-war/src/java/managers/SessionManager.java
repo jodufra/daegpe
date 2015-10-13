@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -31,16 +32,15 @@ public class SessionManager extends AbstractManager {
             user = (UserDTO) externalContext.getSessionMap().get("user");
 
             if (user == null) {
-                externalContext.invalidateSession();
-                throw new Exception("User not logged in");
+                context.addMessage(null, new FacesMessage("Identifique-se para ter acesso."));
+                throw new Exception();
             }
         } catch (Exception e) {
-            Logger.getLogger(SessionManager.class.getName()).log(Level.SEVERE, null, e);
             try {
                 Redirect("index");
             } catch (IOException ex) {
                 Logger.getLogger(SessionManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } 
         }
     }
 

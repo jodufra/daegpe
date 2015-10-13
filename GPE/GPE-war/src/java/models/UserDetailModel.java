@@ -15,30 +15,43 @@ import dtos.UserRoleDTO;
 public class UserDetailModel {
 
     private UserDTO user;
-
     private String internalId;
     private String name;
     private String email;
+    private String newPassword;
     private UserRoleDTO userRole;
 
-    public UserDTO newUser() {
-        return new UserDTO();
+    public String generateTitle() {
+        return user == null || user.isNew() ? "Adicionar Utilizador" : user.getName();
     }
 
     public UserDTO save() {
+        user.setInternalId(internalId);
         user.setName(name);
         user.setEmail(email);
-        user.setUserRole(userRole);
+        if (user.isNew() || !newPassword.isEmpty()) {
+            user.setNewPassword(newPassword);
+        }
+        if (userRole != null) {
+            user.setUserRole(userRole);
+        }
         return user;
     }
 
     public UserDTO getUser() {
+        if (user == null) {
+            setUser(new UserDTO());
+        }
         return user;
     }
 
     public void setUser(UserDTO user) {
         this.user = user;
+        if (user == null) {
+            return;
+        }
         this.internalId = user.getInternalId();
+        this.name = user.getName();
         this.email = user.getEmail();
         this.userRole = user.getUserRole();
     }
@@ -65,6 +78,14 @@ public class UserDetailModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public UserRoleDTO getUserRole() {

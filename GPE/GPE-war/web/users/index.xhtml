@@ -25,7 +25,7 @@
                         Listagem Utilizadores
                         <h:form class="pull-right">
                             <h:commandLink id="newUser" class="btn btn-success" value="Adicionar" action='#{redirectManager.GenerateRelativeURL("/users/detail")}' >
-                                <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{usersManager.userDetailModel.newUser()}"/>
+                                <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{null}"/>
                             </h:commandLink>
                         </h:form>
                     </div>
@@ -56,7 +56,7 @@
                             <h:form>
                                 <h:commandLink actionListener="#{usersManager.removeUser}" class="pull-right btn btn-danger fa " value="&#xf1f8;"  />
                                 <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/users/detail")}' >
-                                    <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{usersManager.userDetailModel.newUser()}"/>
+                                    <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{User}"/>
                                 </h:commandLink>
                             </h:form>
                         </h:column>

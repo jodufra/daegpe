@@ -53,9 +53,21 @@ public class UserBean extends AbstractBean<User, UserDTO> {
 
     @Override
     public List<String> save(UserDTO dto) {
-        List<String> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>(); 
+        
+        if (dto.getInternalId().isEmpty()) {
+            errors.add("Id de Utilizador é Obrigatório.");
+        }
+        if (dto.getName().isEmpty()) {
+            errors.add("Nome é Obrigatório.");
+        }
+        if (dto.getEmail().isEmpty()) {
+            errors.add("Email é Obrigatório.");
+        }
+        if (dto.getUserRole() == null) {
+            errors.add("Indique um role.");
+        }
 
-        //TODO: check for errors
         if (errors.isEmpty()) {
             User user;
             if (dto.isNew()) {
@@ -77,7 +89,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
                 super.create(user);
             } else {
                 super.edit(user);
-            }
+            } 
         }
 
         return errors;
@@ -94,8 +106,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT u FROM User u WHERE (u.internalId = \"").append(username).append("\" OR u.email = \"").append(username).append("\") ");
         sb.append("AND u.password = \"").append(password).append("\"");
-        
-        
+
         return generateDTO(em.createQuery(sb.toString(), User.class).getSingleResult());
     }
 

@@ -54,7 +54,7 @@ public class User extends AbstractEntity implements Serializable {
     @Size(min = 1, max = 255)
     private String name;
 
-    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Invalid email")
+    //@Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Invalid email")
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -199,7 +199,9 @@ public class User extends AbstractEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Entities.User[ iduser=" + idUser + " ]";
+        return "User{" + "idUser=" + idUser + ", internalId=" + internalId + ", name=" + name + ", email=" + email + ", password=" + password + ", photo=" + photo + ", search=" + search + ", userRole=" + userRole + '}';
     }
+
+    
 
 }

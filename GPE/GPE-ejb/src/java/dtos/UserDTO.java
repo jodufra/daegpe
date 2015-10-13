@@ -24,7 +24,7 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
     private String internalId;
     private String name;
     private String email;
-    private String password;
+    private final String password;
     private String newPassword;
     private String photo;
     private UserRoleDTO userRole;
@@ -45,6 +45,7 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.newPassword = password;
         this.photo = photo;
         this.userRole = userRole;
     }
@@ -55,6 +56,7 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.newPassword = password;
         this.photo = photo;
         this.userRole = userRole;
     }
@@ -128,4 +130,10 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
         return idUser == 0;
     }
 
+    @Override
+    public String toString() {
+        return "UserDTO{" + "idUser=" + idUser + ", internalId=" + internalId + ", name=" + name + ", email=" + email + ", password=" + password + ", newPassword=" + newPassword + ", photo=" + photo + ", userRole=" + userRole + '}';
+    }
+
+    
 }
