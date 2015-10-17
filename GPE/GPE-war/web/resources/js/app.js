@@ -3,7 +3,7 @@ var Sidebar = new (function () {
     var sidebar = $("body .sidebar");
 
     sidebarCtrl.init = function () {
-        var open = function (elem){
+        var open = function (elem) {
             var parent = $(elem).parent();
             var nestedUl = $("ul", parent);
             var liCount = $("li", nestedUl).length;
@@ -18,11 +18,11 @@ var Sidebar = new (function () {
 
             parent.toggleClass("open");
         }
-        
-        
+
+
         var value = $('input[name="active-sidebar-option"]', sidebar).val();
         $("#sidebar-options > li > a:contains(" + value + ")").parent().addClass("active");
-        $("#sidebar-options > li.active .toggle").each(function (){
+        $("#sidebar-options > li.active .toggle").each(function () {
             open(this);
         });
         $(".toggle", sidebar).click(function (e) {
@@ -42,6 +42,7 @@ var Content = new (function () {
         element = elem;
         contentCtrl.initTabs();
         contentCtrl.initTooltips();
+        contentCtrl.initLiveEdit();
 
         if (typeof onComplete !== "undefined")
             onComplete();
@@ -133,6 +134,14 @@ var Content = new (function () {
         if (element.find('*[data-plugin*="tooltip"]').length) {
             element.find('*[data-plugin*="tooltip"]').each(function () {
                 $(this).tooltip();
+            });
+        }
+    }
+
+    contentCtrl.initLiveEdit = function () {
+        if (element.find('*[data-plugin*="live-edit"]').length) {
+            element.find('*[data-plugin*="live-edit"]').each(function () {
+                $(this).liveEdit();
             });
         }
     }

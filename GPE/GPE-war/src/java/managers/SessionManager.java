@@ -23,7 +23,7 @@ import javax.faces.context.FacesContext;
 public class SessionManager extends AbstractManager {
 
     private UserDTO user;
-
+    
     @PostConstruct
     private void setUser() {
         try {

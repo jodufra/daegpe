@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.OneToMany;
@@ -47,9 +49,13 @@ public class UC extends AbstractEntity implements Serializable {
 
     @Size(max = 255)
     private String search;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uc")
-    private Collection<Enrollment> enrollments;
+    
+    @ManyToMany
+    @JoinTable(name = "UCS_VS_STUDENTS",
+            joinColumns = @JoinColumn(name = "IDUC", referencedColumnName = "IDUC"),
+            inverseJoinColumns = @JoinColumn(name = "IDSTUDENT", referencedColumnName = "IDUSER")
+    )
+    private Collection<Student> students;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uc")
     private Collection<Event> events;
@@ -112,13 +118,14 @@ public class UC extends AbstractEntity implements Serializable {
         this.events = events;
     }
 
-    public Collection<Enrollment> getEnrollments() {
-        return enrollments;
+    public Collection<Student> getStudents() {
+        return students;
     }
 
-    public void setEnrollments(Collection<Enrollment> enrollments) {
-        this.enrollments = enrollments;
+    public void setStudents(Collection<Student> students) {
+        this.students = students;
     }
+    
 
     @Override
     public boolean isNew() {

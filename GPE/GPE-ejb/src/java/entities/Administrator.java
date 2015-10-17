@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dtos;
+package entities;
 
-import java.io.Serializable;
+import javax.persistence.Entity;
 
 /**
  *
- * @author Joel
+ * @author joeld
  */
-public abstract class AbstractDTO implements Serializable {
-
-    public abstract boolean isNew();
+@Entity
+public class Administrator extends User{
+    
 }

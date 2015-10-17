@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
@@ -63,9 +64,38 @@ public class Event extends AbstractEntity implements Serializable {
     @NotNull
     private UC uc;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
-    private Collection<Participation> participants;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "IDMANAGER")
+    @NotNull
+    private Manager manager;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    private Collection<Attendance> participants;
+
+    public Event() {
+        this.participants = new ArrayList<>();
+    }
+
+    public Event(String name, Date dateStart, short minutes, UC uc, Manager manager) {
+        this.name = name;
+        this.dateStart = dateStart;
+        this.minutes = minutes;
+        this.uc = uc;
+        this.manager = manager;
+        this.participants = new ArrayList<>();
+    }
+
+    public Event(Integer idEvent, String name, Date dateStart, short minutes, String search, UC uc, Manager manager) {
+        this.idEvent = idEvent;
+        this.name = name;
+        this.dateStart = dateStart;
+        this.minutes = minutes;
+        this.search = search;
+        this.uc = uc;
+        this.manager = manager;
+        this.participants = new ArrayList<>();
+    }
+        
     public Integer getIdEvent() {
         return idEvent;
     }
@@ -114,17 +144,25 @@ public class Event extends AbstractEntity implements Serializable {
         this.uc = uc;
     }
 
-    public Collection<Participation> getParticipants() {
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+
+    public Collection<Attendance> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(Collection<Participation> participants) {
+    public void setParticipants(Collection<Attendance> participants) {
         this.participants = participants;
     }
 
     @Override
     public boolean isNew() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return idEvent == 0;
     }
 
     @Override

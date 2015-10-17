@@ -11,10 +11,8 @@ body .loader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background
 /****************************************************/
 .input-group-addon { background: none; border: none; }
     .input-group-addon label { font-weight: normal; margin: 0; }
-input.form-control,
-input.form-control:focus,
-input.form-control:active,
-input.form-control:hover { border-top-color: transparent; border-right-color: transparent; border-left-color: transparent; box-shadow: none; border-radius: 0; border-bottom-width: 1px; }
+input.form-control { border-top-color: transparent; border-right-color: transparent; border-left-color: transparent; box-shadow: none; border-radius: 0; border-bottom-width: 1px; }
+    input.form-control:focus { border-color: transparent transparent #106CC8 transparent; box-shadow: none; }
 .btn.btn-circle { width: 50px; height: 50px; line-height: 50px; text-align: center; font-size: 20px; padding: 0; margin: 0; border-radius: 50%; box-shadow: 0 0 4px #404040; -webkit-transition: all 0.2s ease; -moz-transition: all 0.2s ease; -o-transition: all 0.2s ease; transition: all 0.2s ease; }
     .btn.btn-circle:hover { box-shadow: 0 0 0 #404040; font-size: 28px; }
     .btn.btn-circle.btn-circle-sm { width: 34px; height: 34px; line-height: 34px; font-size: 16px; }
@@ -23,7 +21,7 @@ input.form-control:hover { border-top-color: transparent; border-right-color: tr
         .btn.btn-circle.btn-circle-lg:hover { font-size: 32px; }
 .vertical-align-container { display: table; width: 100%; height: 100%; }
     .vertical-align-container > .vertical-aligned-content { display: table-cell; text-align: center; vertical-align: middle; }
-.navbar { background-color: #37474F; margin-bottom: 0; border: none; border-radius: 0; }
+.navbar { background-color: #AC2925; margin-bottom: 0; border: none; border-radius: 0; }
     .navbar .container-fluid { margin: 0 10px; }
     .navbar .brand { display: inline-block; text-align: left; text-decoration: none; }
         .navbar .brand h1 { padding: 0; margin: 0; line-height: 50px; font-size: 30px; font-weight: 600; color: white; }
@@ -38,6 +36,9 @@ input.form-control:hover { border-top-color: transparent; border-right-color: tr
     .breadcrumb li a { line-height: 1; font-size: 12px; color: #455A64; }
     .breadcrumb li + li:before { content: "\f104"; display: inline-block; font: normal normal normal 14px/1 FontAwesome; text-align: center; padding: 0 10px; color: #455A64; }
 .panel { border-radius: 2px; box-shadow: 0 0 2px #aaa; }
+.input-group-dynamic { position: relative; padding-top: 25px; margin-bottom: 5px; }
+    .input-group-dynamic label { position: absolute; left: 6px; top: 5px; font-size: 90%; z-index: 3; color:#888; font-weight:normal; -moz-transition: all 0.15s ease-in-out 0s; -o-transition: all 0.15s ease-in-out 0s; -webkit-transition: all 0.15s ease-in-out 0s; transition: all 0.15s ease-in-out 0s; }
+    .input-group-dynamic input:focus + label { color: #106CC8; }
 
 /****************************************************/
 /*  Site                                            */
@@ -49,9 +50,9 @@ input.form-control:hover { border-top-color: transparent; border-right-color: tr
         .sidebar #sidebar-options,
         .sidebar #sidebar-options ul { list-style-type: none; padding: 0; margin: 0; }
             .sidebar #sidebar-options li a { position: relative; display: block; color: #444; font-size: 14px; padding: 13px 10px; -webkit-transition: all 0.1s ease 0s; -moz-transition: all 0.1s ease 0s; -o-transition: all 0.1s ease 0s; transition: all 0.1s ease 0s; text-decoration: none; }
-                .sidebar #sidebar-options li a:hover { background-color: #607d8b; color: white; }
+                .sidebar #sidebar-options li a:hover { background-color: #888080; color: white; }
                 .sidebar #sidebar-options li a i { display: inline-block; font-size: 14px; margin: 0 10px; text-align: center; width: 20px; }
-            .sidebar #sidebar-options > li.active > a { border-left: 5px solid #37474F; }
+            .sidebar #sidebar-options > li.active > a { border-left: 5px solid #AC2925; }
             .sidebar #sidebar-options > li > a > i { margin: 0 10px 0 5px; }
             .sidebar #sidebar-options > li > a > span .fa-minus,
             .sidebar #sidebar-options > li > a > span .fa-plus { position: absolute; top: 0; right: 0; height: 46px; width: 16px; line-height: 46px; -webkit-transition: font-size 0.3s ease; -moz-transition: font-size 0.3s ease; -o-transition: font-size 0.3s ease; transition: font-size 0.3s ease; }
@@ -75,4 +76,4 @@ body#LoginPage { text-align: center; background: #ECEFF1; background: -webkit-gr
         body#LoginPage .panel form { padding: 0 45px 0 15px; }
             body#LoginPage .panel form .form-group { text-align: left; }
             body#LoginPage .panel form [type="submit"] { position: absolute; right: -25px; top: 55px; }
-            body#LoginPage .panel form ul { color:#C9302C; }
+            body#LoginPage .panel form ul { color: #C9302C; }

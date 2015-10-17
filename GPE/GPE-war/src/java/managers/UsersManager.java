@@ -7,16 +7,12 @@ package managers;
 
 import beans.UserBean;
 import dtos.UserDTO;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import models.UserDetailModel;
 import models.UserIndexModel;
@@ -46,10 +42,10 @@ public class UsersManager extends AbstractManager {
         boolean wasNew = user.isNew();
         List<String> errors = userBean.save(user);
         if (errors.isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage("userdetail:success", new FacesMessage(wasNew ? "Adicionado com sucesso" : "Guardado com sucesso"));
+            FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(wasNew ? "Adicionado com sucesso" : "Guardado com sucesso"));
         } else {
             for (String error : errors) {
-                FacesContext.getCurrentInstance().addMessage("userdetail:error", new FacesMessage(error));
+                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(error));
             }
         }
         return GenerateRelativeURL("/users/detail");

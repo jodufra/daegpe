@@ -5,29 +5,20 @@
  */
 package dtos;
 
-import entities.User;
-import java.util.Date;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import utilities.Security;
 
 /**
  *
  * @author joeld
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-public class UserDTO extends AbstractDTO<User, UserDTO> {
+public class UserDTO extends AbstractDTO {
 
-    private Integer idUser;
-    private String internalId;
-    private String name;
-    private String email;
-    private final String password;
-    private String newPassword;
-    private String photo;
-    private UserRoleDTO userRole;
+    protected Integer idUser;
+    protected String internalId;
+    protected String name;
+    protected String email;
+    protected final String password;
+    protected String newPassword;
 
     public UserDTO() {
         this.idUser = 0;
@@ -35,30 +26,24 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
         this.name = "";
         this.email = "";
         this.password = "";
-        this.photo = "";
-        this.userRole = new UserRoleDTO();
     }
 
-    public UserDTO(String internalId, String name, String email, String password, String photo, UserRoleDTO userRole) {
+    public UserDTO(String internalId, String name, String email, String password) {
         this.idUser = 0;
         this.internalId = internalId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.newPassword = password;
-        this.photo = photo;
-        this.userRole = userRole;
     }
 
-    public UserDTO(Integer idUser, String internalId, String name, String email, String password, String photo, UserRoleDTO userRole) {
+    public UserDTO(Integer idUser, String internalId, String name, String email, String password) {
         this.idUser = idUser;
         this.internalId = internalId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.newPassword = password;
-        this.photo = photo;
-        this.userRole = userRole;
     }
 
     public Integer getIdUser() {
@@ -109,22 +94,6 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
         return !password.equals(newPassword);
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public UserRoleDTO getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRoleDTO userRole) {
-        this.userRole = userRole;
-    }
-
     @Override
     public boolean isNew() {
         return idUser == 0;
@@ -132,8 +101,7 @@ public class UserDTO extends AbstractDTO<User, UserDTO> {
 
     @Override
     public String toString() {
-        return "UserDTO{" + "idUser=" + idUser + ", internalId=" + internalId + ", name=" + name + ", email=" + email + ", password=" + password + ", newPassword=" + newPassword + ", photo=" + photo + ", userRole=" + userRole + '}';
+        return "UserDTO{" + "idUser=" + idUser + ", internalId=" + internalId + ", name=" + name + ", email=" + email + ", password=" + password + ", newPassword=" + newPassword + '}';
     }
-
     
 }

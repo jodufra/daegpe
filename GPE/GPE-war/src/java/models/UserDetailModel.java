@@ -6,7 +6,6 @@
 package models;
 
 import dtos.UserDTO;
-import dtos.UserRoleDTO;
 
 /**
  *
@@ -14,46 +13,42 @@ import dtos.UserRoleDTO;
  */
 public class UserDetailModel {
 
-    private UserDTO user;
+    private int idUser;
     private String internalId;
     private String name;
     private String email;
     private String newPassword;
-    private UserRoleDTO userRole;
+    private boolean isNew;
 
-    public String generateTitle() {
-        return user == null || user.isNew() ? "Adicionar Utilizador" : user.getName();
+    public void setUser(UserDTO user) {
+        if (user != null && !user.isNew()) {
+            this.idUser = user.getIdUser();
+            this.internalId = user.getInternalId();
+            this.name = user.getName();
+            this.email = user.getEmail();
+            this.newPassword = "";
+            this.isNew = false;
+        } else {
+            this.idUser = 0;
+            this.internalId = "";
+            this.name = "";
+            this.email = "";
+            this.newPassword = "";
+            this.isNew = true;
+        }
+    }
+
+    public String title() {
+        return isNew ? "Adicionar Utilizador" : name;
     }
 
     public UserDTO save() {
-        user.setInternalId(internalId);
-        user.setName(name);
-        user.setEmail(email);
-        if (user.isNew() || !newPassword.isEmpty()) {
+        UserDTO user = new UserDTO(idUser, internalId, name, email, "");
+        if (!newPassword.isEmpty()) {
             user.setNewPassword(newPassword);
         }
-        if (userRole != null) {
-            user.setUserRole(userRole);
-        }
-        return user;
-    }
 
-    public UserDTO getUser() {
-        if (user == null) {
-            setUser(new UserDTO());
-        }
         return user;
-    }
-
-    public void setUser(UserDTO user) {
-        this.user = user;
-        if (user == null) {
-            return;
-        }
-        this.internalId = user.getInternalId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.userRole = user.getUserRole();
     }
 
     public String getInternalId() {
@@ -88,12 +83,8 @@ public class UserDetailModel {
         this.newPassword = newPassword;
     }
 
-    public UserRoleDTO getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRoleDTO userRole) {
-        this.userRole = userRole;
+    public boolean isIsNew() {
+        return isNew;
     }
 
 }

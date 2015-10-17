@@ -6,14 +6,13 @@
 package beans;
 
 import dtos.UserDTO;
-import dtos.UserRoleDTO;
 import entities.User;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import utilities.Security;
 import static utilities.Text.GenerateSlug;
 
@@ -24,11 +23,9 @@ import static utilities.Text.GenerateSlug;
 @Stateless
 public class UserBean extends AbstractBean<User, UserDTO> {
 
+    
     @PersistenceContext(unitName = "GPE-ejbPU")
     private EntityManager em;
-
-    @EJB
-    private UserRoleBean userRoleBean;
 
     public UserBean() {
         super(User.class);
@@ -45,16 +42,17 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     }
 
     @Override
-    protected UserDTO generateDTO(User user) {
-        UserRoleDTO role = userRoleBean.find(user.getUserRole().getIdUserRole());
-        return new UserDTO(user.getIdUser(), user.getInternalId(), user.getName(),
-                user.getEmail(), user.getPassword(), user.getPhoto(), role);
+    protected UserDTO generateDTO(User entity) {
+        if (entity == null) {
+            return null;
+        }
+        return new UserDTO(entity.getIdUser(), entity.getInternalId(), entity.getName(), entity.getEmail(), entity.getPassword());
     }
 
     @Override
     public List<String> save(UserDTO dto) {
-        List<String> errors = new ArrayList<>(); 
-        
+        List<String> errors = new ArrayList<>();
+
         if (dto.getInternalId().isEmpty()) {
             errors.add("Id de Utilizador é Obrigatório.");
         }
@@ -63,9 +61,6 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         }
         if (dto.getEmail().isEmpty()) {
             errors.add("Email é Obrigatório.");
-        }
-        if (dto.getUserRole() == null) {
-            errors.add("Indique um role.");
         }
 
         if (errors.isEmpty()) {
@@ -81,15 +76,13 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             if (dto.hasNewPassword()) {
                 user.setPassword(dto.getNewPassword());
             }
-            user.setPhoto(dto.getPhoto());
-            user.setUserRole(userRoleBean.getEntityFromDTO(dto.getUserRole()));
             user.setSearch(GenerateSlug(user.getInternalId() + " " + user.getName() + " " + user.getEmail(), true, true));
 
             if (dto.isNew()) {
                 super.create(user);
             } else {
                 super.edit(user);
-            } 
+            }
         }
 
         return errors;
@@ -107,7 +100,14 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         sb.append("SELECT u FROM User u WHERE (u.internalId = \"").append(username).append("\" OR u.email = \"").append(username).append("\") ");
         sb.append("AND u.password = \"").append(password).append("\"");
 
-        return generateDTO(em.createQuery(sb.toString(), User.class).getSingleResult());
+        TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
+
+        List<User> users = query.getResultList();
+        
+        if(users.isEmpty())
+            return null;
+
+        return  generateDTO(users.get(0));
     }
 
     public List<UserDTO> find(int pageId, int pageSize, UserOrderBy orderBy) {

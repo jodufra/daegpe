@@ -27,7 +27,7 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
     public AbstractBean(Class<Entity> entityClass) {
         this.entityClass = entityClass;
     }
-    
+
     protected abstract EntityManager getEntityManager();
 
     protected abstract Entity getEntityFromDTO(DTO dto);

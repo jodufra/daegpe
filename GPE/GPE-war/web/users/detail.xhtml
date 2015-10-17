@@ -8,14 +8,14 @@
 
     <h:body>
         <ui:composition template="/dashboard.xhtml">
-            <ui:define name="title">#{usersManager.userDetailModel.generateTitle()}</ui:define>
+            <ui:define name="title">#{usersManager.userDetailModel.title()}</ui:define>
 
             <ui:define name="active-sidebar-option">
                 <input type="hidden" name="active-sidebar-option" value="Utilizadores"/>   
             </ui:define>
 
             <ui:define name="breadcrumb">
-                <li>#{usersManager.userDetailModel.generateTitle()}</li>
+                <li>#{usersManager.userDetailModel.title()}</li>
                 <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/users/index")}' >Utilizadores</h:link></li>
                 <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
@@ -24,9 +24,7 @@
                 <div class="container">
                     <div class="panel">
                         <div class="panel-body">
-                            <h:form id="userdetail" class="form-horizontal">
-                                <h:inputHidden id="error" /> 
-                                <h:inputHidden id="success" /> 
+                            <h:form id="userdetail" class="form-horizontal" a:autocomplete="off">
                                 <div class="row ">
                                     <div class="col-xs-12">
                                         <h:messages class="text-danger" for="error" />
@@ -37,39 +35,40 @@
                                         <h:messages class="text-danger" for="success" />
                                     </div>
                                 </div>
+                                
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Id Utilizador</label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+                                    <div class="col-sm-3 col-sm-offset-3">
+                                        <div class="input-group input-group-dynamic">
+                                            <span class="input-group-addon"><i class="fa fa-tag"></i></span>
                                             <h:inputText class="form-control" value="#{usersManager.userDetailModel.internalId}" a:placeholder="Id Utilizador" />
+                                            <label class="">Id Utilizador</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Nome</label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
                                             <h:inputText class="form-control" value="#{usersManager.userDetailModel.name}" a:placeholder="Nome Complete" />
+                                            <label class="">Nome</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Email</label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
                                             <h:inputText class="form-control" value="#{usersManager.userDetailModel.email}" a:placeholder="Email" />
+                                            <label class="">Email</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Palavra-chave</label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                            <h:inputSecret class="form-control" value="#{usersManager.userDetailModel.newPassword}" a:placeholder="Palavra-chave" />
+                                            <h:inputSecret class="form-control" value="#{usersManager.userDetailModel.newPassword}" a:placeholder="Palavra-chave" a:autocomplete="off"  />
+                                            <label class="">Palavra-chave</label>
                                         </div>
                                     </div>
                                 </div>

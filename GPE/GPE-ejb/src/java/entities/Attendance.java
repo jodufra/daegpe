@@ -24,18 +24,18 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @NamedQueries({})
-@Table(name = "PARTICIPATIONS")
-public class Participation extends AbstractEntity implements Serializable {
+@Table(name = "ATTENDANCES")
+public class Attendance extends AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    private Integer idParticipation;
+    private Integer idAttendance;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "IDUSER")
+    @JoinColumn(name = "IDSTUDENT")
     @NotNull
-    private User user;
+    private Student student;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "IDEVENT")
@@ -43,38 +43,39 @@ public class Participation extends AbstractEntity implements Serializable {
     private Event event;
 
     @Basic(optional = false)
-    private boolean hasPresence;
+    private boolean present;
 
-    public Participation() {
+    public Attendance() {
+        this.present = false;
     }
 
-    public Participation(User user, Event event, boolean hasPresence) {
-        this.user = user;
+    public Attendance(Student student, Event event, boolean present) {
+        this.student = student;
         this.event = event;
-        this.hasPresence = hasPresence;
+        this.present = present;
     }
 
-    public Participation(Integer idParticipation, User user, Event event, boolean hasPresence) {
-        this.idParticipation = idParticipation;
-        this.user = user;
+    public Attendance(Integer idAttendance, Student student, Event event, boolean present) {
+        this.idAttendance = idAttendance;
+        this.student = student;
         this.event = event;
-        this.hasPresence = hasPresence;
+        this.present = present;
     }
 
-    public Integer getIdParticipation() {
-        return idParticipation;
+    public Integer getIdAttendance() {
+        return idAttendance;
     }
 
-    public void setIdParticipation(Integer idParticipation) {
-        this.idParticipation = idParticipation;
+    public void setIdAttendance(Integer idAttendance) {
+        this.idAttendance = idAttendance;
     }
 
-    public User getUser() {
-        return user;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public Event getEvent() {
@@ -85,23 +86,23 @@ public class Participation extends AbstractEntity implements Serializable {
         this.event = event;
     }
 
-    public boolean isHasPresence() {
-        return hasPresence;
+    public boolean isPresent() {
+        return present;
     }
 
-    public void setHasPresence(boolean hasPresence) {
-        this.hasPresence = hasPresence;
+    public void setPresent(boolean present) {
+        this.present = present;
     }
-
+    
     @Override
     public boolean isNew() {
-        return idParticipation == 0;
+        return idAttendance == 0;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.idParticipation);
+        hash = 79 * hash + Objects.hashCode(this.idAttendance);
         return hash;
     }
 
@@ -113,8 +114,8 @@ public class Participation extends AbstractEntity implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Participation other = (Participation) obj;
-        if (!Objects.equals(this.idParticipation, other.idParticipation)) {
+        final Attendance other = (Attendance) obj;
+        if (!Objects.equals(this.idAttendance, other.idAttendance)) {
             return false;
         }
         return true;
