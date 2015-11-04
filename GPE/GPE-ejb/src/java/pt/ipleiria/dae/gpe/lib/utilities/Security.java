@@ -17,7 +17,7 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class Security {
 
-    public static String GetMD5Hash(String input) {
+    public static String GenerateMD5Hash(String input) {
         if (input == null || input.isEmpty()) {
             return "";
         }

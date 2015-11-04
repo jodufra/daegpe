@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:body>
         <ui:composition template="/dashboard.xhtml">
@@ -63,6 +64,17 @@
                                             <span class="input-group-addon"><i class="fa fa-key"></i></span>
                                             <h:inputSecret class="form-control" value="#{usersManager.userDetailModel.newPassword}" a:placeholder="Palavra-chave" a:autocomplete="off"  />
                                             <label class="">Palavra-chave</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        <div class="input-group input-group-dynamic">
+                                            <span class="input-group-addon"><i class="fa fa-child"></i></span>
+                                            <h:selectOneMenu value="#{usersManager.userDetailModel.type}" class="form-control" >
+                                                <f:selectItems value="#{usersManager.userDetailModel.userTypes}" />
+                                            </h:selectOneMenu>
+                                            <label class="">Tipo</label>
                                         </div>
                                     </div>
                                 </div>

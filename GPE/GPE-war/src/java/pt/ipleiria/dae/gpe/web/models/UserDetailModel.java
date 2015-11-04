@@ -6,6 +6,7 @@
 package pt.ipleiria.dae.gpe.web.models;
 
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+import pt.ipleiria.dae.gpe.lib.entities.UserType;
 
 /**
  *
@@ -19,6 +20,11 @@ public class UserDetailModel {
     private String email;
     private String newPassword;
     private boolean isNew;
+    private UserType type;
+
+    public String title() {
+        return isNew ? "Adicionar Utilizador" : name;
+    }
 
     public void setUser(UserDTO user) {
         if (user != null && !user.isNew()) {
@@ -28,6 +34,7 @@ public class UserDetailModel {
             this.email = user.getEmail();
             this.newPassword = "";
             this.isNew = user.isNew();
+            this.type = user.getType();
         } else {
             this.idUser = 0;
             this.internalId = "";
@@ -35,20 +42,33 @@ public class UserDetailModel {
             this.email = "";
             this.newPassword = "";
             this.isNew = true;
+            this.type = UserType.Student;
         }
     }
 
-    public String title() {
-        return isNew ? "Adicionar Utilizador" : name;
-    }
-
-    public UserDTO save() {
-        UserDTO user = new UserDTO(idUser, internalId, name, email);
+    public UserDTO provideUserDTO() {
+        UserDTO user = new UserDTO(idUser, type, internalId, name, email);
         if (!newPassword.isEmpty()) {
             user.setNewPassword(newPassword);
         }
 
         return user;
+    }
+    
+    public UserType[] getUserTypes(){
+        return UserType.values();
+    }
+
+    public String provideUserTypeLabel(UserType type) {
+        switch (type) {
+            case Administrator:
+                return "Administrador";
+            case Manager:
+                return "Gestor";
+            case Student:
+                return "Estudante";
+        }
+        return "";
     }
 
     public String getInternalId() {
@@ -57,6 +77,14 @@ public class UserDetailModel {
 
     public void setInternalId(String internalId) {
         this.internalId = internalId;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 
     public String getName() {

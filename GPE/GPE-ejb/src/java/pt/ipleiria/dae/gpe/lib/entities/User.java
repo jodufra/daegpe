@@ -41,6 +41,10 @@ public class User extends AbstractEntity implements Serializable {
 
     @Basic(optional = false)
     @NotNull
+    protected UserType type;
+
+    @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 255)
     protected String internalId;
 
@@ -88,6 +92,14 @@ public class User extends AbstractEntity implements Serializable {
 
     public void setIdUser(Integer idUser) {
         this.idUser = idUser;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 
     public String getInternalId() {
@@ -149,10 +161,7 @@ public class User extends AbstractEntity implements Serializable {
             return false;
         }
         User other = (User) object;
-        if ((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser))) {
-            return false;
-        }
-        return true;
+        return !((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser)));
     }
 
     @Override

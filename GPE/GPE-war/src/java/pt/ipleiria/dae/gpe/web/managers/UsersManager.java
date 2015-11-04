@@ -40,14 +40,15 @@ public class UsersManager extends AbstractManager {
     private void initUsersManager(){
         userIndexModel = new UserIndexModel(userBean);
         userDetailModel = new UserDetailModel();
-        errorMessages.put(EntityValidationError.USER_INTERNALID_REQUIRED, "Id de Utilizador é Obrigatório.");        
-        errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é Obrigatório.");
-        errorMessages.put(EntityValidationError.USER_EMAIL_REQUIRED, "Email é Obrigatório.");
-        errorMessages.put(EntityValidationError.USER_EMAIL_PATTERN, "Email inválido");
+        errorMessages.put(EntityValidationError.USER_INTERNALID_REQUIRED, "Id Utilizador é obrigatório.");        
+        errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é obrigatório.");
+        errorMessages.put(EntityValidationError.USER_EMAIL_REQUIRED, "Email é obrigatório.");
+        errorMessages.put(EntityValidationError.USER_EMAIL_PATTERN, "Email inválido.");
+        errorMessages.put(EntityValidationError.USER_USERTYPE_INVALID, "Tipo de Utilizador inválido.");
     }
 
     public String saveUser() {
-        UserDTO user = userDetailModel.save();
+        UserDTO user = userDetailModel.provideUserDTO();
         boolean wasNew = user.isNew();
         List<EntityValidationError> errors = userBean.save(user);
 

@@ -13,5 +13,20 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Administrator extends User{
+
+    public Administrator() {
+        super();
+        this.type = UserType.Administrator;
+    }
+
+    public Administrator(String internalId, String name, String email, String password) {
+        super(internalId, name, email, password);
+        this.type = UserType.Administrator;
+    }
+
+    public Administrator(Integer idUser, String internalId, String name, String email, String password, String search) {
+        super(idUser, internalId, name, email, password, search);
+        this.type = UserType.Administrator;
+    }
     
 }

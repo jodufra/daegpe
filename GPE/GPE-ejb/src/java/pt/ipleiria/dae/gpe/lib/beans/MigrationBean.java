@@ -23,7 +23,7 @@ public class MigrationBean {
     @EJB
     private pt.ipleiria.dae.gpe.lib.beans.UserBean userBean;
 
-    @PostConstruct 
+    @PostConstruct
     public void populateDB() {
         System.out.println("Seeding DB");
 
@@ -40,6 +40,12 @@ public class MigrationBean {
 
         student = new StudentDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "student");
         userBean.save(student);
+
+        for (int i = 0; i < 100; i++) {
+            String id = (9999000 + i) + "";
+            student = new StudentDTO(id, "Dummy Student", id + "@my.ipleiria.pt", "student");
+            userBean.save(student);
+        }
 
         System.out.println("DB seeded");
     }
