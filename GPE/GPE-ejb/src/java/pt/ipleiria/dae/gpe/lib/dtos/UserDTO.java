@@ -16,6 +16,16 @@ import pt.ipleiria.dae.gpe.lib.utilities.Security;
  */
 public class UserDTO extends AbstractDTO {
 
+    public static boolean IsAdministrator(UserDTO user){
+        return (user instanceof AdministratorDTO);
+    }
+    public static boolean IsManager(UserDTO user){
+        return (user instanceof ManagerDTO);
+    }
+    public static boolean IsStudent(UserDTO user){
+        return (user instanceof StudentDTO);
+    }
+    
     protected Integer idUser;
     protected UserType type;
     protected String internalId;

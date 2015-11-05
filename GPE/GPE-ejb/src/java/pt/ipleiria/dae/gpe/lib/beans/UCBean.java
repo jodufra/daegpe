@@ -11,9 +11,13 @@ import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
 /**
  *
@@ -35,7 +39,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
     }
 
     @Override
-    public List<EntityValidationError> save(UCDTO dto) {
+    public void save(UCDTO dto) throws EntityValidationException, EntityNotFoundException {
         List<EntityValidationError> errors = new ArrayList<>();
 
         if (dto.getInternalId().isEmpty()) {
@@ -44,7 +48,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
         if (dto.getName().isEmpty()) {
             errors.add(EntityValidationError.UC_NAME_REQUIRED);
         }
-        
+
         if (errors.isEmpty()) {
             UC uc;
             if (dto.isNew()) {
@@ -61,9 +65,9 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
             } else {
                 edit(uc);
             }
+        } else {
+            throw new EntityValidationException(errors);
         }
-
-        return errors;
     }
 
 }

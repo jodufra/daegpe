@@ -22,7 +22,10 @@ public class UserDetailModel {
     private boolean isNew;
     private UserType type;
 
-    public String title() {
+    public UserDetailModel() {
+    }
+
+    public String getTitle() {
         return isNew ? "Adicionar Utilizador" : name;
     }
 
@@ -51,24 +54,11 @@ public class UserDetailModel {
         if (!newPassword.isEmpty()) {
             user.setNewPassword(newPassword);
         }
-
         return user;
     }
-    
-    public UserType[] getUserTypes(){
-        return UserType.values();
-    }
 
-    public String provideUserTypeLabel(UserType type) {
-        switch (type) {
-            case Administrator:
-                return "Administrador";
-            case Manager:
-                return "Gestor";
-            case Student:
-                return "Estudante";
-        }
-        return "";
+    public UserType[] getUserTypes() {
+        return UserType.values();
     }
 
     public String getInternalId() {

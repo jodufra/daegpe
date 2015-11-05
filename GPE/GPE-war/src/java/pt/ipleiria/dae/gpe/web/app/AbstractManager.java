@@ -7,9 +7,11 @@ package pt.ipleiria.dae.gpe.web.app;
 
 import java.io.IOException;
 import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import java.util.EnumMap;
+import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 
 /**
  *
@@ -44,6 +46,28 @@ public abstract class AbstractManager implements Serializable {
     protected void Redirect(String url) throws IOException {
         url = GenerateAbsoluteURL(url);
         FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+    }
+
+    protected void PresentMessage(String clientId, FacesMessage.Severity severity, String summary, String details) {
+        FacesContext currentInstance = FacesContext.getCurrentInstance();
+        currentInstance.addMessage(clientId, new FacesMessage(severity, summary, details));
+    }
+
+    protected void PresentSuccessMessage(String clientId, String summary) {
+        FacesContext currentInstance = FacesContext.getCurrentInstance();
+        currentInstance.addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, ""));
+    }
+
+    protected void PresentErrorMessage(String clientId, String summary) {
+        FacesContext currentInstance = FacesContext.getCurrentInstance();
+        currentInstance.addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, ""));
+    }
+
+    protected void PresentErrorMessages(String clientId, List<EntityValidationError> exceptions, EnumMap<EntityValidationError, String> exceptionMessages) {
+        FacesContext currentInstance = FacesContext.getCurrentInstance();
+        for (EntityValidationError exception : exceptions) {
+            currentInstance.addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, exceptionMessages.get(exception), ""));
+        }
     }
 
 }

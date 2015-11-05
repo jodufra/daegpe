@@ -33,6 +33,16 @@ import javax.validation.constraints.Size;
 })
 @Table(name = "USERS")
 public class User extends AbstractEntity implements Serializable {
+    
+    public static boolean IsAdministrator(User user){
+        return (user instanceof Administrator);
+    }
+    public static boolean IsManager(User user){
+        return (user instanceof Manager);
+    }
+    public static boolean IsStudent(User user){
+        return (user instanceof Student);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

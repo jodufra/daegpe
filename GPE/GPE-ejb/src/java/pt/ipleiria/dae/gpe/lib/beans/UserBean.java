@@ -12,10 +12,17 @@ import pt.ipleiria.dae.gpe.lib.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import pt.ipleiria.dae.gpe.lib.entities.Administrator;
+import pt.ipleiria.dae.gpe.lib.entities.Manager;
+import pt.ipleiria.dae.gpe.lib.entities.Student;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
 
@@ -39,15 +46,20 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     }
 
     @Override
-    public List<EntityValidationError> save(UserDTO dto) {
+    public void save(UserDTO dto) throws EntityValidationException, EntityNotFoundException {
         List<EntityValidationError> errors = new ArrayList<>();
 
         if (dto.getInternalId().isEmpty()) {
             errors.add(EntityValidationError.USER_INTERNALID_REQUIRED);
         } else {
-            UserDTO userWithSameInternalId = find(dto.getInternalId());
-            if (userWithSameInternalId != null && !Objects.equals(userWithSameInternalId.getIdUser(), dto.getIdUser())) {
-                errors.add(EntityValidationError.USER_INTERNALID_NOT_UNIQUE);
+            UserDTO userWithSameInternalId;
+            try {
+                userWithSameInternalId = find(dto.getInternalId());
+                if (userWithSameInternalId != null && !Objects.equals(userWithSameInternalId.getIdUser(), dto.getIdUser())) {
+                    errors.add(EntityValidationError.USER_INTERNALID_NOT_UNIQUE);
+                }
+            } catch (EntityNotFoundException ex) {
+                // Do nothing. This execption means that there are no users with repeated InternalId.
             }
         }
         if (dto.getType() == null) {
@@ -63,7 +75,15 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         if (errors.isEmpty()) {
             User user;
             if (dto.isNew()) {
-                user = new User();
+                if (UserDTO.IsAdministrator(dto)) {
+                    user = new Administrator();
+                } else if (UserDTO.IsManager(dto)) {
+                    user = new Manager();
+                } else if (UserDTO.IsStudent(dto)) {
+                    user = new Student();
+                } else {
+                    user = new User();
+                }
             } else {
                 user = getEntityFromDTO(dto);
             }
@@ -81,37 +101,32 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             } else {
                 super.edit(user);
             }
+        } else {
+            throw new EntityValidationException(errors);
         }
-
-        return errors;
     }
 
-    public UserDTO find(String internalId) {
+    public UserDTO find(String internalId) throws EntityNotFoundException {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT u FROM User u WHERE u.internalId = \"").append(internalId).append("\"");
         TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
         List<User> users = query.getResultList();
         if (users.isEmpty()) {
-            return null;
+            throw new EntityNotFoundException();
         }
         return generateDTO(users.get(0));
     }
 
-    public UserDTO find(String username, String password) {
+    public UserDTO find(String username, String password) throws EntityNotFoundException {
         password = Security.GenerateMD5Hash(password);
-
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT u FROM User u WHERE (u.internalId = \"").append(username).append("\" OR u.email = \"").append(username).append("\") ");
         sb.append("AND u.password = \"").append(password).append("\"");
-
         TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
-
         List<User> users = query.getResultList();
-
         if (users.isEmpty()) {
-            return null;
+            throw new EntityNotFoundException();
         }
-
         return generateDTO(users.get(0));
     }
 
@@ -144,7 +159,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
                 break;
         }
 
-        if (pageId != 0 && pageSize != 0) {
+        if (pageId > 0 && pageSize > 0) {
             int offset = (pageId - 1) * pageSize;
             return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
         }

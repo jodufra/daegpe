@@ -5,12 +5,16 @@
  */
 package pt.ipleiria.dae.gpe.lib.beans;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pt.ipleiria.dae.gpe.lib.dtos.AdministratorDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
 /**
  *
@@ -25,29 +29,34 @@ public class MigrationBean {
 
     @PostConstruct
     public void populateDB() {
-        System.out.println("Seeding DB");
+        try {
+            System.out.println("Seeding DB");
+            
+            AdministratorDTO admin;
+            admin = new AdministratorDTO("dev", "Developer", "developer@gpe.pt", "admin");
+            userBean.save(admin);
 
-        AdministratorDTO admin;
-        admin = new AdministratorDTO("dev", "Developer", "developer@gpe.pt", "admin");
-        userBean.save(admin);
-
-        StudentDTO student;
-        student = new StudentDTO("2120189", "Duarte Mateus", "2120189@my.ipleiria.pt", "student");
-        userBean.save(student);
-
-        student = new StudentDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "student");
-        userBean.save(student);
-
-        student = new StudentDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "student");
-        userBean.save(student);
-
-        for (int i = 0; i < 100; i++) {
-            String id = (9999000 + i) + "";
-            student = new StudentDTO(id, "Dummy Student", id + "@my.ipleiria.pt", "student");
+            StudentDTO student;
+            student = new StudentDTO("2120189", "Duarte Mateus", "2120189@my.ipleiria.pt", "student");
             userBean.save(student);
-        }
 
-        System.out.println("DB seeded");
+            student = new StudentDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "student");
+            userBean.save(student);
+
+            student = new StudentDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "student");
+            userBean.save(student);
+
+            for (int i = 0; i < 100; i++) {
+                String id = (9999000 + i) + "";
+                student = new StudentDTO(id, "Dummy Student", id + "@my.ipleiria.pt", "student");
+                userBean.save(student);
+            }
+
+            System.out.println("DB seeded");
+        } catch (EntityValidationException | EntityNotFoundException e) {
+            System.out.println("MigrationBean.populateDB() - !!! Exception while populating the database");
+        } 
+
     }
 
 }

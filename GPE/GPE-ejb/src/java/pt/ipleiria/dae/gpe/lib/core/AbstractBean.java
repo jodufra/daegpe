@@ -15,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
 /**
  *
@@ -34,7 +36,7 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
 
     protected abstract EntityManager getEntityManager();
 
-    protected Entity getEntityFromDTO(DTO dto){
+    protected Entity getEntityFromDTO(DTO dto) throws EntityNotFoundException {
         return getEntity(dto.getRelationalId());
     }
 
@@ -50,7 +52,7 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         return null;
     }
 
-    public abstract List<EntityValidationError> save(DTO dto);
+    public abstract void save(DTO dto) throws EntityValidationException, EntityNotFoundException;
 
     protected List<DTO> generateDTOList(List<Entity> entities) {
         List<DTO> results = new ArrayList<>();
@@ -68,22 +70,32 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         getEntityManager().merge(entity);
     }
 
-    public void remove(DTO dto) {
+    public void remove(DTO dto) throws EntityNotFoundException {
         if (!dto.isNew()) {
             getEntityManager().remove(getEntityManager().merge(getEntityFromDTO(dto)));
         }
     }
 
-    protected Entity getEntity(Object id) {
+    public void removeById(Object id) throws EntityNotFoundException  {
+        Entity entity = getEntity(id);
+        if (!entity.isNew()) {
+            getEntityManager().remove(getEntityManager().merge(entity));
+        }
+    }
+
+    protected Entity getEntity(Object id) throws EntityNotFoundException {
         return getEntityManager().find(entityClass, id);
     }
 
-    public DTO find(Object obj) {
+    public DTO find(Object obj) throws EntityNotFoundException {
         Entity entity;
         if (obj.getClass().equals(AbstractDTO.class)) {
             entity = getEntityFromDTO((DTO) obj);
         } else {
             entity = getEntity(obj);
+        }
+        if (entity == null) {
+            throw new EntityNotFoundException();
         }
         return generateDTO(entity);
     }
