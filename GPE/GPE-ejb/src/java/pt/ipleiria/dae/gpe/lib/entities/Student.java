@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Student extends User {
-    
+
     @ManyToMany(mappedBy = "students")
     private Collection<UC> ucs;
 
@@ -27,18 +27,21 @@ public class Student extends User {
 
     public Student() {
         super();
+        this.type = UserType.Student;
         this.ucs = new ArrayList<>();
         this.attendances = new ArrayList<>();
     }
 
     public Student(String internalId, String name, String email, String password) {
         super(internalId, name, email, password);
+        this.type = UserType.Student;
         this.ucs = new ArrayList<>();
         this.attendances = new ArrayList<>();
     }
 
     public Student(Integer idUser, String internalId, String name, String email, String password, String search) {
         super(idUser, internalId, name, email, password, search);
+        this.type = UserType.Student;
         this.ucs = new ArrayList<>();
         this.attendances = new ArrayList<>();
     }
@@ -58,6 +61,5 @@ public class Student extends User {
     public void setAttendances(Collection<Attendance> attendances) {
         this.attendances = attendances;
     }
-    
-    
+
 }
