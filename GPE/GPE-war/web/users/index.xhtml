@@ -30,6 +30,7 @@
                         </h:form>
                     </div>
 
+<<<<<<< HEAD
                     <h:dataTable var="User" value="#{usersManager.userIndexModel.users}" class="table table-striped">
                         
                         <h:column> 
@@ -56,12 +57,52 @@
                             </f:facet>   
                             <h:form>
                                 <h:commandLink actionListener="#{usersManager.removeUser}" class="pull-right btn btn-danger fa " value="&#xf1f8;"  />
+=======
+                    <h:form id="userindexform" >
+                        <div class="row ">
+                            <div class="col-xs-12 text-center">
+                                <h:messages for="userindexform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                            </div>
+                        </div>
+                        <h:dataTable var="User" value="#{usersManager.userIndexModel.users}" class="table table-striped" >
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Id"/>
+                                </f:facet>   
+                                <h:outputText value="#{User.internalId}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Name"/>
+                                </f:facet>   
+                                <h:outputText value="#{User.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Email"/>
+                                </f:facet>   
+                                <h:outputText value="#{User.email}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Tipo"/>
+                                </f:facet>   
+                                <h:outputText value="#{User.type}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value=""/>
+                                </f:facet>   
+                                <h:commandLink class="pull-right btn btn-danger fa " value="&#xf1f8;" onclick="return confirm('Conrfirma que pretende remover este Utilizador?');" actionListener="#{usersManager.removeUser}">
+                                    <f:param name="userId" id="userId" value="#{User.idUser}" />
+                                </h:commandLink>
+>>>>>>> bcdf2cd4dad14c357f41ae402f6898d7297a9d26
                                 <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirect.GenerateRelativeURL("/users/detail")}' >
                                     <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{User}"/>
                                 </h:commandLink>
-                            </h:form>
-                        </h:column>
-                    </h:dataTable>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
                 </div>
             </ui:define>
         </ui:composition>

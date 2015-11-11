@@ -20,7 +20,6 @@ public class UserIndexModel {
     public int pageId;    
     public final int pageSize = 20;
     public UserOrderBy orderBy;
-    public List<UserDTO> users;
 
     public UserIndexModel(UserBean userBean) {
         this.userBean = userBean;
@@ -47,7 +46,5 @@ public class UserIndexModel {
     public List<UserDTO> getUsers() {
         return userBean.find(pageId, pageSize, orderBy);
     }
-    
-    
     
 }

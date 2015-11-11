@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.web.app;
 
-import pt.ipleiria.dae.gpe.web.app.AbstractManager;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.io.IOException;
 import java.util.logging.Level;

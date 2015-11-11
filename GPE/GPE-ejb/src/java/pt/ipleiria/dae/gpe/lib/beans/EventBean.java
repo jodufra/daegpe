@@ -12,6 +12,8 @@ import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
 
 @Stateless
@@ -32,7 +34,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
     }
 
     @Override
-    public List<EntityValidationError> save(EventDTO dto) {
+    public void save(EventDTO dto) throws EntityValidationException, EntityNotFoundException {
        List<EntityValidationError> errors = new ArrayList<>();
 
         if (dto.getInternalId().isEmpty()) {
@@ -69,13 +71,10 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             } else {
                 super.edit(event);
             }
+        }else{
+             throw new EntityValidationException(errors);
         }
-        System.out.println("ERROS: " + errors.size());
-        for(EntityValidationError e: errors){
-            System.out.println("T: " + e.toString());
-        }
-        return errors;
-    
+        
     }
     
     

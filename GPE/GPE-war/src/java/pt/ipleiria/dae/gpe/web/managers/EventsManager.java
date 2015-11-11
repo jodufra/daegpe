@@ -20,6 +20,9 @@ import pt.ipleiria.dae.gpe.web.app.AbstractManager;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.web.models.EventDetailModel;
 import pt.ipleiria.dae.gpe.web.models.EventIndexModel;
 
@@ -49,27 +52,19 @@ public class EventsManager extends AbstractManager{
     public EventsManager() {
     }
 
-    public String saveEvent()
+    public void saveEvent()
     {
         errors.clear();
         EventDTO eventDTO = this.eventDetailModel.save();
-        System.out.println("ID: " + eventDTO.getIdEvent());
         boolean wasNew = eventDTO.isNew();
-        System.out.println("wasNew: " + wasNew);
-        errors = eventBean.save(eventDTO);
-        
-        FacesContext currentInstance = FacesContext.getCurrentInstance();
-        
-        if (errors.isEmpty()) {
-            currentInstance.addMessage("eventdetailform", new FacesMessage(FacesMessage.SEVERITY_INFO, wasNew ? "Adicionado com sucesso" : "Guardado com sucesso", ""));
-            return  GenerateRelativeURL("/events/index");
-        } else {
-            for (EntityValidationError error : errors) {
-                currentInstance.addMessage("eventdetailform", new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessages.get(error), ""));
-            }
+        try {
+            eventBean.save(eventDTO);
+            PresentSuccessMessage("userdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("userdetailform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("userdetailform", "Utilizador a ser editado, não foi encontrado ou foi removido.");
         }
-
-        return "";
     }
     
     public EventIndexModel getEventIndexModel() {
