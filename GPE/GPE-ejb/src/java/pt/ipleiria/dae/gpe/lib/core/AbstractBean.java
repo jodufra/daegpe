@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.lib.core;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
-import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
 /**
  *
@@ -36,15 +33,14 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
 
     protected abstract EntityManager getEntityManager();
 
-    protected Entity getEntityFromDTO(DTO dto) throws EntityNotFoundException {
+    protected Entity getEntityFromDTO(DTO dto){
         return getEntity(dto.getRelationalId());
     }
 
     protected DTO generateDTO(Entity entity) {
         if (entity != null) {
             try {
-                Constructor<DTO> declaredConstructor = (Constructor<DTO>) DeclaredConstructorCache.CACHE.getDeclaredConstructor(dtoClass, entityClass);
-                return declaredConstructor.newInstance(entity);
+                return dtoClass.getDeclaredConstructor(entityClass).newInstance(entity);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(AbstractBean.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -52,7 +48,7 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         return null;
     }
 
-    public abstract void save(DTO dto) throws EntityValidationException, EntityNotFoundException;
+    public abstract List<EntityValidationError> save(DTO dto);
 
     protected List<DTO> generateDTOList(List<Entity> entities) {
         List<DTO> results = new ArrayList<>();
@@ -70,32 +66,22 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         getEntityManager().merge(entity);
     }
 
-    public void remove(DTO dto) throws EntityNotFoundException {
+    public void remove(DTO dto) {
         if (!dto.isNew()) {
             getEntityManager().remove(getEntityManager().merge(getEntityFromDTO(dto)));
         }
     }
 
-    public void removeById(Object id) throws EntityNotFoundException  {
-        Entity entity = getEntity(id);
-        if (!entity.isNew()) {
-            getEntityManager().remove(getEntityManager().merge(entity));
-        }
-    }
-
-    protected Entity getEntity(Object id) throws EntityNotFoundException {
+    protected Entity getEntity(Object id) {
         return getEntityManager().find(entityClass, id);
     }
 
-    public DTO find(Object obj) throws EntityNotFoundException {
+    public DTO find(Object obj) {
         Entity entity;
         if (obj.getClass().equals(AbstractDTO.class)) {
             entity = getEntityFromDTO((DTO) obj);
         } else {
             entity = getEntity(obj);
-        }
-        if (entity == null) {
-            throw new EntityNotFoundException();
         }
         return generateDTO(entity);
     }

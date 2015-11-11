@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <ui:composition template="/dashboard.xhtml">
+            <ui:define name="title">Ucs</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Ucs"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Ucs</li>
+                <li><h:link outcome='#{redirect.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">
+                    <div class="panel-heading">
+                        Listagem Ucs
+                        <h:form class="pull-right">
+                            <h:commandLink id="newUc" class="btn btn-success" value="Adicionar" action='#{redirect.GenerateRelativeURL("/ucs/detail")}' >
+                                <f:setPropertyActionListener target="#{ucsManager.ucDetailModel.uc}" value="#{null}"/>
+                            </h:commandLink>
+                        </h:form>
+                    </div>
+
+                    <h:dataTable var="Uc" value="#{ucsManager.ucIndexModel.ucs}" class="table table-striped" >
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Id"/>
+                            </f:facet>   
+                            <h:outputText value="#{Uc.idUC}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Internal Id"/>
+                            </f:facet>   
+                            <h:outputText value="#{Uc.internalId}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Name"/>
+                            </f:facet>   
+                            <h:outputText value="#{Uc.name}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value=""/>
+                            </f:facet>   
+                            <h:form>
+                                <h:commandLink actionListener="#{ucsManager.removeUc}" class="pull-right btn btn-danger fa " value="&#xf1f8;"  />
+                                <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirect.GenerateRelativeURL("/ucs/detail")}' >
+                                    <f:setPropertyActionListener target="#{ucsManager.ucDetailModel.uc}" value="#{Uc}"/>
+                                </h:commandLink>
+                            </h:form>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
