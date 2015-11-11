@@ -6,7 +6,6 @@
 package pt.ipleiria.dae.gpe.web.models;
 
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
 
 /**
  *
@@ -20,14 +19,6 @@ public class UserDetailModel {
     private String email;
     private String newPassword;
     private boolean isNew;
-    private UserType type;
-
-    public UserDetailModel() {
-    }
-
-    public String getTitle() {
-        return isNew ? "Adicionar Utilizador" : name;
-    }
 
     public void setUser(UserDTO user) {
         if (user != null && !user.isNew()) {
@@ -37,7 +28,6 @@ public class UserDetailModel {
             this.email = user.getEmail();
             this.newPassword = "";
             this.isNew = user.isNew();
-            this.type = user.getType();
         } else {
             this.idUser = 0;
             this.internalId = "";
@@ -45,20 +35,20 @@ public class UserDetailModel {
             this.email = "";
             this.newPassword = "";
             this.isNew = true;
-            this.type = UserType.Student;
         }
     }
 
-    public UserDTO provideUserDTO() {
-        UserDTO user = new UserDTO(idUser, type, internalId, name, email);
+    public String title() {
+        return isNew ? "Adicionar Utilizador" : name;
+    }
+
+    public UserDTO save() {
+        UserDTO user = new UserDTO(idUser, internalId, name, email);
         if (!newPassword.isEmpty()) {
             user.setNewPassword(newPassword);
         }
-        return user;
-    }
 
-    public UserType[] getUserTypes() {
-        return UserType.values();
+        return user;
     }
 
     public String getInternalId() {
@@ -67,14 +57,6 @@ public class UserDetailModel {
 
     public void setInternalId(String internalId) {
         this.internalId = internalId;
-    }
-
-    public UserType getType() {
-        return type;
-    }
-
-    public void setType(UserType type) {
-        this.type = type;
     }
 
     public String getName() {

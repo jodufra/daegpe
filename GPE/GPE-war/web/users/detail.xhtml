@@ -8,14 +8,14 @@
 
     <h:body>
         <ui:composition template="/dashboard.xhtml">
-            <ui:define name="title">#{usersManager.userDetailModel.title}</ui:define>
+            <ui:define name="title">#{usersManager.userDetailModel.title()}</ui:define>
 
             <ui:define name="active-sidebar-option">
                 <input type="hidden" name="active-sidebar-option" value="Utilizadores"/>   
             </ui:define>
 
             <ui:define name="breadcrumb">
-                <li>#{usersManager.userDetailModel.title}</li>
+                <li>#{usersManager.userDetailModel.title()}</li>
                 <li><h:link outcome='#{redirect.GenerateRelativeURL("/users/index")}' >Utilizadores</h:link></li>
                 <li><h:link outcome='#{redirect.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
             </ui:define>

@@ -33,25 +33,11 @@ import javax.validation.constraints.Size;
 })
 @Table(name = "USERS")
 public class User extends AbstractEntity implements Serializable {
-    
-    public static boolean IsAdministrator(User user){
-        return (user instanceof Administrator);
-    }
-    public static boolean IsManager(User user){
-        return (user instanceof Manager);
-    }
-    public static boolean IsStudent(User user){
-        return (user instanceof Student);
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     protected Integer idUser;
-
-    @Basic(optional = false)
-    @NotNull
-    protected UserType type;
 
     @Basic(optional = false)
     @NotNull
@@ -102,14 +88,6 @@ public class User extends AbstractEntity implements Serializable {
 
     public void setIdUser(Integer idUser) {
         this.idUser = idUser;
-    }
-
-    public UserType getType() {
-        return type;
-    }
-
-    public void setType(UserType type) {
-        this.type = type;
     }
 
     public String getInternalId() {
@@ -171,7 +149,10 @@ public class User extends AbstractEntity implements Serializable {
             return false;
         }
         User other = (User) object;
-        return !((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser)));
+        if ((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser))) {
+            return false;
+        }
+        return true;
     }
 
     @Override

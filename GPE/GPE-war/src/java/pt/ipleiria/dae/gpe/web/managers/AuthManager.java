@@ -15,12 +15,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 
 /**
  *
@@ -68,13 +68,12 @@ public class AuthManager extends AbstractManager {
         ExternalContext externalContext = context.getExternalContext();
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
-        UserDTO user;
-        try {
-            user = userBean.find(username, password);        
-            password = "";
+        UserDTO user = userBean.find(username, password);
+        password = "";
+        if (user != null) {
             externalContext.getSessionMap().put("user", user);
             externalContext.redirect(originalURL);
-        } catch (EntityNotFoundException ex) {
+        } else {
             context.addMessage(null, new FacesMessage("Nome de Utilizador ou Palavra-chave incorrectas"));
         }
     }
@@ -84,6 +83,7 @@ public class AuthManager extends AbstractManager {
         password = "";
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         externalContext.invalidateSession();
+
         externalContext.redirect(externalContext.getApplicationContextPath() + "/index.xhtml");
     }
 

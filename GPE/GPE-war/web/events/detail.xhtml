@@ -3,9 +3,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:h="http://java.sun.com/jsf/html">
 
     <h:body>
         <ui:composition template="/dashboard.xhtml">
@@ -20,50 +18,9 @@
                 <li><h:link outcome='#{redirect.GenerateRelativeURL("/events/index")}' >Eventos</h:link></li>
                 <li><h:link outcome='#{redirect.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
+
             <ui:define name="content">
-                <div class = "panel">
-                    <div>
-                        <h3 style = "text-align: center;">New Event</h3>
-                    </div>
-                <h:form id = "eventdetailform" style = "margin: 30px 20% 20px 20%">
-                    
-                    
-                    <h:panelGroup layout="block" rendered="#{eventsManager.errors.size() > 0}">
-                        <div class="alert alert-danger">
-                            <h:messages for="eventdetailform" rendered="true" errorClass="text-danger" infoClass="text-success">
-                            
-                            </h:messages>
-                        </div>
-                    </h:panelGroup>
-                    
-                    <h:panelGroup layout="block"> 
-                            <div class="form-group">
-                                <h:outputLabel for="internalId">Internal ID:</h:outputLabel>
-                                <h:inputText id = "internalId" value = "#{eventsManager.eventDetailModel.internalId}" a:placeholder="Id Event" class="form-control" ></h:inputText>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel for = "name">Name</h:outputLabel>
-                                <h:inputText id = "name" value = "#{eventsManager.eventDetailModel.name}" a:placeholder="Name of Event" class="form-control"></h:inputText>
-                            </div>
-
-                            <div class="form-group">
-                                <h:outputLabel for = "minutes">Minutes</h:outputLabel>
-                                
-                                <h:selectOneMenu id = "minutes" value = "#{eventsManager.eventDetailModel.minutes}" class="form-control" style = "height: 35px">
-                                    <f:selectItem itemValue="30"/>
-                                    <f:selectItem itemValue="60"/>
-                                    <f:selectItem itemValue="90"/>
-                                    <f:selectItem itemValue="120"/>
-                                </h:selectOneMenu>
-                            </div>    
-
-                        <div>
-                            <h:commandButton value = "Voltar" class = "btn btn-danger" action = '#{eventsManager.removeEvent()}' style = "margin-left: 70%; margin-right: 10px;"></h:commandButton>
-                            <h:commandButton type="submit" value="Create" action = "#{eventsManager.saveEvent()}" class="btn btn-success" ></h:commandButton>
-                        </div>
-                    </h:panelGroup> 
-                </h:form>
-                </div>
+                <div class="panel">Adicionar eventos</div>
             </ui:define>
         </ui:composition>
     </h:body>
