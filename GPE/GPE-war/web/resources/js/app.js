@@ -201,4 +201,5 @@ var App = new (function () {
 
 $(function () {
     App.init();
+    $('[data-toggle="tooltip"]').tooltip()
 });

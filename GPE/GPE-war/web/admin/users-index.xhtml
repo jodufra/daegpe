@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:body>
+        <ui:composition template="/admin/dashboard.xhtml">
+            <ui:define name="title">Utilizadores</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Utilizadores"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Utilizadores</li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">
+                    <h:form id="userindexform" >
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-dynamic">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <h:inputText class="form-control" value="#{adminManager.userIndexModel.search}" a:placeholder="Procurar"  />
+                                            <label class="">Escreva e pressione Enter para Procurar</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <span class="pull-right">
+                                        <div style="padding-top: 12.5px;">
+                                            <h:commandLink id="newUser" class="btn btn-success btn-circle" value="+" title="Adicionar Utilizador" a:data-placement="left" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-detail")}' >
+                                                <f:setPropertyActionListener target="#{adminManager.userDetailModel.user}" value="#{null}"/>
+                                            </h:commandLink>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-xs-12 text-center">
+                                <h:messages for="userindexform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                            </div>
+                        </div>
+                        <h:dataTable var="User" value="#{adminManager.userIndexModel.users}" class="table table-striped" >
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <h:outputText value="Id"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 3}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{4}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 4}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{3}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{3}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{User.internalId}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <h:outputText value="Name"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 5}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{6}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 6}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{5}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{5}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{User.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <h:outputText value="Email"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 1}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{2}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 2}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{1}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{1}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{User.email}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <h:outputText value="Tipo"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 7}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{8}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.userIndexModel.orderBy == 8}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{7}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.userIndexModel.orderBy}" value="#{7}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{User.type}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value=""/>
+                                </f:facet>   
+                                <h:commandLink class="pull-right btn btn-danger fa " value="&#xf1f8;" onclick="return confirm('Conrfirma que pretende remover este Utilizador?');" actionListener="#{adminManager.removeUser}">
+                                    <f:param name="userId" id="userId" value="#{User.idUser}" />
+                                </h:commandLink>
+                                <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/admin/users-detail")}' >
+                                    <f:setPropertyActionListener target="#{adminManager.userDetailModel.user}" value="#{User}"/>
+                                </h:commandLink>
+                            </h:column>
+                        </h:dataTable>
+                        <div class="row text-center pagination">
+                            <c:if test="#{adminManager.userIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  class="fa fa-angle-double-left" title="Primeira Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.userIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-left" title="Página Anterior" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.userIndexModel.pageId > 3 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.userIndexModel.pageId - 3}" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId - 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{adminManager.userIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink value="#{adminManager.userIndexModel.pageId - 2}" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId - 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <c:if test="#{adminManager.userIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink   value="#{adminManager.userIndexModel.pageId - 1}" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <span>
+                                <b>#{adminManager.userIndexModel.pageId}</b>
+                            </span>
+                            <c:if test="#{adminManager.userIndexModel.pagesCount - adminManager.userIndexModel.pageId > 0 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.userIndexModel.pageId + 1}" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId + 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{adminManager.userIndexModel.pagesCount - adminManager.userIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.userIndexModel.pageId + 2}" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId + 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{adminManager.userIndexModel.pagesCount - adminManager.userIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.userIndexModel.pageId + 3}" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId + 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{adminManager.userIndexModel.pagesCount - adminManager.userIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-right" title="Próxima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pagesCount - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.userIndexModel.pagesCount != adminManager.userIndexModel.pageId }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-double-right" title="Ultima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pagesCount}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                        </div>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

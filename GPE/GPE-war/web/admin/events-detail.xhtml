@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <ui:composition template="/admin/dashboard.xhtml">
+            <ui:define name="title">Adicionar Evento</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Eventos"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Adicionar Evento</li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >Eventos</h:link></li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+            <ui:define name="content">
+                <div class = "panel">
+                    <div>
+                        <h3 style = "text-align: center;">New Event</h3>
+                    </div>
+                    <h:form id = "eventdetailform" style = "margin: 30px 20% 20px 20%">
+
+
+                        <div class="row ">
+                            <div class="col-xs-12 text-center">
+                                <h:messages for="eventdetailform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                            </div>
+                        </div>
+
+                        <h:panelGroup layout="block"> 
+                            <div class="form-group">
+                                <h:outputLabel for="internalId">Internal ID:</h:outputLabel>
+                                <h:inputText id = "internalId" value = "#{adminManager.eventDetailModel.internalId}" a:placeholder="Id Event" class="form-control" ></h:inputText>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel for = "name">Name</h:outputLabel>
+                                <h:inputText id = "name" value = "#{adminManager.eventDetailModel.name}" a:placeholder="Name of Event" class="form-control"></h:inputText>
+                            </div>
+
+                            <div class="form-group">
+                                <h:outputLabel for = "minutes">Minutes</h:outputLabel>
+
+                                <h:selectOneMenu id = "minutes" value = "#{adminManager.eventDetailModel.minutes}" class="form-control" style = "height: 35px">
+                                    <f:selectItem itemValue="30"/>
+                                    <f:selectItem itemValue="60"/>
+                                    <f:selectItem itemValue="90"/>
+                                    <f:selectItem itemValue="120"/>
+                                </h:selectOneMenu>
+                            </div>    
+
+                            <div>
+                                <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' class="btn btn-link" >Voltar</h:link>
+                                <h:commandButton type="submit" value="Create" action = "#{adminManager.saveEvent()}" class="btn btn-success" ></h:commandButton>
+                            </div>
+                        </h:panelGroup> 
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

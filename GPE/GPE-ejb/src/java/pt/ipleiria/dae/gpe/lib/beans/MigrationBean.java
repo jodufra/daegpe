@@ -5,6 +5,7 @@
  */
 package pt.ipleiria.dae.gpe.lib.beans;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pt.ipleiria.dae.gpe.lib.dtos.AdministratorDTO;
@@ -13,6 +14,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
@@ -25,13 +28,23 @@ import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 public class MigrationBean {
 
     @EJB
+    private pt.ipleiria.dae.gpe.lib.beans.UCBean ucBean;
+    @EJB
     private pt.ipleiria.dae.gpe.lib.beans.UserBean userBean;
+    @EJB
+    private pt.ipleiria.dae.gpe.lib.beans.EventBean eventBean;
 
     @PostConstruct
     public void populateDB() {
         try {
             System.out.println("Seeding DB");
-            
+
+            // UCs
+            for (int i = 0; i < 100; i++) {
+                ucBean.save(new UCDTO("" + i, "UC" + i));
+            }
+
+            // Users
             AdministratorDTO admin;
             admin = new AdministratorDTO("dev", "Developer", "developer@gpe.pt", "admin");
             userBean.save(admin);
@@ -52,10 +65,21 @@ public class MigrationBean {
                 userBean.save(student);
             }
 
+            // Events
+            EventDTO event;
+            event = new EventDTO("Aula Semanal", "a1", new Date(), (short) 60, null, null);
+            eventBean.save(event);
+
+            event = new EventDTO("Seminário", "s1", new Date(), (short) 60, null, null);
+            eventBean.save(event);
+
+            event = new EventDTO("Workshop", "w1", new Date(), (short) 60, null, null);
+            eventBean.save(event);
+
             System.out.println("DB seeded");
         } catch (EntityValidationException | EntityNotFoundException e) {
             System.out.println("MigrationBean.populateDB() - !!! Exception while populating the database");
-        } 
+        }
 
     }
 

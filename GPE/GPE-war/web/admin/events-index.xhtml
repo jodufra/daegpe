@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <ui:composition template="/admin/dashboard.xhtml">
+            <ui:define name="title">Eventos</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Eventos"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Eventos</li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">
+                    <div>
+                        <h3 style = "float:left; margin-left: 10px;">Events List</h3>
+                        <h:form>
+                            <h:commandButton value = "Add Event" class="btn btn-primary" action = '#{redirectManager.GenerateRelativeURL("/admin/events-detail")}' style = "float:right; margin: 20px 20px 0 0">
+                                <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{null}"/>
+                            </h:commandButton>
+                        </h:form>
+                    </div>
+                    <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndexModel.events}" style = "width: 100%;">
+                        <h:inputHidden value="#{Event.idEvent}" />
+                        <h:column>
+                            <f:facet name = "header">Name</f:facet>
+                            <h:outputText value="#{Event.name}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name = "header">Type</f:facet>
+                            
+                        </h:column>
+                        <h:column>
+                            <f:facet name = "header">Day of Week</f:facet>
+                            
+                        </h:column>
+                        <h:column>
+                            <f:facet name = "header">Time</f:facet>
+                            <h:outputText value="#{Event.dateStart}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name = "header">Local</f:facet>
+                            
+                        </h:column>
+                        <h:column>
+                            <f:facet name = "header">Weeks Interval</f:facet>
+                        </h:column>
+                        <h:column>
+                            <f:facet name = "header">Manager</f:facet>
+                            <h:outputText value="#{Event.manager}"/>
+                        </h:column>
+                         <h:column >
+                            <f:facet name = "header">Actions</f:facet>
+                            <h:form>
+                                <h:commandLink 
+                                    actionListener="#{adminManager.removeEvent}" 
+                                    value = "Remove" class="btn btn-danger" 
+                                    style = "float: right; margin-right: 10px;"
+                                    onclick="if (! confirm('Do you really want DELETE the Event ?')) return false">
+                                    
+                                    <f:param name = "deleteEventId" id = "deleteEventId" value = "#{Event.idEvent}"/>
+                                </h:commandLink>
+                                <h:commandButton value = "Edit" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-detail")}'>
+                                    <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{Event}"/>
+                                </h:commandButton>
+                            </h:form>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

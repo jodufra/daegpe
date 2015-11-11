@@ -12,8 +12,6 @@ import pt.ipleiria.dae.gpe.lib.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,6 +23,7 @@ import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
+import pt.ipleiria.dae.gpe.lib.utilities.UserFindOptions;
 
 /**
  *
@@ -74,13 +73,17 @@ public class UserBean extends AbstractBean<User, UserDTO> {
 
         if (errors.isEmpty()) {
             User user;
+            String userType = "";
             if (dto.isNew()) {
                 if (UserDTO.IsAdministrator(dto)) {
                     user = new Administrator();
+                    userType = "Administrator";
                 } else if (UserDTO.IsManager(dto)) {
                     user = new Manager();
+                    userType = "Manager";
                 } else if (UserDTO.IsStudent(dto)) {
                     user = new Student();
+                    userType = "Student";
                 } else {
                     user = new User();
                 }
@@ -94,7 +97,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             if (dto.hasNewPassword()) {
                 user.setPassword(dto.getNewPassword());
             }
-            user.setSearch(GenerateSlug(" " + user.getInternalId() + " " + user.getName() + " " + user.getEmail() + " ", true, true));
+            user.setSearch(GenerateSlug(" " + user.getInternalId() + " " + user.getName() + " " + user.getEmail() + " " + userType + " ", true, true));
 
             if (dto.isNew()) {
                 super.create(user);
@@ -114,7 +117,17 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         if (users.isEmpty()) {
             throw new EntityNotFoundException();
         }
-        return generateDTO(users.get(0));
+        User user = users.get(0);
+        if (User.IsAdministrator(user)) {
+            return generateDTO((Administrator) user);
+        }
+        if (User.IsManager(user)) {
+            return generateDTO((Manager) user);
+        }
+        if (User.IsStudent(user)) {
+            return generateDTO((Student) user);
+        }
+        return generateDTO(user);
     }
 
     public UserDTO find(String username, String password) throws EntityNotFoundException {
@@ -127,18 +140,43 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         if (users.isEmpty()) {
             throw new EntityNotFoundException();
         }
-        return generateDTO(users.get(0));
+        User user = users.get(0);
+        if (User.IsAdministrator(user)) {
+            return generateDTO((Administrator) user);
+        }
+        if (User.IsManager(user)) {
+            return generateDTO((Manager) user);
+        }
+        if (User.IsStudent(user)) {
+            return generateDTO((Student) user);
+        }
+        return generateDTO(user);
     }
 
-    public enum UserOrderBy {
-
-        InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, EmailAsc, EmailDesc
-    }
-
-    public List<UserDTO> find(int pageId, int pageSize, UserOrderBy orderBy) {
+    public List<UserDTO> find(UserFindOptions options) {
         String query = "SELECT u FROM User u";
 
-        switch (orderBy) {
+        if (options.search != null && !options.search.isEmpty()) {
+            String[] pieces = options.search.split(" ");
+            boolean first = true;
+            for (int i = 0; i < pieces.length; i++) {
+                if (pieces[i].equals(" ") || pieces[i].isEmpty()) {
+                    continue;
+                }
+                pieces[i] = GenerateSlug(pieces[i], true, true);
+                if (first) {
+                    query += " WHERE ";
+                    first = false;
+                } else {
+                    query += " AND ";
+                }
+                query += "u.search LIKE '%" + pieces[i] + "%'";
+            }
+        }
+
+        options.count = (long) em.createQuery(query.replace("SELECT u", "SELECT COUNT(u)")).getSingleResult();
+
+        switch (options.orderBy) {
             case EmailAsc:
                 query += " ORDER BY u.email";
                 break;
@@ -157,11 +195,17 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             case NameDesc:
                 query += " ORDER BY u.name desc";
                 break;
+            case TypeAsc:
+                query += " ORDER BY u.type";
+                break;
+            case TypeDesc:
+                query += " ORDER BY u.type desc";
+                break;
         }
 
-        if (pageId > 0 && pageSize > 0) {
-            int offset = (pageId - 1) * pageSize;
-            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
+        if (options.pageId > 0 && options.pageSize > 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
         }
 
         return generateDTOList(em.createQuery(query, User.class).getResultList());

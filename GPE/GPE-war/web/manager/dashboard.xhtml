@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
         <meta charset="UTF-8"/>
@@ -18,21 +19,20 @@
         <div class="loader"></div>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
-                <a class="brand" href="index.html">
+                <a class="brand" href="/manager/dashboard.html">
                     <h1>GESTOR <small>DE</small> PRESENÇAS</h1>
                 </a>
                 <span class="user-nav">
                     <div class="btn-group">
                         <h:form>
                             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                #{appSession.user.name} <span class="caret"></span>
+                                #{sessionManager.user.name} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Minha Conta</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><h:commandLink action="#{authManager.logout()}" class="" value="Logout"/></li>
+                                <li>
+                                    <h:commandLink action="#{sessionManager.logout()}" class="" value="Logout"/>
+                                </li>
                             </ul>
                         </h:form>
                     </div>
@@ -47,9 +47,6 @@
                         <ui:insert name="active-sidebar-option">
                             <input type="hidden" name="active-sidebar-option" value="Dashboard"/>
                         </ui:insert>
-                        <li><h:link outcome='#{redirect.GenerateRelativeURL("/dashboard")}' ><i class="fa fa-home"></i>Dashboard </h:link></li>
-                        <li><h:link outcome='#{redirect.GenerateRelativeURL("/events/index")}' ><i class="fa fa-bell"></i>Eventos</h:link></li>
-                        <li><h:link outcome='#{redirect.GenerateRelativeURL("/users/index")}' ><i class="fa fa-users"></i>Utilizadores</h:link></li>
                     </ul>
                 </div>
             </div>
@@ -64,12 +61,12 @@
                 </div>
                 <div class="content">
                     <ui:insert name="content">
-                        Content
+                        Não implementado
                     </ui:insert>
                 </div>
             </div>
         </div>
-        <h:outputScript library="plugins" name="jquery-2.1.4.min.js"/>
+        <h:outputScript library="plugins" name="jquery/jquery-2.1.4.min.js"/>
         <h:outputScript library="plugins" name="jquery-ui/jquery-ui.min.js"/>
         <h:outputScript library="plugins" name="bootstrap/js/bootstrap.min.js"/>
         <h:outputScript library="plugins" name="jquery.growl/jquery.growl.js"/>

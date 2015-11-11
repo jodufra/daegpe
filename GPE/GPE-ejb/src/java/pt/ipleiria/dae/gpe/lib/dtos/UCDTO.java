@@ -18,11 +18,12 @@ public class UCDTO extends AbstractDTO {
     private String internalId;
     private String name;
 
-    public UCDTO() {
+    public UCDTO(Integer idUc, String internalId, String name) {
         super(null);
-        this.idUC = 0;
-        this.internalId = "";
-        this.name = "";
+        this.idUC = idUc;
+        this.internalId = internalId;
+        this.name = name;
+        this.New = idUC == 0;
     }
 
     public UCDTO(String internalId, String name) {

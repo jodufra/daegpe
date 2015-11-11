@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,17 +32,19 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search")
 })
-@Table(name = "USERS")
+@Table(name = "USERS", uniqueConstraints = @UniqueConstraint(columnNames = {"INTERNALID"}))
 public class User extends AbstractEntity implements Serializable {
-    
-    public static boolean IsAdministrator(User user){
-        return (user instanceof Administrator);
+
+    public static boolean IsAdministrator(User user) {
+        return (user instanceof Administrator || user.type == UserType.Administrator);
     }
-    public static boolean IsManager(User user){
-        return (user instanceof Manager);
+
+    public static boolean IsManager(User user) {
+        return (user instanceof Manager || user.type == UserType.Manager);
     }
-    public static boolean IsStudent(User user){
-        return (user instanceof Student);
+
+    public static boolean IsStudent(User user) {
+        return (user instanceof Student || user.type == UserType.Student);
     }
 
     @Id

@@ -24,13 +24,13 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <h:inputText required="true" a:required="true" value="#{authManager.username}" class="form-control" a:placeholder="Id utilizador / Email" />
+                                <h:inputText required="true" a:required="true" value="#{sessionManager.username}" class="form-control" a:placeholder="Id utilizador / Email" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
-                                <h:inputSecret required="true" a:required="true" value="#{authManager.password}" class="form-control" a:placeholder="Password" />
+                                <h:inputSecret required="true" a:required="true" value="#{sessionManager.password}" class="form-control" a:placeholder="Password" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -40,13 +40,13 @@
                                 </span>
                             </div>
                         </div>
-                        <h:commandButton action="#{authManager.login()}" class="btn btn-danger btn-circle fa" value="&#xf178;"/>
+                        <h:commandButton action="#{sessionManager.login()}" class="btn btn-danger btn-circle fa" value="&#xf178;"/>
                         <h:messages globalOnly="true" />
                     </h:form>
                 </div>
             </div>
         </div>
-        <h:outputScript library="plugins" name="jquery-2.1.4.min.js"/>
-        <h:outputScript library="plugins" name="bootstrap/js/bootstrap.min.js"/>
+        <h:outputScript library="plugins" name="jquery/jquery-2.1.4.min.js" />
+        <h:outputScript library="plugins" name="bootstrap/js/bootstrap.min.js" />
     </body>
 </html>

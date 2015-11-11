@@ -25,6 +25,9 @@ public abstract class AbstractManager implements Serializable {
     }
 
     protected String GenerateRelativeURL(String url) {
+        if (url.isEmpty()) {
+            return url;
+        }
         url = GenerateURL(url);
         if (url.charAt(0) != '/') {
             url = "/" + url;
@@ -33,6 +36,9 @@ public abstract class AbstractManager implements Serializable {
     }
 
     protected String GenerateAbsoluteURL(String url) {
+        if (url.isEmpty()) {
+            return url;
+        }
         if (url.charAt(0) != '/') {
             url = '/' + url;
         }

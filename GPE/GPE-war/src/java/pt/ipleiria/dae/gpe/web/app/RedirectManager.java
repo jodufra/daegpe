@@ -14,9 +14,9 @@ import javax.faces.bean.RequestScoped;
  */
 @ManagedBean
 @RequestScoped
-public class Redirect extends AbstractManager {
+public class RedirectManager extends AbstractManager {
 
-    public Redirect() {
+    public RedirectManager() {
     }
 
     @Override

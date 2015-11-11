@@ -6,25 +6,33 @@
 package pt.ipleiria.dae.gpe.web.models;
 
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
-import pt.ipleiria.dae.gpe.lib.beans.UserBean.UserOrderBy;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.List;
+import pt.ipleiria.dae.gpe.lib.utilities.UserFindOptions;
+import pt.ipleiria.dae.gpe.lib.utilities.UserOrderBy;
 
 /**
  *
  * @author Joel
  */
 public class UserIndexModel {
+
     private final UserBean userBean;
-    
-    public int pageId;    
+
+    public int pageId;
     public final int pageSize = 20;
     public UserOrderBy orderBy;
+    public String search;
+
+    public long count;
+    public int pagesCount;
 
     public UserIndexModel(UserBean userBean) {
         this.userBean = userBean;
         this.pageId = 1;
         this.orderBy = UserOrderBy.InternalIdAsc;
+        this.search = "";
+        this.count = 0;
     }
 
     public int getPageId() {
@@ -35,16 +43,86 @@ public class UserIndexModel {
         this.pageId = pageId;
     }
 
-    public UserOrderBy getOrderBy() {
-        return orderBy;
+    public int getOrderBy() {
+        switch (orderBy) {
+            case EmailAsc:
+                return 1;
+            case EmailDesc:
+                return 2;
+            case InternalIdAsc:
+                return 3;
+            case InternalIdDesc:
+                return 4;
+            case NameAsc:
+                return 5;
+            case NameDesc:
+                return 6;
+            case TypeAsc:
+                return 7;
+            case TypeDesc:
+                return 8;
+        }
+        return 0;
     }
 
-    public void setOrderBy(UserOrderBy orderBy) {
-        this.orderBy = orderBy;
+    public void setOrderBy(int val) {
+
+        switch (val) {
+            case 1:
+                orderBy = UserOrderBy.EmailAsc;
+                break;
+            case 2:
+                orderBy = UserOrderBy.EmailDesc;
+                break;
+            case 3:
+                orderBy = UserOrderBy.InternalIdAsc;
+                break;
+            case 4:
+                orderBy = UserOrderBy.InternalIdDesc;
+                break;
+            case 5:
+                orderBy = UserOrderBy.NameAsc;
+                break;
+            case 6:
+                orderBy = UserOrderBy.NameDesc;
+                break;
+            case 7:
+                orderBy = UserOrderBy.TypeAsc;
+                break;
+            case 8:
+                orderBy = UserOrderBy.TypeDesc;
+                break;
+        }
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.pageId = 1;
+        this.orderBy = UserOrderBy.InternalIdAsc;
+        this.search = search;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public int getPagesCount() {
+        return pagesCount;
     }
 
     public List<UserDTO> getUsers() {
-        return userBean.find(pageId, pageSize, orderBy);
+        UserFindOptions options = new UserFindOptions(pageId, pageSize, orderBy, search);
+        List<UserDTO> list = userBean.find(options);
+        this.count = options.count;
+        this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
+        return list;
     }
-    
+
 }

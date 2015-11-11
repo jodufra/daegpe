@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title><ui:insert name="title">Dashboard</ui:insert> | Gestão de Presenças</title>
+        <h:outputStylesheet library="plugins" name="bootstrap/css/bootstrap.css"/>
+        <h:outputStylesheet library="plugins" name="font-awesome/css/font-awesome.css"/>
+        <h:outputStylesheet library="css" name="style.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="loader"></div>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <a class="brand" href="admin/dashboard.html">
+                    <h1>GESTOR <small>DE</small> PRESENÇAS</h1>
+                </a>
+                <span class="user-nav">
+                    <div class="btn-group">
+                        <h:form>
+                            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                #{sessionManager.user.name} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <h:commandLink  class="" value="Minha Conta" action='#{redirectManager.GenerateRelativeURL("admin/users-detail")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.userDetailModel.user}" value="#{sessionManager.user}"/>
+                                    </h:commandLink>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <h:commandLink action="#{sessionManager.logout()}" class="" value="Logout"/>
+                                </li>
+                            </ul>
+                        </h:form>
+                    </div>
+                </span>
+            </div>
+        </nav>
+
+        <div class="site">
+            <div class="sidebar-wrapper">
+                <div class="sidebar">
+                    <ul id="sidebar-options">
+                        <ui:insert name="active-sidebar-option">
+                            <input type="hidden" name="active-sidebar-option" value="Dashboard"/>
+                        </ui:insert>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' ><i class="fa fa-home"></i>Dashboard </h:link></li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' ><i class="fa fa-book"></i>Ucs</h:link></li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' ><i class="fa fa-bell"></i>Eventos</h:link></li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' ><i class="fa fa-users"></i>Utilizadores</h:link></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="breadcrumb-holder">
+                    <ul class="breadcrumb">
+                        <ui:insert name="breadcrumb">
+                            <li>Dashboard</li>
+                        </ui:insert>
+                    </ul>
+                </div>
+                <div class="content">
+                    <ui:insert name="content">
+                    </ui:insert>
+                </div>
+            </div>
+        </div>
+        <h:outputScript library="plugins" name="jquery/jquery-2.1.4.min.js"/>
+        <h:outputScript library="plugins" name="jquery-ui/jquery-ui.min.js"/>
+        <h:outputScript library="plugins" name="bootstrap/js/bootstrap.min.js"/>
+        <h:outputScript library="plugins" name="jquery.growl/jquery.growl.js"/>
+        <h:outputScript library="js" name="live-edit.js"/>
+        <h:outputScript library="js" name="app.js"/>
+    </h:body>
+</html>
