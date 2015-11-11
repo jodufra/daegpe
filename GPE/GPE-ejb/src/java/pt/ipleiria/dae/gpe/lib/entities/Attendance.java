@@ -59,7 +59,7 @@ public class Attendance extends AbstractEntity implements Serializable {
     public Attendance(Integer idAttendance, Student student, Event event, boolean present) {
         this.idAttendance = idAttendance;
         this.student = student;
-        this.event = event;
+        //this.event = event;
         this.present = present;
     }
 

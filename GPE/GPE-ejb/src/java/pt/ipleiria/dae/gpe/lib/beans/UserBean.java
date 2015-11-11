@@ -45,13 +45,10 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         if (dto.getInternalId().isEmpty()) {
             errors.add(EntityValidationError.USER_INTERNALID_REQUIRED);
         } else {
-            UserDTO userWithSameInternalId = find(dto.getInternalId());
-            if (userWithSameInternalId != null && !Objects.equals(userWithSameInternalId.getIdUser(), dto.getIdUser())) {
+            UserDTO userWithSameId = find(dto.getInternalId());
+            if (userWithSameId != null && !Objects.equals(userWithSameId.getIdUser(), dto.getIdUser())) {
                 errors.add(EntityValidationError.USER_INTERNALID_NOT_UNIQUE);
             }
-        }
-        if (dto.getType() == null) {
-            errors.add(EntityValidationError.USER_USERTYPE_INVALID);
         }
         if (dto.getName().isEmpty()) {
             errors.add(EntityValidationError.USER_NAME_REQUIRED);
@@ -65,16 +62,15 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             if (dto.isNew()) {
                 user = new User();
             } else {
-                user = getEntityFromDTO(dto);
+                user = getEntity(dto.getIdUser());
             }
-            user.setType(dto.getType());
             user.setInternalId(dto.getInternalId());
             user.setName(dto.getName());
             user.setEmail(dto.getEmail());
             if (dto.hasNewPassword()) {
                 user.setPassword(dto.getNewPassword());
             }
-            user.setSearch(GenerateSlug(" " + user.getInternalId() + " " + user.getName() + " " + user.getEmail() + " ", true, true));
+            user.setSearch(GenerateSlug(user.getInternalId() + " " + user.getName() + " " + user.getEmail(), true, true));
 
             if (dto.isNew()) {
                 super.create(user);
@@ -97,8 +93,13 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         return generateDTO(users.get(0));
     }
 
+    public enum UserOrderBy {
+
+        InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, EmailAsc, EmailDesc
+    }
+
     public UserDTO find(String username, String password) {
-        password = Security.GenerateMD5Hash(password);
+        password = Security.GetMD5Hash(password);
 
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT u FROM User u WHERE (u.internalId = \"").append(username).append("\" OR u.email = \"").append(username).append("\") ");
@@ -113,11 +114,6 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         }
 
         return generateDTO(users.get(0));
-    }
-
-    public enum UserOrderBy {
-
-        InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, EmailAsc, EmailDesc
     }
 
     public List<UserDTO> find(int pageId, int pageSize, UserOrderBy orderBy) {

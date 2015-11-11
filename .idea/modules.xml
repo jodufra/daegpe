@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/GPE/GPE-ejb/src/GPE-ejb.iml" filepath="$PROJECT_DIR$/GPE/GPE-ejb/src/GPE-ejb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GPE/GPE-war/src/GPE-war.iml" filepath="$PROJECT_DIR$/GPE/GPE-war/src/GPE-war.iml" />
+    </modules>
+  </component>
+</project>

@@ -5,17 +5,123 @@
  */
 package pt.ipleiria.dae.gpe.web.managers;
 
+import javax.faces.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
 import pt.ipleiria.dae.gpe.web.app.AbstractManager;
-import javax.faces.bean.ViewScoped;
+import pt.ipleiria.dae.gpe.lib.beans.EventBean;
+import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
+import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.web.models.EventDetailModel;
+import pt.ipleiria.dae.gpe.web.models.EventIndexModel;
 
-/**
- *
- * @author Joel
- */
-@ViewScoped
+@ManagedBean
+@SessionScoped
 public class EventsManager extends AbstractManager{
     
+    private final EnumMap<EntityValidationError, String> errorMessages = new EnumMap<>(EntityValidationError.class);
+    
+    @EJB
+    private EventBean eventBean;
+    
+    private EventIndexModel eventIndexModel;
+    private EventDetailModel eventDetailModel;
+    List<EntityValidationError> errors;
+   
+    
+    @PostConstruct
+    private void initUsersManager(){
+        eventIndexModel = new EventIndexModel(eventBean);
+        eventDetailModel = new EventDetailModel();
+        errors = new ArrayList<>();
+        errorMessages.put(EntityValidationError.USER_INTERNALID_REQUIRED, "Id de Utilizador é Obrigatório.");  
+        errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é Obrigatório.");
+    }
+    
     public EventsManager() {
+    }
+
+    public String saveEvent()
+    {
+        errors.clear();
+        EventDTO eventDTO = this.eventDetailModel.save();
+        System.out.println("ID: " + eventDTO.getIdEvent());
+        boolean wasNew = eventDTO.isNew();
+        System.out.println("wasNew: " + wasNew);
+        errors = eventBean.save(eventDTO);
+        
+        FacesContext currentInstance = FacesContext.getCurrentInstance();
+        
+        if (errors.isEmpty()) {
+            currentInstance.addMessage("eventdetailform", new FacesMessage(FacesMessage.SEVERITY_INFO, wasNew ? "Adicionado com sucesso" : "Guardado com sucesso", ""));
+            return  GenerateRelativeURL("/events/index");
+        } else {
+            for (EntityValidationError error : errors) {
+                currentInstance.addMessage("eventdetailform", new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessages.get(error), ""));
+            }
+        }
+
+        return "";
+    }
+    
+    public EventIndexModel getEventIndexModel() {
+        return this.eventIndexModel;
+    }
+
+    public void setEventIndexModel(EventIndexModel eventIndexModel) {
+        this.eventIndexModel = eventIndexModel;
+    }
+    
+    public EventBean getEventBean() {
+        return eventBean;
+    }
+
+    public void setEventBean(EventBean eventBean) {
+        this.eventBean = eventBean;
+    }
+
+    public EventDetailModel getEventDetailModel() {
+        return eventDetailModel;
+    }
+
+    public void setEventDetailModel(EventDetailModel eventDetailModel) {
+        this.eventDetailModel = eventDetailModel;
+    }
+
+    public List<EntityValidationError> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<EntityValidationError> errors) {
+        this.errors = errors;
+    }
+
+
+    
+    
+    public String removeEvent()
+    {
+        this.errors.clear();
+        return GenerateRelativeURL("/events/index");
+    }
+    
+    
+    public void remove(ActionEvent event)
+    {
+         UIParameter param = (UIParameter) event.getComponent().findComponent("deleteEventId");
+        System.out.println("VALOR: " + param.getValue());
+       
+        Integer id = (Integer) param.getValue();
+        
+        eventBean.remove(id);
     }
     
 }

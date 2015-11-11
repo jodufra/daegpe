@@ -17,7 +17,7 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class Security {
 
-    public static String GenerateMD5Hash(String input) {
+    public static String GetMD5Hash(String input) {
         if (input == null || input.isEmpty()) {
             return "";
         }
@@ -34,6 +34,8 @@ public class Security {
 
         return hash.replace("-", "").toLowerCase();
     }
+
+   
 
 }
  

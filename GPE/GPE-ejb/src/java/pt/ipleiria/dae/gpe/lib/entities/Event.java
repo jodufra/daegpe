@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pt.ipleiria.dae.gpe.lib.entities;
 
 import pt.ipleiria.dae.gpe.lib.core.AbstractEntity;
@@ -17,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -43,6 +36,13 @@ public class Event extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     private Integer idEvent;
 
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    protected String internalId;
+
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -60,14 +60,14 @@ public class Event extends AbstractEntity implements Serializable {
     @Size(max = 255)
     private String search;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "IDUC")
-    @NotNull
+    //@ManyToOne(optional = true)
+    //@JoinColumn(name = "IDUC")
+    //@NotNull
     private UC uc;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "IDMANAGER")
-    @NotNull
+    //@ManyToOne(optional = false)
+    //@JoinColumn(name = "IDMANAGER")
+    //@NotNull
     private Manager manager;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
@@ -77,8 +77,9 @@ public class Event extends AbstractEntity implements Serializable {
         this.participants = new ArrayList<>();
     }
 
-    public Event(String name, Date dateStart, short minutes, UC uc, Manager manager) {
+    public Event(String name, String internalId, Date dateStart, short minutes, UC uc, Manager manager) {
         this.name = name;
+        this.internalId = internalId;
         this.dateStart = dateStart;
         this.minutes = minutes;
         this.uc = uc;
@@ -86,7 +87,7 @@ public class Event extends AbstractEntity implements Serializable {
         this.participants = new ArrayList<>();
     }
 
-    public Event(Integer idEvent, String name, Date dateStart, short minutes, String search, UC uc, Manager manager) {
+    public Event(Integer idEvent, String internalId, String name, Date dateStart, short minutes, String search, UC uc, Manager manager) {
         this.idEvent = idEvent;
         this.name = name;
         this.dateStart = dateStart;
@@ -94,6 +95,7 @@ public class Event extends AbstractEntity implements Serializable {
         this.search = search;
         this.uc = uc;
         this.manager = manager;
+        this.internalId = internalId;
         this.participants = new ArrayList<>();
     }
 
@@ -153,6 +155,7 @@ public class Event extends AbstractEntity implements Serializable {
         this.manager = manager;
     }
 
+    
     public Collection<Attendance> getParticipants() {
         return participants;
     }
@@ -188,4 +191,18 @@ public class Event extends AbstractEntity implements Serializable {
         return true;
     }
 
+    public String getInternalId() {
+        return internalId;
+    }
+
+    public void setInternalId(String internalId) {
+        this.internalId = internalId;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.name;
+    }
+    
 }

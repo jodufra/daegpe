@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.lib.core;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +40,7 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
     protected DTO generateDTO(Entity entity) {
         if (entity != null) {
             try {
-                Constructor<DTO> declaredConstructor = (Constructor<DTO>) DeclaredConstructorCache.CACHE.getDeclaredConstructor(dtoClass, entityClass);
-                return declaredConstructor.newInstance(entity);
+                return dtoClass.getDeclaredConstructor(entityClass).newInstance(entity);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(AbstractBean.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -17,25 +17,22 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Manager extends User {
-
+    
     @OneToMany(mappedBy = "manager", cascade = CascadeType.REMOVE)
     private Collection<Event> events;
 
     public Manager() {
         super();
-        this.type = UserType.Manager;
         this.events = new ArrayList<>();
     }
 
     public Manager(String internalId, String name, String email, String password) {
         super(internalId, name, email, password);
-        this.type = UserType.Manager;
         this.events = new ArrayList<>();
     }
 
     public Manager(Integer idUser, String internalId, String name, String email, String password, String search) {
         super(idUser, internalId, name, email, password, search);
-        this.type = UserType.Manager;
         this.events = new ArrayList<>();
     }
 
@@ -46,5 +43,6 @@ public class Manager extends User {
     public void setEvents(Collection<Event> events) {
         this.events = events;
     }
-
+     
+    
 }

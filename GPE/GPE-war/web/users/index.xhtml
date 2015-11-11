@@ -30,7 +30,8 @@
                         </h:form>
                     </div>
 
-                    <h:dataTable var="User" value="#{usersManager.userIndexModel.users}" class="table table-striped" >
+                    <h:dataTable var="User" value="#{usersManager.userIndexModel.users}" class="table table-striped">
+                        
                         <h:column> 
                             <f:facet name="header">
                                 <h:outputText value="Id"/>
@@ -48,12 +49,6 @@
                                 <h:outputText value="Email"/>
                             </f:facet>   
                             <h:outputText value="#{User.email}"/>
-                        </h:column>
-                        <h:column> 
-                            <f:facet name="header">
-                                <h:outputText value="Tipo"/>
-                            </f:facet>   
-                            <h:outputText value="#{User.type}"/>
                         </h:column>
                         <h:column> 
                             <f:facet name="header">
