@@ -27,12 +27,12 @@ import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
-import pt.ipleiria.dae.gpe.web.models.EventDetailModel;
-import pt.ipleiria.dae.gpe.web.models.EventIndexModel;
-import pt.ipleiria.dae.gpe.web.models.UCDetailModel;
-import pt.ipleiria.dae.gpe.web.models.UCIndexModel;
-import pt.ipleiria.dae.gpe.web.models.UserDetailModel;
-import pt.ipleiria.dae.gpe.web.models.UserIndexModel;
+import pt.ipleiria.dae.gpe.web.models.admin.EventDetailModel;
+import pt.ipleiria.dae.gpe.web.models.admin.EventIndexModel;
+import pt.ipleiria.dae.gpe.web.models.admin.UCDetailModel;
+import pt.ipleiria.dae.gpe.web.models.admin.UCIndexModel;
+import pt.ipleiria.dae.gpe.web.models.admin.UserDetailModel;
+import pt.ipleiria.dae.gpe.web.models.admin.UserIndexModel;
 
 /**
  *

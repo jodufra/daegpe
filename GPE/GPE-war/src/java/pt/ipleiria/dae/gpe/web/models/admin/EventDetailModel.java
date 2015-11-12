@@ -1,5 +1,5 @@
 
-package pt.ipleiria.dae.gpe.web.models;
+package pt.ipleiria.dae.gpe.web.models.admin;
 
 import java.util.Date;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
