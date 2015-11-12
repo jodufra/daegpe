@@ -15,6 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
@@ -46,8 +47,12 @@ public class MigrationBean {
 
             // Users
             AdministratorDTO admin;
-            admin = new AdministratorDTO("dev", "Developer", "developer@gpe.pt", "admin");
+            admin = new AdministratorDTO("admin", "Administrator", "admin@gpe.pt", "admin");
             userBean.save(admin);
+            
+            ManagerDTO manager;
+            manager = new ManagerDTO("manager", "Manager", "manager@gpe.pt", "manager");
+            userBean.save(manager);
 
             StudentDTO student;
             student = new StudentDTO("2120189", "Duarte Mateus", "2120189@my.ipleiria.pt", "student");

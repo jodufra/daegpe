@@ -15,7 +15,7 @@
         <h:outputStylesheet library="css" name="style.css"/>
     </h:head>
 
-    <h:body>
+    <h:body class="user-student">
         <div class="loader"></div>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -29,6 +29,11 @@
                                 #{sessionManager.user.name} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <h:commandLink  class="" value="Minha Conta" action='#{redirectManager.GenerateRelativeURL("student/users-detail")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.userDetailModel.user}" value="#{sessionManager.user}"/>
+                                    </h:commandLink>
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
                                     <h:commandLink action="#{sessionManager.logout()}" class="" value="Logout"/>

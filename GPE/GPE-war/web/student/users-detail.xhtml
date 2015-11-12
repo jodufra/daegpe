@@ -4,21 +4,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:body>
-        <ui:composition template="/admin/dashboard.xhtml">
-            <ui:define name="title">#{adminManager.userDetailModel.title}</ui:define>
+        <ui:composition template="/student/dashboard.xhtml">
+            <ui:define name="title">#{studentManager.userDetailModel.title}</ui:define>
 
             <ui:define name="active-sidebar-option">
                 <input type="hidden" name="active-sidebar-option" value="Utilizadores"/>   
             </ui:define>
 
             <ui:define name="breadcrumb">
-                <li>#{adminManager.userDetailModel.title}</li>
-                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >Utilizadores</h:link></li>
-                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
+                <li>#{studentManager.userDetailModel.title}</li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/student/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
             <ui:define name="content">
@@ -35,7 +33,7 @@
                                     <div class="col-sm-3 col-sm-offset-3">
                                         <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                                            <h:inputText class="form-control" value="#{adminManager.userDetailModel.internalId}" a:placeholder="Id Utilizador" />
+                                            <p class="form-control-static">#{studentManager.userDetailModel.internalId}</p>
                                             <label class="">Id Utilizador</label>
                                         </div>
                                     </div>
@@ -44,9 +42,7 @@
                                     <div class="col-sm-6 col-sm-offset-3">
                                         <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-child"></i></span>
-                                            <h:selectOneMenu value="#{adminManager.userDetailModel.type}" class="form-control" >
-                                                <f:selectItems value="#{adminManager.userDetailModel.userTypes}" />
-                                            </h:selectOneMenu>
+                                            <p class="form-control-static">#{studentManager.userDetailModel.type}</p>
                                             <label class="">Tipo</label>
                                         </div>
                                     </div>
@@ -55,7 +51,7 @@
                                     <div class="col-sm-6 col-sm-offset-3">
                                         <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                            <h:inputText class="form-control" value="#{adminManager.userDetailModel.name}" a:placeholder="Nome Complete" />
+                                            <h:inputText class="form-control" value="#{studentManager.userDetailModel.name}" a:placeholder="Nome Complete" />
                                             <label class="">Nome</label>
                                         </div>
                                     </div>
@@ -64,7 +60,7 @@
                                     <div class="col-sm-6 col-sm-offset-3">
                                         <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                            <h:inputText class="form-control" value="#{adminManager.userDetailModel.email}" a:placeholder="Email" />
+                                            <h:inputText class="form-control" value="#{studentManager.userDetailModel.email}" a:placeholder="Email" />
                                             <label class="">Email</label>
                                         </div>
                                     </div>
@@ -73,7 +69,7 @@
                                     <div class="col-sm-6 col-sm-offset-3">
                                         <div class="input-group input-group-dynamic">
                                             <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                            <h:inputSecret class="form-control" value="#{adminManager.userDetailModel.newPassword}" a:placeholder="Palavra-chave" a:autocomplete="off"  />
+                                            <h:inputSecret class="form-control" value="#{studentManager.userDetailModel.newPassword}" a:placeholder="Palavra-chave" a:autocomplete="off"  />
                                             <label class="">Palavra-chave</label>
                                         </div>
                                     </div>
@@ -81,8 +77,8 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <span class="pull-right">
-                                            <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' class="btn btn-link" >Voltar</h:link>
-                                            <h:commandButton action="#{adminManager.saveUser()}" class="btn btn-success" value="Guardar"/>
+                                            <h:link outcome='#{redirectManager.GenerateRelativeURL("/student/dashboard")}' class="btn btn-link" >Voltar</h:link>
+                                            <h:commandButton action="#{studentManager.saveUser()}" class="btn btn-success" value="Guardar"/>
                                         </span>
                                     </div>
                                 </div>

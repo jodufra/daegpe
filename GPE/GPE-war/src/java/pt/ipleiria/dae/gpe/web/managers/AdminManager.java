@@ -160,54 +160,30 @@ public class AdminManager extends AbstractManager {
         eventBean.remove(id);
     }
 
+    ////////////////////////////////////////////
+    ///////////////// Models ///////////////////
     public UCIndexModel getUcIndexModel() {
         return ucIndexModel;
-    }
-
-    public void setUcIndexModel(UCIndexModel ucIndexModel) {
-        this.ucIndexModel = ucIndexModel;
     }
 
     public UCDetailModel getUcDetailModel() {
         return ucDetailModel;
     }
 
-    ////////////////////////////////////////////
-    ///////////////// Models ///////////////////
-    public void setUcDetailModel(UCDetailModel ucDetailModel) {
-        this.ucDetailModel = ucDetailModel;
-    }
-
     public UserIndexModel getUserIndexModel() {
         return userIndexModel;
-    }
-
-    public void setUserIndexModel(UserIndexModel userIndexModel) {
-        this.userIndexModel = userIndexModel;
     }
 
     public UserDetailModel getUserDetailModel() {
         return userDetailModel;
     }
 
-    public void setUserDetailModel(UserDetailModel userDetailModel) {
-        this.userDetailModel = userDetailModel;
-    }
-
     public EventIndexModel getEventIndexModel() {
         return eventIndexModel;
     }
 
-    public void setEventIndexModel(EventIndexModel eventIndexModel) {
-        this.eventIndexModel = eventIndexModel;
-    }
-
     public EventDetailModel getEventDetailModel() {
         return eventDetailModel;
-    }
-
-    public void setEventDetailModel(EventDetailModel eventDetailModel) {
-        this.eventDetailModel = eventDetailModel;
     }
 
 }
