@@ -16,7 +16,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
@@ -25,12 +26,8 @@ import pt.ipleiria.dae.gpe.lib.utilities.StudentUCFindOptions;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
 import pt.ipleiria.dae.gpe.lib.utilities.UCOrderBy;
 
-/**
- *
- * @author joeld
- */
 @Stateless
-public class UCBean extends AbstractBean<UC, UCDTO> {
+public class UCBean extends AbstractBean<UC,UCDTO> {
 
     @PersistenceContext(unitName = "GPE-ejbPU")
     private EntityManager em;
@@ -44,6 +41,40 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
         return em;
     }
 
+        
+       public void addStudentUc(UCDTO ucDTO, StudentDTO studentDTO) throws EntityNotFoundException, EntityValidationException {
+        
+           List<EntityValidationError> errors = new ArrayList<>();
+        if (studentDTO.getInternalId() == null) {
+            errors.add(EntityValidationError.UC_INTERNALID_REQUIRED);
+        }
+        if (ucDTO.getInternalId() == null ) {
+            errors.add(EntityValidationError.USER_INTERNALID_REQUIRED);
+        }
+
+
+        if (errors.isEmpty()) {
+        UC uc = getEntityFromDTO(ucDTO); 
+        Student student = em.find(Student.class, studentDTO.getIdUser());
+        uc.addStudent(student);
+        edit(uc); 
+        }else {
+            throw new EntityValidationException(errors);
+        }
+    }
+//      public void addStudentUc(UCDTO ucDto, StudentDTO student) throws EntityNotFoundException {
+//          UC uc;
+//
+//          uc = getEntityFromDTO(ucDto);
+//          //uc.getStudents().add(student);
+//          //uc.setStudents(null);
+//          edit(uc);
+//          
+//    }
+    
+      
+    
+    
     @Override
     public void save(UCDTO dto) throws EntityValidationException, EntityNotFoundException {
         List<EntityValidationError> errors = new ArrayList<>();
@@ -78,9 +109,9 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
             uc.setSearch(uc.getInternalId() + " " + uc.getName());
 
             if (uc.isNew()) {
-                create(uc);
+                super.create(uc);
             } else {
-                edit(uc);
+                super.edit(uc);
             }
         } else {
             throw new EntityValidationException(errors);
@@ -147,7 +178,6 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
 
         return generateDTOList(em.createQuery(query, UC.class).getResultList());
     }
-
     public List<UCDTO> findFromStudent(StudentUCFindOptions options) {
         Student student = em.find(Student.class, options.user.getRelationalId());
         return generateDTOList((List<UC>) student.getUcs());

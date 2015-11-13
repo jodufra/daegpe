@@ -24,7 +24,9 @@ import javax.faces.event.ActionEvent;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
+import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.web.models.admin.EventDetailModel;
@@ -118,6 +120,33 @@ public class AdminManager extends AbstractManager {
         }
     }
 
+    public void addStudentUc() throws EntityNotFoundException, EntityValidationException {
+        UCDTO uc = ucDetailModel.save();
+        UserDTO user = userDetailModel.provideUserDTO();
+        ucBean.addStudentUc(uc, (StudentDTO) user);
+        userBean.addUcStudent(user, uc);
+        
+
+
+
+
+//Integer userId,ucId;
+        //boolean wasNew = uc.isNew();
+
+//        try {
+//            ucBean.save(uc);
+//            PresentSuccessMessage("ucdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
+//        } catch (EntityValidationException eve) {
+//            PresentErrorMessages("ucdetailform", eve.getEntityValidationErrors(), errorMessages);
+//        } catch (EntityNotFoundException enf) {
+//            PresentErrorMessage("ucdetailform", "UC a ser editada, não foi encontrada ou foi removida.");
+//        }
+    }
+    
+    
+    
+    
+    
     public void removeUc(ActionEvent event) throws IOException {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("ucId");

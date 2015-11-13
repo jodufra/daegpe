@@ -29,7 +29,6 @@
                             </h:commandLink>
                         </h:form>
                     </div>
-
                     <h:dataTable var="Uc" value="#{adminManager.ucIndexModel.ucs}" class="table table-striped" >
                         <h:column> 
                             <f:facet name="header">
@@ -55,7 +54,7 @@
                             </f:facet>   
                             <h:form>
                                 <h:commandLink class="pull-right btn btn-danger fa " value="&#xf1f8;" onclick="return confirm('Conrfirma que pretende remover esta Unidade Curricular?');" actionListener="#{adminManager.removeUc}">
-                                    <f:param name="userId" id="ucId" value="#{Uc.idUC}" />
+                                    <f:param name="userId" id="ucId" value="#{Uc.idUC}"/>
                                 </h:commandLink>
                                 <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-detail")}' >
                                     <f:setPropertyActionListener target="#{adminManager.ucDetailModel.uc}" value="#{Uc}"/>
