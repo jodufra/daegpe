@@ -83,6 +83,9 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
         }
     }
 
+    
+    
+    
     public UCDTO find(String internalId) throws EntityNotFoundException {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT u FROM UC u WHERE u.internalId = \"").append(internalId).append("\"");
