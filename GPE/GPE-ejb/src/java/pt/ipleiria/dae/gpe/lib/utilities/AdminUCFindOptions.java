@@ -5,6 +5,8 @@
  */
 package pt.ipleiria.dae.gpe.lib.utilities;
 
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+
 
 /**
  *

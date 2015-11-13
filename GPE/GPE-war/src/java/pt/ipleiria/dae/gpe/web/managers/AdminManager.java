@@ -64,11 +64,16 @@ public class AdminManager extends AbstractManager {
         errorMessages.put(EntityValidationError.UC_INTERNALID_REQUIRED, "Id da Uc é Obrigatório.");
         errorMessages.put(EntityValidationError.UC_INTERNALID_NOT_UNIQUE, "Internal ID da Uc é Obrigatório.");
         errorMessages.put(EntityValidationError.UC_NAME_REQUIRED, "Nome é Obrigatório.");
+        errorMessages.put(EntityValidationError.UC_IS_NEW, "A UC ainda não existe.");
         errorMessages.put(EntityValidationError.USER_INTERNALID_REQUIRED, "Id Utilizador é obrigatório.");
         errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_REQUIRED, "Email é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_PATTERN, "Email inválido.");
         errorMessages.put(EntityValidationError.USER_USERTYPE_INVALID, "Tipo de Utilizador inválido.");
+        errorMessages.put(EntityValidationError.USER_IS_NOT_ADMIN, "O Utilizador não é Administrador.");
+        errorMessages.put(EntityValidationError.USER_IS_NOT_MANAGER, "O Utilizador não é Gestor.");
+        errorMessages.put(EntityValidationError.USER_IS_NOT_STUDENT, "O Utilizador não é Estudante.");
+        errorMessages.put(EntityValidationError.USER_IS_NEW, "O Utilizador ainda não existe.");
     }
 
     @PostConstruct
@@ -76,7 +81,7 @@ public class AdminManager extends AbstractManager {
         eventIndexModel = new EventIndexModel(eventBean);
         eventDetailModel = new EventDetailModel();
         ucIndexModel = new UCIndexModel(ucBean);
-        ucDetailModel = new UCDetailModel();
+        ucDetailModel = new UCDetailModel(ucBean, userBean);
         userIndexModel = new UserIndexModel(userBean);
         userDetailModel = new UserDetailModel();
     }
@@ -105,8 +110,8 @@ public class AdminManager extends AbstractManager {
 
     ////////////////////////////////////////////
     ///////////////// UCs //////////////////////
-    public void saveUc() {
-        UCDTO uc = ucDetailModel.save();
+    public void saveUC() {
+        UCDTO uc = ucDetailModel.provideUCDTO();
         boolean wasNew = uc.isNew();
 
         try {
@@ -120,34 +125,7 @@ public class AdminManager extends AbstractManager {
         }
     }
 
-    public void addStudentUc() throws EntityNotFoundException, EntityValidationException {
-        UCDTO uc = ucDetailModel.save();
-        UserDTO user = userDetailModel.provideUserDTO();
-        ucBean.addStudentUc(uc, (StudentDTO) user);
-        userBean.addUcStudent(user, uc);
-        
-
-
-
-
-//Integer userId,ucId;
-        //boolean wasNew = uc.isNew();
-
-//        try {
-//            ucBean.save(uc);
-//            PresentSuccessMessage("ucdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
-//        } catch (EntityValidationException eve) {
-//            PresentErrorMessages("ucdetailform", eve.getEntityValidationErrors(), errorMessages);
-//        } catch (EntityNotFoundException enf) {
-//            PresentErrorMessage("ucdetailform", "UC a ser editada, não foi encontrada ou foi removida.");
-//        }
-    }
-    
-    
-    
-    
-    
-    public void removeUc(ActionEvent event) throws IOException {
+    public void removeUC(ActionEvent event) throws IOException {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("ucId");
             Object id = param.getValue();
@@ -156,6 +134,36 @@ public class AdminManager extends AbstractManager {
         } catch (EntityNotFoundException e) {
             PresentErrorMessage("ucindexform", "A UC que prentendia remover, não foi encontrado.");
         }
+    }
+
+    public void addStudentUC(ActionEvent event) throws IOException {
+        UserDTO user = (UserDTO) ((UIParameter) event.getComponent().findComponent("user")).getValue();
+        UCDTO uc = ucDetailModel.provideUCDTO();
+
+        try {
+            ucBean.addStudentUC(uc, user);
+            userBean.addUCStudent(user, uc);
+            PresentSuccessMessage("ucstudentsform", "Adicionado com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("ucstudentsform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("ucstudentsform", "Verifique que o estudante e a UC ainda existem.");
+        }
+    }
+
+    public void removeStudentUC(ActionEvent event) throws IOException {
+        StudentDTO user = (StudentDTO) ((UIParameter) event.getComponent().findComponent("user")).getValue();
+        UCDTO uc = ucDetailModel.provideUCDTO();
+        PresentErrorMessage("ucstudentsform", "Não implementado.");
+        //        try {
+        //            ucBean.addStudentUC(uc, (StudentDTO) user);
+        //            userBean.addUCStudent(user, uc);
+        //            PresentSuccessMessage("ucstudentsform", "Adicionado com sucesso");
+        //        } catch (EntityValidationException eve) {
+        //            PresentErrorMessages("ucstudentsform", eve.getEntityValidationErrors(), errorMessages);
+        //        } catch (EntityNotFoundException enf) {
+        //            PresentErrorMessage("ucstudentsform", "Verifique que o estudante e a UC ainda existem.");
+        //        }
     }
 
     ////////////////////////////////////////////

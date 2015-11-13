@@ -128,7 +128,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         em.remove(event);
     }
 
-    public void addEventAttendance(AttendanceDTO dto) throws EntityValidationException {
+    public void addAttendanceEvent(AttendanceDTO dto) throws EntityValidationException {
         List<EntityValidationError> errors = new ArrayList<>();
 
         if (dto.getStudent() == null || dto.getStudent().isNew()) {
