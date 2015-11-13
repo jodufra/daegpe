@@ -286,10 +286,6 @@ public class Event extends AbstractEntity implements Serializable {
         this.Semester = Semester;
     }
 
-    public void addParticipant(Attendance attendance)
-    {
-        this.participants.add(attendance);
-    }
     
     @Override
     public String toString()

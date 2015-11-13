@@ -79,8 +79,6 @@ public class AdminManager extends AbstractManager {
 
     @PostConstruct
     public void constructModels() {
-        eventIndexModel = new EventIndexModel(eventBean);
-        eventDetailModel = new EventDetailModel();
         ucIndexModel = new UCIndexModel(ucBean);
         ucDetailModel = new UCDetailModel(ucBean, userBean);
         userIndexModel = new UserIndexModel(userBean);

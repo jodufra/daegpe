@@ -24,6 +24,7 @@ import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.lib.utilities.EventType;
+import pt.ipleiria.dae.gpe.lib.utilities.ManagerEventFindOptions;
 
 
 @Stateless
@@ -198,4 +199,10 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
     {
         return EventType.values();
     }
+    
+    public List<EventDTO> findFromManager(ManagerEventFindOptions options) {
+        Manager manager = em.find(Manager.class, options.user.getRelationalId());
+        return generateDTOList((List<Event>) manager.getEvents());
+    }
+
 }
