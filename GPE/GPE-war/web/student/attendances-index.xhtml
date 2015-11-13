@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:body>
+        <ui:composition template="/student/dashboard.xhtml">
+            <ui:define name="title">Participações</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Participações"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Participações</li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/student/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">
+                    <h:form id="attendanceindexform" >
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-dynamic">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <h:inputText class="form-control" value="#{studentManager.attendanceIndexModel.search}" a:placeholder="Procurar"  />
+                                            <label class="">Escreva e pressione Enter para Procurar</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h:dataTable var="Attendance" value="#{studentManager.attendanceIndexModel.attendances}" class="table table-striped" >
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <h:outputText value="Evento"/>
+                                        <c:choose>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 1}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{2}"/>
+                                            </c:when>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 2}">
+                                                <i class="fa fa-sort-alpha-desc"></i>\
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{1}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{1}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.event.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <h:outputText value="Estudante"/>
+                                        <c:choose>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 3}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{4}"/>
+                                            </c:when>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 4}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{3}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{3}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.student.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <h:outputText value="Presente"/>
+                                        <c:choose>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 3}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{4}"/>
+                                            </c:when>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 4}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{3}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{3}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.present ? 'Sim' : 'Não' }"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value=""/>
+                                </f:facet>   
+                            </h:column>
+                        </h:dataTable>
+                        <div class="row text-center pagination">
+                            <c:if test="#{studentManager.attendanceIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  class="fa fa-angle-double-left" title="Primeira Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{studentManager.attendanceIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-left" title="Página Anterior" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{studentManager.attendanceIndexModel.pageId > 3 }">
+                                <span>
+                                    <h:commandLink  value="#{studentManager.attendanceIndexModel.pageId - 3}" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId - 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{studentManager.attendanceIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink value="#{studentManager.attendanceIndexModel.pageId - 2}" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId - 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <c:if test="#{studentManager.attendanceIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink   value="#{studentManager.attendanceIndexModel.pageId - 1}" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <span>
+                                <b>#{studentManager.attendanceIndexModel.pageId}</b>
+                            </span>
+                            <c:if test="#{studentManager.attendanceIndexModel.pagesCount - studentManager.attendanceIndexModel.pageId > 0 }">
+                                <span>
+                                    <h:commandLink  value="#{studentManager.attendanceIndexModel.pageId + 1}" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId + 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{studentManager.attendanceIndexModel.pagesCount - studentManager.attendanceIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  value="#{studentManager.attendanceIndexModel.pageId + 2}" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId + 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{studentManager.attendanceIndexModel.pagesCount - studentManager.attendanceIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink  value="#{studentManager.attendanceIndexModel.pageId + 3}" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId + 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{studentManager.attendanceIndexModel.pagesCount - studentManager.attendanceIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-right" title="Próxima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pagesCount - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{studentManager.attendanceIndexModel.pagesCount != studentManager.attendanceIndexModel.pageId }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-double-right" title="Ultima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pagesCount}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                        </div>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -24,8 +24,10 @@ import javax.faces.event.ActionEvent;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.web.models.admin.EventDetailModel;
@@ -50,12 +52,12 @@ public class AdminManager extends AbstractManager {
     @EJB
     private EventBean eventBean;
 
+    private EventIndexModel eventIndexModel;
+    private EventDetailModel eventDetailModel;
     private UCIndexModel ucIndexModel;
     private UCDetailModel ucDetailModel;
     private UserIndexModel userIndexModel;
     private UserDetailModel userDetailModel;
-    private EventIndexModel eventIndexModel;
-    private EventDetailModel eventDetailModel;
     private final EnumMap<EntityValidationError, String> errorMessages;
 
     public AdminManager() {
@@ -63,31 +65,40 @@ public class AdminManager extends AbstractManager {
         errorMessages.put(EntityValidationError.UC_INTERNALID_REQUIRED, "Id da Uc é Obrigatório.");
         errorMessages.put(EntityValidationError.UC_INTERNALID_NOT_UNIQUE, "Internal ID da Uc é Obrigatório.");
         errorMessages.put(EntityValidationError.UC_NAME_REQUIRED, "Nome é Obrigatório.");
+        errorMessages.put(EntityValidationError.UC_IS_NEW, "A UC ainda não existe.");
         errorMessages.put(EntityValidationError.USER_INTERNALID_REQUIRED, "Id Utilizador é obrigatório.");
         errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_REQUIRED, "Email é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_PATTERN, "Email inválido.");
         errorMessages.put(EntityValidationError.USER_USERTYPE_INVALID, "Tipo de Utilizador inválido.");
+        errorMessages.put(EntityValidationError.USER_IS_NOT_ADMIN, "O Utilizador não é Administrador.");
+        errorMessages.put(EntityValidationError.USER_IS_NOT_MANAGER, "O Utilizador não é Gestor.");
+        errorMessages.put(EntityValidationError.USER_IS_NOT_STUDENT, "O Utilizador não é Estudante.");
+        errorMessages.put(EntityValidationError.USER_IS_NEW, "O Utilizador ainda não existe.");
     }
 
     @PostConstruct
     public void constructModels() {
+        eventIndexModel = new EventIndexModel(eventBean);
+        eventDetailModel = new EventDetailModel();
         ucIndexModel = new UCIndexModel(ucBean);
-        ucDetailModel = new UCDetailModel();
+        ucDetailModel = new UCDetailModel(ucBean, userBean);
         userIndexModel = new UserIndexModel(userBean);
         userDetailModel = new UserDetailModel();
         eventIndexModel = new EventIndexModel(eventBean);
         eventDetailModel = new EventDetailModel(eventBean, ucBean, userBean);
     }
 
+   
     ////////////////////////////////////////////
     ///////////////// UCs //////////////////////
-    public void saveUc() {
-        UCDTO uc = ucDetailModel.save();
+    public void saveUC() {
+        UCDTO uc = ucDetailModel.provideUCDTO();
         boolean wasNew = uc.isNew();
 
         try {
             ucBean.save(uc);
+            ucDetailModel.setUc(ucBean.find(uc.getInternalId()));
             PresentSuccessMessage("ucdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
         } catch (EntityValidationException eve) {
             PresentErrorMessages("ucdetailform", eve.getEntityValidationErrors(), errorMessages);
@@ -96,7 +107,7 @@ public class AdminManager extends AbstractManager {
         }
     }
 
-    public void removeUc(ActionEvent event) throws IOException {
+    public void removeUC(ActionEvent event) throws IOException {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("ucId");
             Object id = param.getValue();
@@ -107,6 +118,36 @@ public class AdminManager extends AbstractManager {
         }
     }
 
+    public void addStudentUC(ActionEvent event) throws IOException {
+        UserDTO user = (UserDTO) ((UIParameter) event.getComponent().findComponent("user")).getValue();
+        UCDTO uc = ucDetailModel.provideUCDTO();
+
+        try {
+            ucBean.addStudentUC(uc, user);
+            userBean.addUCStudent(user, uc);
+            PresentSuccessMessage("ucstudentsform", "Adicionado com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("ucstudentsform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("ucstudentsform", "Verifique que o estudante e a UC ainda existem.");
+        }
+    }
+
+    public void removeStudentUC(ActionEvent event) throws IOException {
+        StudentDTO user = (StudentDTO) ((UIParameter) event.getComponent().findComponent("user")).getValue();
+        UCDTO uc = ucDetailModel.provideUCDTO();
+        PresentErrorMessage("ucstudentsform", "Não implementado.");
+        //        try {
+        //            ucBean.addStudentUC(uc, (StudentDTO) user);
+        //            userBean.addUCStudent(user, uc);
+        //            PresentSuccessMessage("ucstudentsform", "Adicionado com sucesso");
+        //        } catch (EntityValidationException eve) {
+        //            PresentErrorMessages("ucstudentsform", eve.getEntityValidationErrors(), errorMessages);
+        //        } catch (EntityNotFoundException enf) {
+        //            PresentErrorMessage("ucstudentsform", "Verifique que o estudante e a UC ainda existem.");
+        //        }
+    }
+
     ////////////////////////////////////////////
     ///////////////// Users ///////////////////
     public void saveUser() {
@@ -114,6 +155,7 @@ public class AdminManager extends AbstractManager {
         boolean wasNew = user.isNew();
         try {
             userBean.save(user);
+            userDetailModel.setUser(userBean.find(user.getInternalId()));
             PresentSuccessMessage("userdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
         } catch (EntityValidationException eve) {
             PresentErrorMessages("userdetailform", eve.getEntityValidationErrors(), errorMessages);

@@ -3,17 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.ipleiria.dae.gpe.web.models.admin;
+package pt.ipleiria.dae.gpe.web.models.student;
 
 import java.util.List;
+import javax.faces.context.FacesContext;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
-import pt.ipleiria.dae.gpe.lib.utilities.AdminUCFindOptions;
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.utilities.UCOrderBy;
+import pt.ipleiria.dae.gpe.lib.utilities.StudentUCFindOptions;
 
 /**
  *
- * @author LuoSKraD
+ * @author Joel
  */
 public class UCIndexModel {
 
@@ -97,8 +99,8 @@ public class UCIndexModel {
     }
 
     public List<UCDTO> getUcs() {
-        AdminUCFindOptions options = new AdminUCFindOptions(pageId, pageSize, orderBy, search);
-        List<UCDTO> list = ucBean.find(options);
+        StudentUCFindOptions options = new StudentUCFindOptions(pageId, pageSize, orderBy, (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"), search);
+        List<UCDTO> list = ucBean.findFromStudent(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
         return list;

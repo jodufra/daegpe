@@ -32,6 +32,7 @@ public class AttendanceDTO extends AbstractDTO {
         this.student = student;
         this.event = event;
         this.present = present;
+        this.New = idAttendance == 0;
     }
 
     public AttendanceDTO(Attendance entity) {

@@ -4,65 +4,184 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:body>
         <ui:composition template="/admin/dashboard.xhtml">
-            <ui:define name="title">Ucs</ui:define>
+            <ui:define name="title">UCs</ui:define>
 
             <ui:define name="active-sidebar-option">
-                <input type="hidden" name="active-sidebar-option" value="Ucs"/>   
+                <input type="hidden" name="active-sidebar-option" value="UCs"/>   
             </ui:define>
 
             <ui:define name="breadcrumb">
-                <li>Ucs</li>
+                <li>UCs</li>
                 <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
             <ui:define name="content">
                 <div class="panel">
-                    <div class="panel-heading">
-                        Listagem Ucs
-                        <h:form class="pull-right">
-                            <h:commandLink id="newUc" class="btn btn-success" value="Adicionar" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-detail")}' >
-                                <f:setPropertyActionListener target="#{adminManager.ucDetailModel.uc}" value="#{null}"/>
-                            </h:commandLink>
-                        </h:form>
-                    </div>
-
-                    <h:dataTable var="Uc" value="#{adminManager.ucIndexModel.ucs}" class="table table-striped" >
-                        <h:column> 
-                            <f:facet name="header">
-                                <h:outputText value="Id"/>
-                            </f:facet>   
-                            <h:outputText value="#{Uc.idUC}"/>
-                        </h:column>
-                        <h:column> 
-                            <f:facet name="header">
-                                <h:outputText value="Internal Id"/>
-                            </f:facet>   
-                            <h:outputText value="#{Uc.internalId}"/>
-                        </h:column>
-                        <h:column> 
-                            <f:facet name="header">
-                                <h:outputText value="Name"/>
-                            </f:facet>   
-                            <h:outputText value="#{Uc.name}"/>
-                        </h:column>
-                        <h:column> 
-                            <f:facet name="header">
-                                <h:outputText value=""/>
-                            </f:facet>   
-                            <h:form>
-                                <h:commandLink class="pull-right btn btn-danger fa " value="&#xf1f8;" onclick="return confirm('Conrfirma que pretende remover esta Unidade Curricular?');" actionListener="#{adminManager.removeUc}">
-                                    <f:param name="userId" id="ucId" value="#{Uc.idUC}" />
+                    <h:form>
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-dynamic">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <h:inputText class="form-control" value="#{adminManager.ucIndexModel.search}" a:placeholder="Procurar"  />
+                                            <label class="">Escreva e pressione Enter para Procurar</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <span class="pull-right">
+                                        <div style="padding-top: 12.5px;">
+                                            <h:commandLink id="newUser" class="btn btn-success btn-circle" value="+" title="Adicionar Unidade Curricular" a:data-placement="left" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-detail")}' >
+                                                <f:setPropertyActionListener target="#{adminManager.ucDetailModel.uc}" value="#{null}"/>
+                                            </h:commandLink>
+                                        </div> 
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-xs-12 text-center">
+                                <h:messages for="ucindexform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                            </div>
+                        </div>
+                        <h:dataTable var="UC" value="#{adminManager.ucIndexModel.ucs}" class="table table-striped" >
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <h:outputText value="Id"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.ucIndexModel.orderBy == 1}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.ucIndexModel.orderBy}" value="#{2}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.ucIndexModel.orderBy == 2}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.ucIndexModel.orderBy}" value="#{1}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.ucIndexModel.orderBy}" value="#{1}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{UC.internalId}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <h:outputText value="Name"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.ucIndexModel.orderBy == 3}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.ucIndexModel.orderBy}" value="#{4}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.ucIndexModel.orderBy == 4}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.ucIndexModel.orderBy}" value="#{3}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.ucIndexModel.orderBy}" value="#{3}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{UC.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value=""/>
+                                </f:facet>   
+                                <h:commandLink class="pull-right btn btn-danger fa " value="&#xf1f8;" onclick="return confirm('Conrfirma que pretende remover esta Unidade Curricular?');" actionListener="#{adminManager.removeUC}">
+                                    <f:param name="userId" id="ucId" value="#{UC.idUC}"/>
                                 </h:commandLink>
                                 <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-detail")}' >
-                                    <f:setPropertyActionListener target="#{adminManager.ucDetailModel.uc}" value="#{Uc}"/>
+                                    <f:setPropertyActionListener target="#{adminManager.ucDetailModel.uc}" value="#{UC}"/>
                                 </h:commandLink>
-                            </h:form>
-                        </h:column>
-                    </h:dataTable>
+                            </h:column>
+                        </h:dataTable>
+                        <div class="row text-center pagination">
+                            <c:if test="#{adminManager.ucIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  class="fa fa-angle-double-left" title="Primeira Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.ucIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-left" title="Página Anterior" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.ucIndexModel.pageId > 3 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.ucIndexModel.pageId - 3}" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pageId - 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{adminManager.ucIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink value="#{adminManager.ucIndexModel.pageId - 2}" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pageId - 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <c:if test="#{adminManager.ucIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink   value="#{adminManager.ucIndexModel.pageId - 1}" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <span>
+                                <b>#{adminManager.ucIndexModel.pageId}</b>
+                            </span>
+                            <c:if test="#{adminManager.ucIndexModel.pagesCount - adminManager.ucIndexModel.pageId > 0 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.ucIndexModel.pageId + 1}" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pageId + 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{adminManager.ucIndexModel.pagesCount - adminManager.ucIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.ucIndexModel.pageId + 2}" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pageId + 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{adminManager.ucIndexModel.pagesCount - adminManager.ucIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.ucIndexModel.pageId + 3}" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pageId + 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{adminManager.ucIndexModel.pagesCount - adminManager.ucIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-right" title="Próxima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pagesCount - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.ucIndexModel.pagesCount != adminManager.ucIndexModel.pageId }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-double-right" title="Ultima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.ucIndexModel.pageId}" value="#{adminManager.ucIndexModel.pagesCount}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                        </div>
+                    </h:form>
                 </div>
             </ui:define>
         </ui:composition>

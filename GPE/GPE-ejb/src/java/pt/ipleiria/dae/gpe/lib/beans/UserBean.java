@@ -10,6 +10,7 @@ import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.User;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -17,14 +18,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Administrator;
+import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
+import pt.ipleiria.dae.gpe.lib.entities.UC;
+import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
-import pt.ipleiria.dae.gpe.lib.utilities.UserFindOptions;
+import pt.ipleiria.dae.gpe.lib.utilities.AdminUserFindOptions;
 
 /**
  *
@@ -49,6 +56,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     public void save(UserDTO dto) throws EntityValidationException, EntityNotFoundException {
         List<EntityValidationError> errors = new ArrayList<>();
 
+        UC uc = null;
         if (dto.getInternalId().isEmpty()) {
             errors.add(EntityValidationError.USER_INTERNALID_REQUIRED);
         } else {
@@ -59,7 +67,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
                     errors.add(EntityValidationError.USER_INTERNALID_NOT_UNIQUE);
                 }
             } catch (EntityNotFoundException ex) {
-                // Do nothing. This execption means that there are no users with repeated InternalId.
+                // Do nothing. This exception means that there are no users with repeated InternalId.
             }
         }
         if (dto.getType() == null) {
@@ -99,11 +107,64 @@ public class UserBean extends AbstractBean<User, UserDTO> {
                 user.setPassword(dto.getNewPassword());
             }
             user.setSearch(GenerateSlug(" " + user.getInternalId() + " " + user.getName() + " " + user.getEmail() + " " + userType + " ", true, true));
-
             if (dto.isNew()) {
                 super.create(user);
             } else {
                 super.edit(user);
+            }
+        } else {
+            throw new EntityValidationException(errors);
+        }
+    }
+
+    public void addUCStudent(UserDTO userDTO, UCDTO UCdto) throws EntityNotFoundException, EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+        if (userDTO.isNew()) {
+            errors.add(EntityValidationError.UC_IS_NEW);
+        }
+        if (userDTO.getType() != UserType.Student) {
+            errors.add(EntityValidationError.USER_IS_NOT_STUDENT);
+        }
+        if (UCdto.isNew()) {
+            errors.add(EntityValidationError.USER_IS_NEW);
+        }
+
+        if (errors.isEmpty()) {
+
+        }
+
+        if (errors.isEmpty()) {
+            Student student = em.find(Student.class, userDTO.getIdUser());
+            UC uc = em.find(UC.class, UCdto.getIdUC());
+            if (!student.getUcs().contains(uc)) {
+                student.addUc(uc);
+                edit(student);
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new EntityValidationException(errors);
+        }
+    }
+
+    public void addAttendanceStudent(AttendanceDTO dto) throws EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+
+        if (dto.getStudent() == null || dto.getStudent().isNew()) {
+            errors.add(EntityValidationError.ATTENDANCE_INVALID_STUDENT);
+        }
+        if (dto.getEvent() == null || dto.getEvent().isNew()) {
+            errors.add(EntityValidationError.ATTENDANCE_INVALID_EVENT);
+        }
+        if (dto.isNew()) {
+            errors.add(EntityValidationError.ATTENDANCE_IS_NEW);
+        }
+
+        if (errors.isEmpty()) {
+            Attendance attendance = em.find(Attendance.class, dto.getIdAttendance());
+            Student student = em.find(Student.class, dto.getStudent().getIdUser());
+            if (!student.getAttendances().contains(attendance)) {
+                student.addAttendance(attendance);
+                super.edit(student);
             }
         } else {
             throw new EntityValidationException(errors);
@@ -154,7 +215,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         return generateDTO(user);
     }
 
-    public List<UserDTO> find(UserFindOptions options) {
+    public List<UserDTO> find(AdminUserFindOptions options) {
         String query = "SELECT u FROM User u";
 
         if (options.search != null && !options.search.isEmpty()) {
@@ -215,6 +276,18 @@ public class UserBean extends AbstractBean<User, UserDTO> {
     public List<ManagerDTO> getAllManagers()
     {
         return generateDTOList(em.createNamedQuery("User.findByManagers").getResultList());
+    }
+
+    public List<UserDTO> findFromUC(AdminUserFindOptions options) {
+        if (options.ucdto == null || options.ucdto.isNew()) {
+            return new ArrayList<>();
+        }
+        UC uc = em.find(UC.class, options.ucdto.getIdUC());
+        List<User> users = new ArrayList<>();
+        for (Student s : uc.getStudents()) {
+            users.add(s);
+        }
+        return generateDTOList(users);
     }
 
 }

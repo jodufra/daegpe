@@ -22,7 +22,7 @@ public abstract class AbstractManager implements Serializable {
     protected String GenerateURL(String url) {
         url += (url.contains("?") ? "&" : "?") + "faces-redirect=true";
         return url;
-    }
+    } 
 
     protected String GenerateRelativeURL(String url) {
         if (url.isEmpty()) {

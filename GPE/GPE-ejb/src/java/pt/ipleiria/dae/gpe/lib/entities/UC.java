@@ -153,4 +153,8 @@ public class UC extends AbstractEntity implements Serializable {
         return true;
     }
 
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
 }

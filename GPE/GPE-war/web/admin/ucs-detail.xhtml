@@ -4,58 +4,182 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:body>
         <ui:composition template="/admin/dashboard.xhtml">
             <ui:define name="title">#{adminManager.ucDetailModel.title()}</ui:define>
 
             <ui:define name="active-sidebar-option">
-                <input type="hidden" name="active-sidebar-option" value="Ucs"/>   
+                <input type="hidden" name="active-sidebar-option" value="UCs"/>   
             </ui:define>
 
             <ui:define name="breadcrumb">
                 <li>#{adminManager.ucDetailModel.title()}</li>
-                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >Ucs</h:link></li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' >UCs</h:link></li>
                 <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
             <ui:define name="content">
                 <div class="container">
-                    <div class="panel">
-                        <div class="panel-body">
-                            <h:form id="ucdetailform" class="form-horizontal" a:autocomplete="off">
-                                <div class="row ">
-                                    <div class="col-xs-12 text-center">
-                                        <h:messages for="ucdetailform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-6 col-sm-offset-3">
-                                        <div class="input-group input-group-dynamic">
-                                            <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                                            <h:inputText class="form-control" value="#{adminManager.ucDetailModel.internalId}" a:placeholder="Internal da UC" />
-                                            <label class="">Internal da Unidade Curricular</label>
+                    <c:if test="#{!adminManager.ucDetailModel.isNew}">
+                        <ul class="nav nav-tabs">
+                            <li class='#{adminManager.ucDetailModel.tab == "details" ? "active" : ""}'><a data-toggle="tab" href="#details">Detalhes UC</a></li>
+                            <li class='#{adminManager.ucDetailModel.tab == "students" ? "active" : ""}'><a data-toggle="tab" href="#students">Adicionar Estudante</a></li>
+                        </ul>
+                    </c:if>
+                    <div class="tab-content" >
+                        <div id="details" class='tab-pane fade #{adminManager.ucDetailModel.tab == "details" ? "in active" : ""} '>
+                            <div class="panel">                       
+                                <div class="panel-body">  
+                                    <h:form id="ucdetailform" class="form-horizontal" a:autocomplete="off">
+                                        <h:inputText class="hidden" value="#{adminManager.ucDetailModel.tab}" a:value="details" />
+                                        <div class="row " >
+                                            <div class="col-xs-12 text-center">
+                                                <h:messages for="ucdetailform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                                            </div>
                                         </div>
-                                    </div>
-                                     <div class="col-sm-6 col-sm-offset-3">
-                                        <div class="input-group input-group-dynamic">
-                                            <span class="input-group-addon"><i class="fa fa-book"></i></span>
-                                            <h:inputText class="form-control" value="#{adminManager.ucDetailModel.name}" a:placeholder="Nome da UC" />
-                                            <label class="">Nome da Unidade Curricular</label>
+                                        <div class="form-group">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                                                    <h:inputText class="form-control" value="#{adminManager.ucDetailModel.internalId}" a:placeholder="Internal da UC" />
+                                                    <label class="">Internal da Unidade Curricular</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-book"></i></span>
+                                                    <h:inputText class="form-control" value="#{adminManager.ucDetailModel.name}" a:placeholder="Nome da UC" />
+                                                    <label class="">Nome da Unidade Curricular</label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <span class="pull-right">
+                                                    <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' class="btn btn-link" >Voltar</h:link>
+                                                    <h:commandButton action="#{adminManager.saveUC()}" class="btn btn-success" value="Guardar">
+                                                        <f:setPropertyActionListener target="#{adminManager.ucDetailModel.tab}" value="#{'details'}"/>
+                                                    </h:commandButton>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </h:form>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <span class="pull-right">
-                                            <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' class="btn btn-link" >Voltar</h:link>
-                                            <h:commandButton action="#{adminManager.saveUc()}" class="btn btn-success" value="Guardar"/>
-                                        </span>
-                                    </div>
-                                </div>
-                            </h:form>       
+                            </div>
                         </div>
+                        <c:if test="#{!adminManager.ucDetailModel.isNew}">
+                            <div id="students" class='tab-pane fade #{adminManager.ucDetailModel.tab == "students" ? "in active" : ""}'>
+                                <div class="panel">                       
+                                    <div class="panel-body">  
+                                        <h:form id="ucstudentsform" class="form-horizontal" a:autocomplete="off">
+                                            <h:inputText class="hidden" value="#{adminManager.ucDetailModel.tab}" a:value="students" />
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group input-group-dynamic">
+                                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                                <h:inputText class="form-control" value="#{adminManager.ucDetailModel.userSearch}" a:placeholder="Procurar"  />
+                                                                <label class="">Escreva e pressione Enter para Procurar</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <span class="pull-left">
+                                                            <div style="padding-top: 12.5px;">
+                                                                <h:commandLink id="newUser" class="btn btn-primary btn-circle fa" value="&#xf002;" title="Procurar" a:data-placement="right" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/ucs-detail")}' >
+                                                                    <f:setPropertyActionListener target="#{adminManager.ucDetailModel.tab}" value="#{'students'}"/>
+                                                                </h:commandLink>    
+                                                            </div> 
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row ">
+                                                <div class="col-xs-12 text-center">
+                                                    <h:messages for="ucstudentsform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                                                </div>
+                                            </div>
+                                            <h:dataTable var="User" value="#{adminManager.ucDetailModel.searchedUsers}" class="table table-striped" >
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Id"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.internalId}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Name"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.name}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Email"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.email}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Tipo"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.type}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value=""/>
+                                                    </f:facet>  
+                                                    <h:commandLink class="pull-right btn btn-success fa " value="&#xf067;" actionListener="#{adminManager.addStudentUC}">
+                                                        <f:setPropertyActionListener target="#{adminManager.ucDetailModel.tab}" value="#{'students'}"/>
+                                                        <f:param name="user" id="user" value="#{User}" />
+                                                    </h:commandLink>
+                                                </h:column>
+                                            </h:dataTable>
+                                            <hr/>
+                                            <h:dataTable var="User" value="#{adminManager.ucDetailModel.ucUsers}" class="table table-striped" >
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Id"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.internalId}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Name"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.name}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Email"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.email}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Tipo"/>
+                                                    </f:facet>   
+                                                    <h:outputText value="#{User.type}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">
+                                                        <h:outputText value=""/>
+                                                    </f:facet> 
+                                                    <h:commandLink class="pull-right btn btn-danger fa " value="&#xf068;" actionListener="#{adminManager.addStudentUC}" onclick="return confirm('Conrfirma que pretende retirar este Utilizador da UC?');">
+                                                        <f:setPropertyActionListener target="#{adminManager.ucDetailModel.tab}" value="#{'students'}"/>
+                                                        <f:param name="user" id="user" value="#{User}" />
+                                                    </h:commandLink>  
+                                                </h:column>
+                                            </h:dataTable>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </ui:define>
