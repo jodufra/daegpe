@@ -62,4 +62,8 @@ public class Student extends User {
         this.attendances = attendances;
     }
 
+    public void addUc(UC uc) {
+        ucs.add(uc);
+    }
+
 }

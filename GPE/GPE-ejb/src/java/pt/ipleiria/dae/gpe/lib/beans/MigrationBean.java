@@ -6,8 +6,6 @@
 package pt.ipleiria.dae.gpe.lib.beans;
 
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import pt.ipleiria.dae.gpe.lib.dtos.AdministratorDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import javax.annotation.PostConstruct;
@@ -16,6 +14,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+import pt.ipleiria.dae.gpe.lib.entities.User;
+import static pt.ipleiria.dae.gpe.lib.entities.UserType.Student;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
@@ -40,9 +41,10 @@ public class MigrationBean {
             System.out.println("Seeding DB");
 
             // UCs
-            for (int i = 0; i < 100; i++) {
+            for (int i = 1; i < 100; i++) {
                 ucBean.save(new UCDTO("" + i, "UC" + i));
             }
+        
 
             // Users
             AdministratorDTO admin;
@@ -64,6 +66,11 @@ public class MigrationBean {
                 student = new StudentDTO(id, "Dummy Student", id + "@my.ipleiria.pt", "student");
                 userBean.save(student);
             }
+            //UC to Student Student to UC
+                StudentDTO s = new StudentDTO(2,"2120189", "Duarte Mateus", "2120189@my.ipleiria.pt");
+                UCDTO uc = new UCDTO(10,"" + 10, "UC" + 10);
+                userBean.addUcStudent(s, uc);//UC to Student
+                ucBean.addStudentUc(uc, s);//Student to UC
 
             // Events
             EventDTO event;
