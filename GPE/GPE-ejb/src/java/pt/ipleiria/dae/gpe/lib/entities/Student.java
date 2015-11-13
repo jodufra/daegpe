@@ -66,8 +66,4 @@ public class Student extends User {
         ucs.add(uc);
     }
 
-    public void addAttendance(Attendance attendance) {
-        this.attendances.add(attendance);
-    }
-
 }
