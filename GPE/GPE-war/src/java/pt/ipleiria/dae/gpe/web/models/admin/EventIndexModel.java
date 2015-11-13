@@ -18,6 +18,7 @@ public class EventIndexModel {
     
     private final EventBean eventBean;
     
+    
     public int pageId;    
     public final int pageSize = 20;
     public EventOrderBy orderBy;
@@ -27,7 +28,7 @@ public class EventIndexModel {
     {
         this.eventBean = eventBean;
         this.pageId = 1;
-        this.orderBy = EventOrderBy.InternalIdAsc;
+        this.orderBy = EventOrderBy.NameAsc;
     }
     
     public List<EventDTO> getEvents() {

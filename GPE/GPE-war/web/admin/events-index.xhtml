@@ -21,14 +21,27 @@
 
             <ui:define name="content">
                 <div class="panel">
-                    <div>
+                    <h:panelGroup layout="block">
                         <h3 style = "float:left; margin-left: 10px;">Events List</h3>
                         <h:form>
                             <h:commandButton value = "Add Event" class="btn btn-primary" action = '#{redirectManager.GenerateRelativeURL("/admin/events-detail")}' style = "float:right; margin: 20px 20px 0 0">
                                 <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{null}"/>
                             </h:commandButton>
                         </h:form>
-                    </div>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup>
+                        
+                    </h:panelGroup>
+                    
+                    <h:panelGroup layout="block">
+                        <h:form>
+                            <h:panelGroup layout="block">
+                                <h:inputText class = "form-control"></h:inputText>
+                            </h:panelGroup>
+                        </h:form>
+                    </h:panelGroup>
+                    
                     <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndexModel.events}" style = "width: 100%;">
                         <h:inputHidden value="#{Event.idEvent}" />
                         <h:column>
@@ -37,26 +50,27 @@
                         </h:column>
                         <h:column>
                             <f:facet name = "header">Type</f:facet>
-                            
+                            <h:outputText value="#{Event.eventType}"/>
                         </h:column>
                         <h:column>
                             <f:facet name = "header">Day of Week</f:facet>
-                            
+                            <h:outputText value="#{Event.eventDayWeek}"/>
                         </h:column>
                         <h:column>
                             <f:facet name = "header">Time</f:facet>
-                            <h:outputText value="#{Event.dateStart}"/>
+                            <h:outputText value="#{Event.startHour}"/>
                         </h:column>
                         <h:column>
                             <f:facet name = "header">Local</f:facet>
-                            
+                            <h:outputText value="#{Event.room}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name = "header">Weeks Interval</f:facet>
+                            <f:facet name = "header">Start Week</f:facet>
+                            <h:outputText value="#{Event.startWeek}"/>
                         </h:column>
                         <h:column>
                             <f:facet name = "header">Manager</f:facet>
-                            <h:outputText value="#{Event.manager}"/>
+                            <h:outputText value="#{Event.manager.name}"/>
                         </h:column>
                          <h:column >
                             <f:facet name = "header">Actions</f:facet>
