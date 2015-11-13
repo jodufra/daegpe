@@ -3,34 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pt.ipleiria.dae.gpe.web.models.admin;
+package pt.ipleiria.dae.gpe.web.models.student;
 
-import pt.ipleiria.dae.gpe.lib.beans.UserBean;
-import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.List;
-import pt.ipleiria.dae.gpe.lib.utilities.AdminUserFindOptions;
-import pt.ipleiria.dae.gpe.lib.utilities.UserOrderBy;
+import javax.faces.context.FacesContext;
+import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+import pt.ipleiria.dae.gpe.lib.utilities.AttendanceOrderBy;
+import pt.ipleiria.dae.gpe.lib.utilities.StudentAttendanceFindOptions;
 
 /**
  *
  * @author Joel
  */
-public class UserIndexModel {
+public class AttendanceIndexModel {
 
-    private final UserBean userBean;
+    private final AttendanceBean attendanceBean;
 
     public int pageId;
     public final int pageSize = 20;
-    public UserOrderBy orderBy;
+    public AttendanceOrderBy orderBy;
     public String search;
 
     public long count;
     public int pagesCount;
 
-    public UserIndexModel(UserBean userBean) {
-        this.userBean = userBean;
+    public AttendanceIndexModel(AttendanceBean attendanceBean) {
+        this.attendanceBean = attendanceBean;
         this.pageId = 1;
-        this.orderBy = UserOrderBy.InternalIdAsc;
+        this.orderBy = AttendanceOrderBy.EventNameAsc;
         this.search = "";
         this.count = 0;
     }
@@ -45,52 +47,41 @@ public class UserIndexModel {
 
     public int getOrderBy() {
         switch (orderBy) {
-            case EmailAsc:
+            case EventNameAsc:
                 return 1;
-            case EmailDesc:
+            case EventNameDesc:
                 return 2;
-            case InternalIdAsc:
+            case StudentNameAsc:
                 return 3;
-            case InternalIdDesc:
+            case StudentNameDesc:
                 return 4;
-            case NameAsc:
+            case IsPresentAsc:
                 return 5;
-            case NameDesc:
+            case IsPresentDesc:
                 return 6;
-            case TypeAsc:
-                return 7;
-            case TypeDesc:
-                return 8;
         }
         return 0;
     }
 
     public void setOrderBy(int val) {
-
         switch (val) {
             case 1:
-                orderBy = UserOrderBy.EmailAsc;
+                orderBy = AttendanceOrderBy.EventNameAsc;
                 break;
             case 2:
-                orderBy = UserOrderBy.EmailDesc;
+                orderBy = AttendanceOrderBy.EventNameDesc;
                 break;
             case 3:
-                orderBy = UserOrderBy.InternalIdAsc;
+                orderBy = AttendanceOrderBy.StudentNameAsc;
                 break;
             case 4:
-                orderBy = UserOrderBy.InternalIdDesc;
+                orderBy = AttendanceOrderBy.StudentNameDesc;
                 break;
             case 5:
-                orderBy = UserOrderBy.NameAsc;
+                orderBy = AttendanceOrderBy.IsPresentAsc;
                 break;
             case 6:
-                orderBy = UserOrderBy.NameDesc;
-                break;
-            case 7:
-                orderBy = UserOrderBy.TypeAsc;
-                break;
-            case 8:
-                orderBy = UserOrderBy.TypeDesc;
+                orderBy = AttendanceOrderBy.IsPresentDesc;
                 break;
         }
     }
@@ -105,7 +96,7 @@ public class UserIndexModel {
 
     public void setSearch(String search) {
         this.pageId = 1;
-        this.orderBy = UserOrderBy.InternalIdAsc;
+        this.orderBy = AttendanceOrderBy.EventNameAsc;
         this.search = search;
     }
 
@@ -117,12 +108,11 @@ public class UserIndexModel {
         return pagesCount;
     }
 
-    public List<UserDTO> getUsers() {
-        AdminUserFindOptions options = new AdminUserFindOptions(pageId, pageSize, orderBy, search);
-        List<UserDTO> list = userBean.find(options);
+    public List<AttendanceDTO> getAttendances() {
+        StudentAttendanceFindOptions options = new StudentAttendanceFindOptions(pageId, pageSize, orderBy, (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"), search);
+        List<AttendanceDTO> list = attendanceBean.findFromStudent(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
         return list;
     }
-
 }

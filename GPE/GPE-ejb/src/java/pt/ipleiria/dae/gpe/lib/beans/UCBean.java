@@ -16,9 +16,13 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
+import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.lib.utilities.AdminUCFindOptions;
+import pt.ipleiria.dae.gpe.lib.utilities.StudentUCFindOptions;
+import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
 import pt.ipleiria.dae.gpe.lib.utilities.UCOrderBy;
 
 /**
@@ -95,9 +99,33 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
     }
 
     public List<UCDTO> find(int pageId, int pageSize, UCOrderBy orderBy) {
+        return find(new AdminUCFindOptions(pageId, pageSize, orderBy, null));
+    }
+
+    public List<UCDTO> find(AdminUCFindOptions options) {
         String query = "SELECT u FROM UC u";
 
-        switch (orderBy) {
+        if (options.search != null && !options.search.isEmpty()) {
+            String[] pieces = options.search.split(" ");
+            boolean first = true;
+            for (int i = 0; i < pieces.length; i++) {
+                if (pieces[i].equals(" ") || pieces[i].isEmpty()) {
+                    continue;
+                }
+                pieces[i] = GenerateSlug(pieces[i], true, true);
+                if (first) {
+                    query += " WHERE ";
+                    first = false;
+                } else {
+                    query += " AND ";
+                }
+                query += "u.search LIKE '%" + pieces[i] + "%'";
+            }
+        }
+
+        options.count = (long) em.createQuery(query.replace("SELECT u", "SELECT COUNT(u)")).getSingleResult();
+
+        switch (options.orderBy) {
             case InternalIdAsc:
                 query += " ORDER BY u.internalId";
                 break;
@@ -112,12 +140,17 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
                 break;
         }
 
-        if (pageId != 0 && pageSize != 0) {
-            int offset = (pageId - 1) * pageSize;
-            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
+        if (options.pageId > 0 && options.pageSize > 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
         }
 
         return generateDTOList(em.createQuery(query, UC.class).getResultList());
+    }
+
+    public List<UCDTO> findFromStudent(StudentUCFindOptions options) {
+        Student student = em.find(Student.class, options.user.getRelationalId());
+        return generateDTOList((List<UC>) student.getUcs());
     }
 
 }

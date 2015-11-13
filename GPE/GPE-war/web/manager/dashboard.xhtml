@@ -19,9 +19,9 @@
         <div class="loader"></div>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
-                <a class="brand" href="/manager/dashboard.html">
+                <h:link class="brand" outcome='#{redirectManager.GenerateRelativeURL("/student/dashboard.html")}' >
                     <h1>GESTOR <small>DE</small> PRESENÇAS</h1>
-                </a>
+                </h:link>
                 <span class="user-nav">
                     <div class="btn-group">
                         <h:form>
@@ -52,6 +52,8 @@
                         <ui:insert name="active-sidebar-option">
                             <input type="hidden" name="active-sidebar-option" value="Dashboard"/>
                         </ui:insert>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/dashboard")}' ><i class="fa fa-home"></i>Dashboard </h:link></li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' ><i class="fa fa-bell"></i>Eventos</h:link></li>
                     </ul>
                 </div>
             </div>
@@ -66,7 +68,6 @@
                 </div>
                 <div class="content">
                     <ui:insert name="content">
-                        Não implementado
                     </ui:insert>
                 </div>
             </div>

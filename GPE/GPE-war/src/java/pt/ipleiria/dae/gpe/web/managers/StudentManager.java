@@ -1,21 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pt.ipleiria.dae.gpe.web.managers;
 
-import pt.ipleiria.dae.gpe.web.app.AbstractManager;
-import pt.ipleiria.dae.gpe.lib.beans.UserBean;
-import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
-import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.EnumMap;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
+import pt.ipleiria.dae.gpe.lib.beans.UCBean;
+import pt.ipleiria.dae.gpe.lib.beans.UserBean;
+import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.web.app.AbstractManager;
+import pt.ipleiria.dae.gpe.web.models.student.AttendanceIndexModel;
+import pt.ipleiria.dae.gpe.web.models.student.UCIndexModel;
 import pt.ipleiria.dae.gpe.web.models.student.UserDetailModel;
 
 /**
@@ -27,9 +26,16 @@ import pt.ipleiria.dae.gpe.web.models.student.UserDetailModel;
 public class StudentManager extends AbstractManager {
 
     @EJB
+    private UCBean ucBean;
+    @EJB
     private UserBean userBean;
+    @EJB
+    private AttendanceBean attendanceBean;
 
+    private UCIndexModel ucIndexModel;
     private UserDetailModel userDetailModel;
+    private AttendanceIndexModel attendanceIndexModel;
+
     private final EnumMap<EntityValidationError, String> errorMessages;
 
     public StudentManager() {
@@ -41,7 +47,9 @@ public class StudentManager extends AbstractManager {
 
     @PostConstruct
     public void constructModels() {
+        ucIndexModel = new UCIndexModel(ucBean);
         userDetailModel = new UserDetailModel();
+        attendanceIndexModel = new AttendanceIndexModel(attendanceBean);
     }
 
     ////////////////////////////////////////////
@@ -60,8 +68,16 @@ public class StudentManager extends AbstractManager {
 
     ////////////////////////////////////////////
     ///////////////// Models ///////////////////
+    public UCIndexModel getUcIndexModel() {
+        return ucIndexModel;
+    }
+
     public UserDetailModel getUserDetailModel() {
         return userDetailModel;
+    }
+
+    public AttendanceIndexModel getAttendanceIndexModel() {
+        return attendanceIndexModel;
     }
 
 }

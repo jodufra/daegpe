@@ -154,7 +154,6 @@ public class Event extends AbstractEntity implements Serializable {
     public void setManager(Manager manager) {
         this.manager = manager;
     }
-
     
     public Collection<Attendance> getParticipants() {
         return participants;
@@ -162,6 +161,10 @@ public class Event extends AbstractEntity implements Serializable {
 
     public void setParticipants(Collection<Attendance> participants) {
         this.participants = participants;
+    }
+
+    public void addParticipant(Attendance a) {
+        this.participants.add(a);
     }
 
     @Override

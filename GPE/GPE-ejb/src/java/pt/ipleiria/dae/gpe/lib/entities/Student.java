@@ -62,4 +62,8 @@ public class Student extends User {
         this.attendances = attendances;
     }
 
+    public void addAttendance(Attendance attendance) {
+        this.attendances.add(attendance);
+    }
+
 }

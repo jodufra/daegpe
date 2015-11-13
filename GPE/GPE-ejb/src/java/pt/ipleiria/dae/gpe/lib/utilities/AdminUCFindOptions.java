@@ -5,19 +5,20 @@
  */
 package pt.ipleiria.dae.gpe.lib.utilities;
 
+
 /**
  *
  * @author joeld
  */
-public class UserFindOptions {
+public class AdminUCFindOptions {
 
     public long count;
     public int pageId;
     public int pageSize;
     public String search;
-    public UserOrderBy orderBy;
+    public UCOrderBy orderBy;
 
-    public UserFindOptions(int pageId, int pageSize, UserOrderBy orderBy, String search) {
+    public AdminUCFindOptions(int pageId, int pageSize, UCOrderBy orderBy, String search) {
         this.pageId = pageId;
         this.pageSize = pageSize;
         this.search = search;

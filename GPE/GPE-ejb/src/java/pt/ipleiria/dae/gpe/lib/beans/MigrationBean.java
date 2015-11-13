@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
@@ -34,7 +35,9 @@ public class MigrationBean {
     private pt.ipleiria.dae.gpe.lib.beans.UserBean userBean;
     @EJB
     private pt.ipleiria.dae.gpe.lib.beans.EventBean eventBean;
-
+    @EJB 
+    private pt.ipleiria.dae.gpe.lib.beans.AttendanceBean attendanceBean;
+    
     @PostConstruct
     public void populateDB() {
         try {
@@ -75,11 +78,23 @@ public class MigrationBean {
             event = new EventDTO("Aula Semanal", "a1", new Date(), (short) 60, null, null);
             eventBean.save(event);
 
-            event = new EventDTO("Seminário", "s1", new Date(), (short) 60, null, null);
+            event = new EventDTO("Seminário", "s1", new Date(), (short) 60, null, null); 
             eventBean.save(event);
 
             event = new EventDTO("Workshop", "w1", new Date(), (short) 60, null, null);
             eventBean.save(event);
+            
+            
+            // Attendances
+            AttendanceDTO attendance;
+            student = new StudentDTO(4, "2121000", "Joel Francisco", "2121000@my.ipleiria.pt");
+            event = new EventDTO(1, "Aula Semanal", "a1", new Date(), (short) 60, null, null);
+            attendance = new AttendanceDTO(student, event, true);
+            attendanceBean.save(attendance);
+            attendance = new AttendanceDTO(1, student, event, true);
+            userBean.addStudentAttendance(attendance);
+            eventBean.addEventAttendance(attendance);
+            
 
             System.out.println("DB seeded");
         } catch (EntityValidationException | EntityNotFoundException e) {

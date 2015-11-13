@@ -49,12 +49,12 @@ public class AdminManager extends AbstractManager {
     @EJB
     private EventBean eventBean;
 
+    private EventIndexModel eventIndexModel;
+    private EventDetailModel eventDetailModel;
     private UCIndexModel ucIndexModel;
     private UCDetailModel ucDetailModel;
     private UserIndexModel userIndexModel;
     private UserDetailModel userDetailModel;
-    private EventIndexModel eventIndexModel;
-    private EventDetailModel eventDetailModel;
     private final EnumMap<EntityValidationError, String> errorMessages;
 
     public AdminManager() {
@@ -71,12 +71,34 @@ public class AdminManager extends AbstractManager {
 
     @PostConstruct
     public void constructModels() {
+        eventIndexModel = new EventIndexModel(eventBean);
+        eventDetailModel = new EventDetailModel();
         ucIndexModel = new UCIndexModel(ucBean);
         ucDetailModel = new UCDetailModel();
         userIndexModel = new UserIndexModel(userBean);
         userDetailModel = new UserDetailModel();
-        eventIndexModel = new EventIndexModel(eventBean);
-        eventDetailModel = new EventDetailModel();
+    }
+
+    ////////////////////////////////////////////
+    ///////////////// Events ///////////////////
+    public void saveEvent() {
+        EventDTO eventDTO = this.eventDetailModel.provideEventDTO();
+        boolean wasNew = eventDTO.isNew();
+        try {
+            eventBean.save(eventDTO);
+            eventDetailModel.setEvent(eventBean.find(eventDTO.getInternalId()));
+            PresentSuccessMessage("eventdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("eventdetailform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("eventdetailform", "Utilizador a ser editado, não foi encontrado ou foi removido.");
+        }
+    }
+
+    public void removeEvent(ActionEvent event) {
+        UIParameter param = (UIParameter) event.getComponent().findComponent("deleteEventId");
+        Integer id = (Integer) param.getValue();
+        eventBean.remove(id);
     }
 
     ////////////////////////////////////////////
@@ -87,6 +109,7 @@ public class AdminManager extends AbstractManager {
 
         try {
             ucBean.save(uc);
+            ucDetailModel.setUc(ucBean.find(uc.getInternalId()));
             PresentSuccessMessage("ucdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
         } catch (EntityValidationException eve) {
             PresentErrorMessages("ucdetailform", eve.getEntityValidationErrors(), errorMessages);
@@ -113,6 +136,7 @@ public class AdminManager extends AbstractManager {
         boolean wasNew = user.isNew();
         try {
             userBean.save(user);
+            userDetailModel.setUser(userBean.find(user.getInternalId()));
             PresentSuccessMessage("userdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
         } catch (EntityValidationException eve) {
             PresentErrorMessages("userdetailform", eve.getEntityValidationErrors(), errorMessages);
@@ -137,27 +161,6 @@ public class AdminManager extends AbstractManager {
         } catch (EntityNotFoundException e) {
             PresentErrorMessage("userindexform", "O Utilizador que prentendia remover, não foi encontrado.");
         }
-    }
-
-    ////////////////////////////////////////////
-    ///////////////// Events ///////////////////
-    public void saveEvent() {
-        EventDTO eventDTO = this.eventDetailModel.provideEventDTO();
-        boolean wasNew = eventDTO.isNew();
-        try {
-            eventBean.save(eventDTO);
-            PresentSuccessMessage("eventdetailform", wasNew ? "Adicionado com sucesso" : "Guardado com sucesso");
-        } catch (EntityValidationException eve) {
-            PresentErrorMessages("eventdetailform", eve.getEntityValidationErrors(), errorMessages);
-        } catch (EntityNotFoundException enf) {
-            PresentErrorMessage("eventdetailform", "Utilizador a ser editado, não foi encontrado ou foi removido.");
-        }
-    }
-
-    public void removeEvent(ActionEvent event) {
-        UIParameter param = (UIParameter) event.getComponent().findComponent("deleteEventId");
-        Integer id = (Integer) param.getValue();
-        eventBean.remove(id);
     }
 
     ////////////////////////////////////////////

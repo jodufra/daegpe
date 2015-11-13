@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.web.models.student;
 
-import pt.ipleiria.dae.gpe.web.models.manager.*;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
 

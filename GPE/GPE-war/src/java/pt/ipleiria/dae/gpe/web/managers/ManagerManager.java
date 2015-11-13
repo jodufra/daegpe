@@ -14,8 +14,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.web.models.manager.EventIndexModel;
 import pt.ipleiria.dae.gpe.web.models.manager.UserDetailModel;
 
 /**
@@ -27,8 +29,11 @@ import pt.ipleiria.dae.gpe.web.models.manager.UserDetailModel;
 public class ManagerManager extends AbstractManager {
 
     @EJB
+    private EventBean eventBean;
+    @EJB
     private UserBean userBean;
 
+    private EventIndexModel eventIndexModel;
     private UserDetailModel userDetailModel;
     private final EnumMap<EntityValidationError, String> errorMessages;
 
@@ -41,6 +46,7 @@ public class ManagerManager extends AbstractManager {
 
     @PostConstruct
     public void constructModels() {
+        eventIndexModel = new EventIndexModel(eventBean);
         userDetailModel = new UserDetailModel();
     }
 
@@ -60,6 +66,10 @@ public class ManagerManager extends AbstractManager {
 
     ////////////////////////////////////////////
     ///////////////// Models ///////////////////
+    public EventIndexModel getEventIndexModel() {
+        return eventIndexModel;
+    }
+
     public UserDetailModel getUserDetailModel() {
         return userDetailModel;
     }

@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <h:body>
         <ui:composition template="/admin/dashboard.xhtml">
@@ -22,40 +23,89 @@
 
             <ui:define name="content">
                 <div class="container">
-                    <div class="panel">
-                        <div class="panel-body">
-                            <h:form id="ucdetailform" class="form-horizontal" a:autocomplete="off">
-                                <div class="row ">
-                                    <div class="col-xs-12 text-center">
-                                        <h:messages for="ucdetailform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-6 col-sm-offset-3">
-                                        <div class="input-group input-group-dynamic">
-                                            <span class="input-group-addon"><i class="fa fa-tag"></i></span>
-                                            <h:inputText class="form-control" value="#{adminManager.ucDetailModel.internalId}" a:placeholder="Internal da UC" />
-                                            <label class="">Internal da Unidade Curricular</label>
+                    <c:if test="#{!adminManager.ucDetailModel.isNew}">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#ucPanel">Detalhes Uc</a></li>
+                            <li><a data-toggle="tab" href="#ucStudentTab">Adicionar Estudante</a></li>
+                        </ul>
+                    </c:if>
+                    <div class="tab-content" >
+                        <div id="ucPanel" class="tab-pane fade in active">
+                            <div class="panel">                       
+                                <div class="panel-body">  
+                                    <h:form id="ucdetailform" class="form-horizontal" a:autocomplete="off">
+                                        <div class="row " >
+                                            <div class="col-xs-12 text-center">
+                                                <h:messages for="ucdetailform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                                            </div>
                                         </div>
-                                    </div>
-                                     <div class="col-sm-6 col-sm-offset-3">
-                                        <div class="input-group input-group-dynamic">
-                                            <span class="input-group-addon"><i class="fa fa-book"></i></span>
-                                            <h:inputText class="form-control" value="#{adminManager.ucDetailModel.name}" a:placeholder="Nome da UC" />
-                                            <label class="">Nome da Unidade Curricular</label>
+                                        <div class="form-group">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                                                    <h:inputText class="form-control" value="#{adminManager.ucDetailModel.internalId}" a:placeholder="Internal da UC" />
+                                                    <label class="">Internal da Unidade Curricular</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-book"></i></span>
+                                                    <h:inputText class="form-control" value="#{adminManager.ucDetailModel.name}" a:placeholder="Nome da UC" />
+                                                    <label class="">Nome da Unidade Curricular</label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <span class="pull-right">
+                                                    <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' class="btn btn-link" >Voltar</h:link>
+                                                    <h:commandButton action="#{adminManager.saveUc()}" class="btn btn-success" value="Guardar"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </h:form>
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <span class="pull-right">
-                                            <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' class="btn btn-link" >Voltar</h:link>
-                                            <h:commandButton action="#{adminManager.saveUc()}" class="btn btn-success" value="Guardar"/>
-                                        </span>
-                                    </div>
-                                </div>
-                            </h:form>       
+                            </div>
                         </div>
+                        <c:if test="#{!adminManager.ucDetailModel.isNew}">
+                            <div id="ucStudentTab" class="tab-pane fade">
+                                <div class="panel">                       
+                                    <div class="panel-body">  
+                                        <h:form id="ucStudent" class="form-horizontal" a:autocomplete="off">
+                                            <div class="row " >
+                                                <div class="col-xs-12 text-center">
+                                                    <h:messages for="ucdetailform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <div class="input-group input-group-dynamic">
+                                                        <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                                                        <h:inputText class="form-control" value="#{adminManager.ucDetailModel.internalId}" a:placeholder="Internal da UC" />
+                                                        <label class="">Internal da Unidade Curricular</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <div class="input-group input-group-dynamic">
+                                                        <span class="input-group-addon"><i class="fa fa-book"></i></span>
+                                                        <h:inputText class="form-control" value="#{adminManager.ucDetailModel.name}" a:placeholder="Nome da UC" />
+                                                        <label class="">Nome da Unidade Curricular</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <span class="pull-right">
+                                                        <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' class="btn btn-link" >Voltar</h:link>
+                                                        <h:commandButton action="#{adminManager.saveUc()}" class="btn btn-success" value="Guardar"/>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </ui:define>
