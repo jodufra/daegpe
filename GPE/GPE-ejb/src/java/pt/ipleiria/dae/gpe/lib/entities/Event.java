@@ -4,28 +4,27 @@ import pt.ipleiria.dae.gpe.lib.core.AbstractEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
+import pt.ipleiria.dae.gpe.lib.utilities.EventType;
+import pt.ipleiria.dae.gpe.lib.utilities.Room;
 
-/**
- *
- * @author joeld
- */
+
 @Entity
 @NamedQueries({})
 @Table(name = "EVENTS")
@@ -36,38 +35,62 @@ public class Event extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     private Integer idEvent;
 
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     protected String internalId;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private EventType eventType;
     
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date dateStart;
-
+    private EventDayWeek eventDayWeek;
+    
+    @Enumerated(EnumType.STRING)
     @NotNull
-    @Min(0)
-    @Max(720)
-    private short minutes;
+    private Room room;
+    
+    @Basic(optional = false)
+    @NotNull
+    private Integer startHour;
+    
+    @Basic(optional = false)
+    @NotNull
+    private Integer endHour;
+    
+    @Basic(optional = false)
+    @NotNull
+    private Integer startWeek;
+    
+    
+    @Basic(optional = false)
+    @NotNull
+    private Integer endWeek;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    private String Semester;
+  
 
     @Size(max = 255)
     private String search;
 
-    //@ManyToOne(optional = true)
-    //@JoinColumn(name = "IDUC")
-    //@NotNull
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "IDUC")
+    @NotNull
     private UC uc;
 
-    //@ManyToOne(optional = false)
-    //@JoinColumn(name = "IDMANAGER")
-    //@NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "IDUSER")
+    @NotNull
     private Manager manager;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
@@ -77,25 +100,37 @@ public class Event extends AbstractEntity implements Serializable {
         this.participants = new ArrayList<>();
     }
 
-    public Event(String name, String internalId, Date dateStart, short minutes, UC uc, Manager manager) {
-        this.name = name;
+    
+    public Event(String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, Integer startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
         this.internalId = internalId;
-        this.dateStart = dateStart;
-        this.minutes = minutes;
+        this.eventType = eventType;
+        this.name = name;
+        this.eventDayWeek = eventDayWeek;
+        this.room = room;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.startWeek = startWeek;
+        this.endWeek = endWeek;
+        this.Semester = semester;
         this.uc = uc;
-        this.manager = manager;
+        this.manager = null;
         this.participants = new ArrayList<>();
     }
 
-    public Event(Integer idEvent, String internalId, String name, Date dateStart, short minutes, String search, UC uc, Manager manager) {
+    public Event(Integer idEvent, String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, Integer startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
         this.idEvent = idEvent;
-        this.name = name;
-        this.dateStart = dateStart;
-        this.minutes = minutes;
-        this.search = search;
-        this.uc = uc;
-        this.manager = manager;
         this.internalId = internalId;
+        this.eventType = eventType;
+        this.name = name;
+        this.eventDayWeek = eventDayWeek;
+        this.room = room;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.startWeek = startWeek;
+        this.endWeek = endWeek;
+        this.Semester = semester;
+        this.uc = uc;
+        this.manager = null;
         this.participants = new ArrayList<>();
     }
 
@@ -113,22 +148,6 @@ public class Event extends AbstractEntity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getDateStart() {
-        return dateStart;
-    }
-
-    public void setDateStart(Date dateStart) {
-        this.dateStart = dateStart;
-    }
-
-    public short getMinutes() {
-        return minutes;
-    }
-
-    public void setMinutes(short minutes) {
-        this.minutes = minutes;
     }
 
     public String getSearch() {
@@ -201,6 +220,72 @@ public class Event extends AbstractEntity implements Serializable {
     public void setInternalId(String internalId) {
         this.internalId = internalId;
     }
+
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+
+    public Integer getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(Integer startHour) {
+        this.startHour = startHour;
+    }
+
+    public Integer getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(Integer endHour) {
+        this.endHour = endHour;
+    }
+
+    public Integer getStartWeek() {
+        return startWeek;
+    }
+
+    public void setStartWeek(Integer startWeek) {
+        this.startWeek = startWeek;
+    }
+
+    public Integer getEndWeek() {
+        return endWeek;
+    }
+
+    public void setEndWeek(Integer endWeek) {
+        this.endWeek = endWeek;
+    }
+
+    public EventDayWeek getEventDayWeek() {
+        return eventDayWeek;
+    }
+
+    public void setEventDayWeek(EventDayWeek eventDayWeek) {
+        this.eventDayWeek = eventDayWeek;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public String getSemester() {
+        return Semester;
+    }
+
+    public void setSemester(String Semester) {
+        this.Semester = Semester;
+    }
+
     
     @Override
     public String toString()

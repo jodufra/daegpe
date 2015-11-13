@@ -105,6 +105,8 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         cq.select(cq.from(entityClass));
         return generateDTOList(getEntityManager().createQuery(cq).getResultList());
     }
+    
+   
 
     public List<DTO> findRange(int[] range) {
         CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();

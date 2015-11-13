@@ -16,8 +16,12 @@ import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
+import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
+import pt.ipleiria.dae.gpe.lib.utilities.EventType;
+import pt.ipleiria.dae.gpe.lib.utilities.Room;
 
 /**
  *
@@ -41,12 +45,23 @@ public class MigrationBean {
         try {
             System.out.println("Seeding DB");
 
+            UCDTO ucDTO = new UCDTO("ucPed", "Aqui vai Ela a UC");
+            ucBean.save(ucDTO);
+            
+            UCDTO ucDTO2 = new UCDTO("ucPed2", "Aqui vai Ela a UC2");
+            ucBean.save(ucDTO2);
+            
             // UCs
             UCDTO uc;
             for (int i = 1; i <= 100; i++) {
                 uc = new UCDTO("uc" + i, "Unidade Curricular " + i);
                 ucBean.save(uc);
             }
+            
+            
+            
+            ManagerDTO managerPedro = new ManagerDTO("managerPedro", "mPedro", "managerpedro@manager.com", "managerPedro");
+            userBean.save(managerPedro);
 
             // Users
             AdministratorDTO admin;
@@ -54,7 +69,7 @@ public class MigrationBean {
             userBean.save(admin);
 
             ManagerDTO manager;
-            manager = new ManagerDTO("manager", "Manager", "manager@gpe.pt", "manager");
+            manager = new ManagerDTO("manager", "Manager", "manager@gpe.pt", "manager"); 
             userBean.save(manager);
 
             StudentDTO student;
@@ -67,9 +82,9 @@ public class MigrationBean {
             student = new StudentDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "student");
             userBean.save(student);
 
-            student = new StudentDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "student");
-            userBean.save(student);
-
+            admin = new AdministratorDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "student");
+            userBean.save(admin);
+            
             for (int i = 0; i < 100; i++) {
                 String id = (9999000 + i) + "";
                 student = new StudentDTO(id, "Dummy", "dummy" + id + "@my.ipleiria.pt", "student");
@@ -78,30 +93,29 @@ public class MigrationBean {
 
             // Events
             EventDTO event;
-            event = new EventDTO("Aula Semanal", "a1", new Date(), (short) 60, null, null);
-            eventBean.save(event);
-
-            event = new EventDTO("Seminário", "s1", new Date(), (short) 60, null, null);
-            eventBean.save(event);
-
-            event = new EventDTO("Workshop", "w1", new Date(), (short) 60, null, null);
-            eventBean.save(event);
+            //userBean.save(new AdministratorDTO("adminPedro", "AdminPedro", "adminpedro@admin.com", "adminPedro"))
+            //event = new EventDTO("event1", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", ucDTO, managerPedro );
+            //eventBean.save(event);
+            
+            //event = new EventDTO("event2", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.A, 4, 17, 20, 22, "1:2", ucDTO2, (ManagerDTO) userBean.find("manager"));
+            //eventBean.save(event);
 
             //UC to Students & Student to UCs
-            student = new StudentDTO(3, "student", "Student Dummy", "dummy@my.ipleiria.pt");
-            uc = new UCDTO(10, "uc" + 10, "Unidade Curricular " + 10);
-            userBean.addUCStudent(student, uc); //UC to Student
-            ucBean.addStudentUC(uc, student); //Student to UC
+            //TODO - Joel ou Duarte
+            //student = new StudentDTO(3, "student", "Student Dummy", "dummy@my.ipleiria.pt");
+            //uc = new UCDTO(10, "uc" + 10, "Unidade Curricular " + 10);
+            //userBean.addUCStudent(student, uc); //UC to Student
+            //ucBean.addStudentUC(uc, student); //Student to UC
 
             // Attendances
-            AttendanceDTO attendance;
+            /*AttendanceDTO attendance;
             student = new StudentDTO(3, "student", "Student Dummy", "dummy@my.ipleiria.pt");
             event = new EventDTO(1, "Aula Semanal", "a1", new Date(), (short) 60, null, null);
             attendance = new AttendanceDTO(student, event, true);
             attendanceBean.save(attendance);
             attendance = new AttendanceDTO(1, student, event, true);
             userBean.addAttendanceStudent(attendance);
-            eventBean.addAttendanceEvent(attendance);
+            eventBean.addAttendanceEvent(attendance);*/
 
             System.out.println("DB seeded");
         } catch (EntityValidationException | EntityNotFoundException e) {

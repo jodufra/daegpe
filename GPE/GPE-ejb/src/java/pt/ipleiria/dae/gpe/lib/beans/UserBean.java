@@ -17,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
@@ -162,7 +163,8 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             Attendance attendance = em.find(Attendance.class, dto.getIdAttendance());
             Student student = em.find(Student.class, dto.getStudent().getIdUser());
             if (!student.getAttendances().contains(attendance)) {
-                student.addAttendance(attendance);
+                //TODO - Joel
+                //student.addAttendance(attendance);
                 super.edit(student);
             }
         } else {
@@ -270,6 +272,11 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         }
 
         return generateDTOList(em.createQuery(query, User.class).getResultList());
+    }
+    
+    public List<ManagerDTO> getAllManagers()
+    {
+        return generateDTOList(em.createNamedQuery("User.findByManagers").getResultList());
     }
 
     public List<UserDTO> findFromUC(AdminUserFindOptions options) {
