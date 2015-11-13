@@ -11,11 +11,11 @@ import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIParameter;
@@ -25,6 +25,7 @@ import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
+import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.web.models.admin.EventDetailModel;
@@ -76,7 +77,7 @@ public class AdminManager extends AbstractManager {
         userIndexModel = new UserIndexModel(userBean);
         userDetailModel = new UserDetailModel();
         eventIndexModel = new EventIndexModel(eventBean);
-        eventDetailModel = new EventDetailModel();
+        eventDetailModel = new EventDetailModel(eventBean, ucBean, userBean);
     }
 
     ////////////////////////////////////////////
@@ -159,6 +160,65 @@ public class AdminManager extends AbstractManager {
         Integer id = (Integer) param.getValue();
         eventBean.remove(id);
     }
+    
+    public void importStudentsFromText() 
+    {
+        EventDTO eventDTO = eventDetailModel.provideEventDTO();
+        List<String> studentsId = new LinkedList<>();
+        List<UserDTO> students = new LinkedList<>();
+        
+        if(!eventDetailModel.getStringIdImport().isEmpty())
+        {
+            String[] studentsIDString = eventDetailModel.getStringIdImport().split(";");
+            for(String studentString: studentsIDString)
+            {
+                if(!(studentString.isEmpty()) && !(studentString.equals(""))){
+                    try
+                    {
+                        studentString = studentString.replaceFirst("[^0-9]", "");
+                        studentsId.add(studentString);
+                    }
+                    catch(NumberFormatException ex)
+                    {
+                        System.out.println("ERROR: " + ex);
+                    }
+                }
+            }
+            
+            if(!studentsId.isEmpty())
+            {
+                //TODO - usar userBean.find(internalID)
+                for(String str: studentsId){
+                    try{
+                        UserDTO userDTO = userBean.find(str);
+                        if(userDTO != null){
+                            if(userDTO.getType() == UserType.Student)
+                            {
+                                System.out.println("STU" + userDTO.getType());
+                                students.add(userDTO);
+                            } 
+                        }
+                    }
+                    catch(EntityNotFoundException ex)
+                    {
+                        PresentErrorMessage("eventdetailform", "Estudante não encontrado");
+                    }
+                    
+                }
+                
+                
+                if(eventDTO != null)
+                {
+                    System.out.println("PAssei aqui");
+                    eventBean.addStudentsToEvent(students, eventDTO);
+                }
+            }
+        }
+    }
+    
+    
+    
+    
 
     ////////////////////////////////////////////
     ///////////////// Models ///////////////////
@@ -185,5 +245,7 @@ public class AdminManager extends AbstractManager {
     public EventDetailModel getEventDetailModel() {
         return eventDetailModel;
     }
+    
+   
 
 }

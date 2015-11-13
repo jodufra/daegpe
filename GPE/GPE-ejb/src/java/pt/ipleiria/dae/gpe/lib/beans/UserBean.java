@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Administrator;
 import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
@@ -209,6 +210,11 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         }
 
         return generateDTOList(em.createQuery(query, User.class).getResultList());
+    }
+    
+    public List<ManagerDTO> getAllManagers()
+    {
+        return generateDTOList(em.createNamedQuery("User.findByManagers").getResultList());
     }
 
 }

@@ -2,6 +2,7 @@
 package pt.ipleiria.dae.gpe.lib.beans;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -11,9 +12,18 @@ import javax.persistence.TypedQuery;
 import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
+import pt.ipleiria.dae.gpe.lib.entities.Manager;
+import pt.ipleiria.dae.gpe.lib.entities.Student;
+import pt.ipleiria.dae.gpe.lib.entities.UC;
+import pt.ipleiria.dae.gpe.lib.entities.User;
+import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.lib.utilities.EventType;
 
 
 @Stateless
@@ -28,6 +38,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
     }
 
 
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -35,7 +46,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
 
     @Override
     public void save(EventDTO dto) throws EntityValidationException, EntityNotFoundException {
-       List<EntityValidationError> errors = new ArrayList<>();
+        List<EntityValidationError> errors = new ArrayList<>();
 
         if (dto.getInternalId().isEmpty()) {
             errors.add(EntityValidationError.USER_INTERNALID_REQUIRED);
@@ -51,6 +62,8 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             errors.add(EntityValidationError.USER_NAME_REQUIRED);
         }
         
+       
+       
 
         if (errors.isEmpty()) {
             Event event;
@@ -59,19 +72,34 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             } else {
                 event = getEntity(dto.getIdEvent());
             }
+            System.out.println("Passei aqui no save");
             event.setInternalId(dto.getInternalId());
+            
+            event.setEventType(dto.getEventType());
             event.setName(dto.getName());
-            event.setDateStart(dto.getDateStart());
-            event.setManager(null);
-            event.setMinutes(dto.getMinutes());
-            event.setName(dto.getName());
-            event.setUc(null);
+            event.setEventDayWeek(dto.getEventDayWeek());
+            event.setRoom(dto.getRoom());
+            event.setStartHour(dto.getStartHour());
+            event.setEndHour(dto.getEndHour());
+            event.setStartWeek(dto.getStartWeek());
+            event.setEndWeek(dto.getEndWeek());
+            event.setSemester(dto.getSemester());
+            event.setSearch("search");
+            event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
+            System.out.println("AQUI: " + em.find(UC.class, 1));
+            event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
+            
+            //System.out.println("Passei aqui tambem1: " + dto.getManager().getName());
             if (dto.isNew()) {
+                System.out.println("Passei aqui super");
                 super.create(event);
+                //em.persist(event);
+                System.out.println("Passei aqui super2");
             } else {
                 super.edit(event);
             }
         }else{
+            System.out.println("ER: " + errors.size());
              throw new EntityValidationException(errors);
         }
         
@@ -89,6 +117,37 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         }
         return generateDTO(events.get(0));
     }
+
+
+    public void addStudentsToEvent(List<UserDTO> students, EventDTO eventDTO)
+    {
+        System.out.println("ID: " + eventDTO.getIdEvent());
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        if(event != null)
+        {
+            for(UserDTO stu: students)
+            {
+                System.out.println("PAssei aqui");
+                Student student = em.find(Student.class, stu.getIdUser());
+                Attendance attendeAttendance = new Attendance((Student) student, event, true);
+                event.addParticipant(attendeAttendance);
+                System.out.println("PAssei aqui: " + event.getParticipants().size());
+            } 
+        }
+        
+    }
+    
+    
+    public Collection<Attendance> getStudentsAttendance(EventDTO eventDTO)
+    {
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        if(event != null){
+             return event.getParticipants();
+        }
+        return null; 
+    }
+    
+    
     
       public enum EventOrderBy {
         InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, EmailAsc, EmailDesc
@@ -134,4 +193,9 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
           }
           em.remove(event);
       }
+      
+    public static EventType[] getEventTypes()
+    {
+        return EventType.values();
+    }
 }

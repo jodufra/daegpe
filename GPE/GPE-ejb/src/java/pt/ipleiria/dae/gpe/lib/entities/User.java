@@ -30,7 +30,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "User.findByInternalid", query = "SELECT u FROM User u WHERE u.internalId = :internalid"),
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-    @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search")
+    @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search"),
+    @NamedQuery(name = "User.findByManagers", query = "SELECT u FROM User u WHERE u.type = pt.ipleiria.dae.gpe.lib.entities.UserType.Manager")
 })
 @Table(name = "USERS", uniqueConstraints = @UniqueConstraint(columnNames = {"INTERNALID"}))
 public class User extends AbstractEntity implements Serializable {
