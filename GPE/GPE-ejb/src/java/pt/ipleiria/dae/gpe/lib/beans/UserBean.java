@@ -17,11 +17,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Administrator;
-import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
@@ -29,7 +27,7 @@ import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
-import pt.ipleiria.dae.gpe.lib.utilities.AdminUserFindOptions;
+import pt.ipleiria.dae.gpe.lib.utilities.UserFindOptions;
 
 /**
  *
@@ -64,7 +62,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
                     errors.add(EntityValidationError.USER_INTERNALID_NOT_UNIQUE);
                 }
             } catch (EntityNotFoundException ex) {
-                // Do nothing. This exception means that there are no users with repeated InternalId.
+                // Do nothing. This execption means that there are no users with repeated InternalId.
             }
         }
         if (dto.getType() == null) {
@@ -184,7 +182,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         return generateDTO(user);
     }
 
-    public List<UserDTO> find(AdminUserFindOptions options) {
+    public List<UserDTO> find(UserFindOptions options) {
         String query = "SELECT u FROM User u";
 
         if (options.search != null && !options.search.isEmpty()) {
@@ -240,29 +238,6 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         }
 
         return generateDTOList(em.createQuery(query, User.class).getResultList());
-    }
-
-    public void addStudentAttendance(AttendanceDTO dto) throws EntityValidationException {
-        List<EntityValidationError> errors = new ArrayList<>();
-
-        if (dto.getStudent() == null || dto.getStudent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_INVALID_STUDENT);
-        }
-        if (dto.getEvent() == null || dto.getEvent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_INVALID_EVENT);
-        }
-        if (dto.isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_IS_NEW);
-        }
-
-        if (errors.isEmpty()) {
-            Attendance a = em.find(Attendance.class, dto.getIdAttendance());
-            Student s = em.find(Student.class, dto.getStudent().getIdUser());
-            s.addAttendance(a);
-            super.edit(s);
-        } else {
-            throw new EntityValidationException(errors);
-        }
     }
 
 }
