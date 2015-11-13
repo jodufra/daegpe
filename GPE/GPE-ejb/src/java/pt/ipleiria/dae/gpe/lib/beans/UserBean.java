@@ -163,7 +163,8 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             Attendance attendance = em.find(Attendance.class, dto.getIdAttendance());
             Student student = em.find(Student.class, dto.getStudent().getIdUser());
             if (!student.getAttendances().contains(attendance)) {
-                student.addAttendance(attendance);
+                //TODO - Joel
+                //student.addAttendance(attendance);
                 super.edit(student);
             }
         } else {
