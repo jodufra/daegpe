@@ -10,16 +10,13 @@ import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.User;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
-import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Administrator;
 import pt.ipleiria.dae.gpe.lib.entities.Attendance;
@@ -274,7 +271,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         return generateDTOList(em.createQuery(query, User.class).getResultList());
     }
     
-    public List<ManagerDTO> getAllManagers()
+    public List<UserDTO> getAllManagers()
     {
         return generateDTOList(em.createNamedQuery("User.findByManagers").getResultList());
     }

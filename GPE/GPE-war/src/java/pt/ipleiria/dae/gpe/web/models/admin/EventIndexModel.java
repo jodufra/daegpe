@@ -7,8 +7,8 @@ package pt.ipleiria.dae.gpe.web.models.admin;
 
 import java.util.List;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
-import pt.ipleiria.dae.gpe.lib.beans.EventBean.EventOrderBy;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
 
 /**
  *
@@ -28,7 +28,7 @@ public class EventIndexModel {
     {
         this.eventBean = eventBean;
         this.pageId = 1;
-        this.orderBy = EventOrderBy.InternalIdAsc;
+        this.orderBy = EventOrderBy.NameAsc;
     }
     
     public List<EventDTO> getEvents() {

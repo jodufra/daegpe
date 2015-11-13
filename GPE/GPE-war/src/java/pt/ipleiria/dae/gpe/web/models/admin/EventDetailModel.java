@@ -4,24 +4,17 @@ package pt.ipleiria.dae.gpe.web.models.admin;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import javafx.print.Collation;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
-import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Attendance;
-import pt.ipleiria.dae.gpe.lib.entities.Event;
-import pt.ipleiria.dae.gpe.lib.entities.User;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
-import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
 import pt.ipleiria.dae.gpe.lib.utilities.EventType;
 import pt.ipleiria.dae.gpe.lib.utilities.Room;
-import pt.ipleiria.dae.gpe.lib.utilities.Text;
 
 
 public class EventDetailModel {
@@ -223,7 +216,7 @@ public class EventDetailModel {
     public Collection<Attendance> getStudentsAttendance()
     {
         EventDTO eventDTO = this.provideEventDTO();
-        return eventBean.getStudentsAttendance(eventDTO);
+        return eventBean.findStudentsAttendance(eventDTO);
     }
 
     public EventBean getEventBean() {
@@ -255,10 +248,10 @@ public class EventDetailModel {
         return ucsDTO;
     }
  
-    public List<ManagerDTO> getAllManagers()
+    public List<UserDTO> getAllManagers()
     {
-        List<ManagerDTO> managersDTO = userBean.getAllManagers();
-        return managersDTO;
+        List<UserDTO> managers = userBean.getAllManagers();
+        return managers;
     }
     
     public void getImportStudentsFromUC()

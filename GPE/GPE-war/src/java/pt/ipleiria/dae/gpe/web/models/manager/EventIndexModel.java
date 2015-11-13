@@ -100,7 +100,7 @@ public class EventIndexModel {
 
     public List<EventDTO> getEvents() {
         ManagerEventFindOptions options = new ManagerEventFindOptions(pageId, pageSize, orderBy, (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"), search);
-        List<EventDTO> list = eventBean.findFromManager(options);
+        List<EventDTO> list = eventBean.findEventsManager(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
         return list;

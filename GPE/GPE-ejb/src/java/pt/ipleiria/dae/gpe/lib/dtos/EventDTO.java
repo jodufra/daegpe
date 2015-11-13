@@ -51,6 +51,7 @@ public class EventDTO extends AbstractDTO{
     public EventDTO( String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, 
             Integer startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
         super(null);
+        this.idEvent = 0;
         this.internalId = internalId;
         this.eventType = eventType;
         this.name = name;
