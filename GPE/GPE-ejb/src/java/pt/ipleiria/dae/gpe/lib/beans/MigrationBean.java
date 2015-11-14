@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.lib.beans;
 
-import java.util.Date;
 import pt.ipleiria.dae.gpe.lib.dtos.AdministratorDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import javax.annotation.PostConstruct;
@@ -16,7 +15,6 @@ import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
-import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
