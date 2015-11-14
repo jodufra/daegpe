@@ -1,11 +1,11 @@
 package pt.ipleiria.dae.gpe.lib.dtos;
 
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
-import java.util.Date;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
 import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
 import pt.ipleiria.dae.gpe.lib.utilities.EventType;
 import pt.ipleiria.dae.gpe.lib.utilities.Room;
+import pt.ipleiria.dae.gpe.lib.utilities.Security;
 
 /**
  *
@@ -26,6 +26,9 @@ public class EventDTO extends AbstractDTO {
     private String semester;
     private UCDTO uc;
     private ManagerDTO manager;
+    private boolean attendanceActive;
+    private boolean attendanceActivated;
+    private String attendancePassword;
 
     public EventDTO(Integer idEvent, String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour,
             String startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
@@ -43,6 +46,9 @@ public class EventDTO extends AbstractDTO {
         this.semester = semester;
         this.uc = uc;
         this.manager = manager;
+        this.attendanceActive = false;        
+        this.attendanceActivated = false;
+        this.attendancePassword = "";
         this.New = idEvent == 0;
     }
 
@@ -62,6 +68,9 @@ public class EventDTO extends AbstractDTO {
         this.semester = semester;
         this.uc = uc;
         this.manager = manager;
+        this.attendanceActive = false;        
+        this.attendanceActivated = false;
+        this.attendancePassword = "";
     }
 
     public EventDTO(Event event) {
@@ -79,6 +88,9 @@ public class EventDTO extends AbstractDTO {
         this.semester = event.getSemester();
         this.uc = new UCDTO(event.getUc());
         this.manager = new ManagerDTO(event.getManager());
+        this.attendanceActive = event.isAttendanceActive();        
+        this.attendanceActivated = event.isAttendanceActivated(); ;
+        this.attendancePassword = event.getAttendancePassword();
     }
 
     public Integer getIdEvent() {
@@ -183,6 +195,30 @@ public class EventDTO extends AbstractDTO {
 
     public void setSemester(String semester) {
         this.semester = semester;
+    }
+
+    public boolean isAttendanceActive() {
+        return attendanceActive;
+    }
+
+    public void setAttendanceActive(boolean attendanceActive) {
+        this.attendanceActive = attendanceActive;
+    }
+
+    public boolean isAttendanceActivated() {
+        return attendanceActivated;
+    }
+
+    public void setAttendanceActivated(boolean attendanceActivated) {
+        this.attendanceActivated = attendanceActivated;
+    }
+
+    public String getAttendancePassword() {
+        return attendancePassword;
+    }
+
+    public void setAttendancePassword(String attendancePassword) {
+        this.attendancePassword = Security.GenerateMD5Hash(attendancePassword);
     }
 
     @Override

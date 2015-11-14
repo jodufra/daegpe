@@ -107,6 +107,10 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
                                     event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
                                     event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
                                     event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
+                                    event.setAttendanceActive(dto.isAttendanceActive());
+                                    event.setAttendanceActivated(dto.isAttendanceActivated());                                    
+                                    event.setAttendancePassword(dto.getAttendancePassword());
+
                                     if (dto.isNew()) {
                                         super.create(event);
                                     } else {

@@ -28,17 +28,19 @@ public class EventDetailModel {
 
     private final UserBean userBean;
     private final AttendanceBean attendanceBean;
-    
+
     private EventDTO event;
 
     private String tab;
     private String userSearch;
+    private String attendancePassword;
 
-    public EventDetailModel(UserBean userBean ,AttendanceBean attendanceBean) {
+    public EventDetailModel(UserBean userBean, AttendanceBean attendanceBean) {
         this.userBean = userBean;
         this.attendanceBean = attendanceBean;
         this.tab = "details";
         this.userSearch = "";
+        this.attendancePassword = "";
     }
 
     public String getTitle() {
@@ -49,12 +51,13 @@ public class EventDetailModel {
         this.event = event;
         this.tab = "details";
         this.userSearch = "";
+        this.attendancePassword = "";
     }
 
     public EventDTO getEvent() {
         return event;
     }
-    
+
     public Integer getIdEvent() {
         return event.getIdEvent();
     }
@@ -107,6 +110,14 @@ public class EventDetailModel {
         return event.getSemester();
     }
 
+    public boolean isAttendanceActive() {
+        return event.isAttendanceActive();
+    }
+
+    public boolean isAttendanceActivated() {
+        return event.isAttendanceActivated();
+    }
+
     public String getTab() {
         return tab;
     }
@@ -123,6 +134,14 @@ public class EventDetailModel {
         this.userSearch = userSearch;
     }
 
+    public String getAttendancePassword() {
+        return attendancePassword;
+    }
+
+    public void setAttendancePassword(String attendancePassword) {
+        this.attendancePassword = attendancePassword;
+    }
+
     public List<UserDTO> getSearchedUsers() {
         if (userSearch.isEmpty()) {
             return new ArrayList<>();
@@ -131,7 +150,7 @@ public class EventDetailModel {
         return userBean.find(options);
     }
 
-    public List<AttendanceDTO> getAttendances(){
+    public List<AttendanceDTO> getAttendances() {
         return attendanceBean.findEventAttendances(event);
     }
 }

@@ -191,26 +191,41 @@
                                         </h:dataTable>
                                         <hr/>
                                         <div class="panel-heading">
-                                            <div class="row">
-                                                <div class="col-md-4 col-md-offset-7 col-sm-6">
-                                                    <div class="form-group">
-                                                        <div class="input-group input-group-dynamic">
-                                                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                            <h:inputSecret class="form-control" value="#{managerManager.eventDetailModel.userSearch}" a:placeholder="Password"  />
-                                                            <label class="">Escreva a Password para autenticar as Presenças</label>
+                                            <c:if test="${!managerManager.eventDetailModel.attendanceActive and !managerManager.eventDetailModel.attendanceActivated}">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-md-offset-7 col-sm-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group input-group-dynamic">
+                                                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                                                <h:inputText class="form-control" value="#{managerManager.eventDetailModel.attendancePassword}" a:placeholder="Password" a:autocomplete="off" />
+                                                                <label class="">Escreva a Password para autenticar as Presenças</label>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-1 col-sm-2">
+                                                        <span class="pull-left">
+                                                            <div style="padding-top: 12.5px;">
+                                                                <h:commandLink class="btn btn-warning btn-circle fa" value="&#xf00c;" title="Activar Presenças" a:data-placement="right" a:data-toggle="tooltip" actionListener="#{managerManager.updateEventAttendanceState()}" >
+                                                                    <f:setPropertyActionListener target="#{managerManager.eventDetailModel.tab}" value="#{'attendances'}"/>
+                                                                </h:commandLink>    
+                                                            </div> 
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-1 col-sm-2">
-                                                    <span class="pull-left">
-                                                        <div style="padding-top: 12.5px;">
-                                                            <h:commandLink class="btn btn-warning btn-circle fa" value="&#xf023;" title="Activar Presenças" a:data-placement="right" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/manager/events-detail")}' >
-                                                                <f:setPropertyActionListener target="#{managerManager.eventDetailModel.tab}" value="#{'attendances'}"/>
-                                                            </h:commandLink>    
-                                                        </div> 
-                                                    </span>
+                                            </c:if>
+                                            <c:if test="#{managerManager.eventDetailModel.attendanceActive and managerManager.eventDetailModel.attendanceActivated}">
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12">
+                                                        <span class="pull-right">
+                                                            <div style="padding-top: 12.5px;">
+                                                                <h:commandLink class="btn btn-danger btn-circle fa" value="&#xf00d;" title="Desactivar Presenças" a:data-placement="left" a:data-toggle="tooltip" actionListener="#{managerManager.updateEventAttendanceState()}" >
+                                                                    <f:setPropertyActionListener target="#{managerManager.eventDetailModel.tab}" value="#{'attendances'}"/>
+                                                                </h:commandLink>    
+                                                            </div> 
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </c:if>
                                         </div>
                                         <h:dataTable var="Attendance" value="#{managerManager.eventDetailModel.attendances}" class="table table-striped" >
                                             <h:column> 
@@ -247,6 +262,11 @@
                                                 <f:facet name="header">
                                                     <h:outputText value=""/>
                                                 </f:facet>  
+                                                <c:if test="#{!managerManager.eventDetailModel.attendanceActive and managerManager.eventDetailModel.attendanceActivated}">
+                                                    <h:commandLink class="btn btn-warning fa" value="&#xf0ec;" title="Alterar Presença" a:data-placement="right" a:data-toggle="tooltip" actionListener="#{managerManager.updateAttendanceState}" >
+                                                        <f:param name="attendance" id="attendance" value="#{Attendance}" />
+                                                    </h:commandLink>
+                                                </c:if>
                                             </h:column>
                                         </h:dataTable>
                                     </h:form>

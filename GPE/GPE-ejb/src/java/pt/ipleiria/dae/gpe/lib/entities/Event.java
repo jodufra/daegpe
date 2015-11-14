@@ -24,7 +24,6 @@ import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
 import pt.ipleiria.dae.gpe.lib.utilities.EventType;
 import pt.ipleiria.dae.gpe.lib.utilities.Room;
 
-
 @Entity
 @NamedQueries({})
 @Table(name = "EVENTS")
@@ -43,7 +42,7 @@ public class Event extends AbstractEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull
     private EventType eventType;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -52,33 +51,31 @@ public class Event extends AbstractEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull
     private EventDayWeek eventDayWeek;
-    
+
     @Enumerated(EnumType.STRING)
     @NotNull
     private Room room;
-    
+
     @Basic(optional = false)
     @NotNull
     private Integer startHour;
-    
+
     @Basic(optional = false)
     @NotNull
     private Integer endHour;
-    
+
     @Basic(optional = false)
     @NotNull
     private String startWeek;
-    
-    
+
     @Basic(optional = false)
     @NotNull
     private Integer endWeek;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 5)
     private String Semester;
-  
 
     @Size(max = 255)
     private String search;
@@ -93,15 +90,30 @@ public class Event extends AbstractEntity implements Serializable {
     @NotNull
     private Manager manager;
 
+    @Basic(optional = false)
+    @NotNull
+    private boolean attendanceActive;
+
+    @Basic(optional = false)
+    @NotNull
+    private boolean attendanceActivated;
+
+    @Basic(optional = false)
+    @NotNull
+    private String attendancePassword;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private Collection<Attendance> participants;
 
     public Event() {
         this.participants = new ArrayList<>();
+        this.attendanceActive = false;        
+        this.attendanceActivated = false;
+        this.attendancePassword = "";
+
     }
 
-    
-    public Event(String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
+    public Event(String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
         this.internalId = internalId;
         this.eventType = eventType;
         this.name = name;
@@ -115,9 +127,12 @@ public class Event extends AbstractEntity implements Serializable {
         this.uc = uc;
         this.manager = null;
         this.participants = new ArrayList<>();
+        this.attendanceActive = false;        
+        this.attendanceActivated = false;
+        this.attendancePassword = "";
     }
 
-    public Event(Integer idEvent, String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
+    public Event(Integer idEvent, String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
         this.idEvent = idEvent;
         this.internalId = internalId;
         this.eventType = eventType;
@@ -132,6 +147,9 @@ public class Event extends AbstractEntity implements Serializable {
         this.uc = uc;
         this.manager = null;
         this.participants = new ArrayList<>();
+        this.attendanceActive = false;        
+        this.attendanceActivated = false;
+        this.attendancePassword = "";
     }
 
     public Integer getIdEvent() {
@@ -173,7 +191,7 @@ public class Event extends AbstractEntity implements Serializable {
     public void setManager(Manager manager) {
         this.manager = manager;
     }
-    
+
     public Collection<Attendance> getParticipants() {
         return participants;
     }
@@ -228,7 +246,6 @@ public class Event extends AbstractEntity implements Serializable {
     public void setEventType(EventType eventType) {
         this.eventType = eventType;
     }
-
 
     public Integer getStartHour() {
         return startHour;
@@ -286,11 +303,33 @@ public class Event extends AbstractEntity implements Serializable {
         this.Semester = Semester;
     }
 
-    
+    public boolean isAttendanceActive() {
+        return attendanceActive;
+    }
+
+    public void setAttendanceActive(boolean attendanceActive) {
+        this.attendanceActive = attendanceActive;
+    }
+
+    public boolean isAttendanceActivated() {
+        return attendanceActivated;
+    }
+
+    public void setAttendanceActivated(boolean attendanceActivated) {
+        this.attendanceActivated = attendanceActivated;
+    }
+
+    public String getAttendancePassword() {
+        return attendancePassword;
+    }
+
+    public void setAttendancePassword(String attendancePassword) {
+        this.attendancePassword = attendancePassword;
+    }
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.name;
     }
-    
+
 }

@@ -11,6 +11,8 @@ import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.EnumMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -54,7 +56,7 @@ public class ManagerManager extends AbstractManager {
         errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_REQUIRED, "Email é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_PATTERN, "Email inválido.");
-        errorMessages.put(EntityValidationError.ATTENDANCE_NULL_STUDENT, "Estudante Inválido.");        
+        errorMessages.put(EntityValidationError.ATTENDANCE_NULL_STUDENT, "Estudante Inválido.");
         errorMessages.put(EntityValidationError.ATTENDANCE_STUDENT_IS_NEW, "Estudante ainda não registado.");
         errorMessages.put(EntityValidationError.ATTENDANCE_USER_NOT_STUDENT, "Utilizador não é Estudante.");
         errorMessages.put(EntityValidationError.ATTENDANCE_NULL_EVENT, "Evento Inválido.");
@@ -98,6 +100,30 @@ public class ManagerManager extends AbstractManager {
         } catch (EntityNotFoundException enf) {
             PresentErrorMessage("eventattendancesform", "Verifique que o Estudante e o Evento ainda existem.");
         }
+    }
+
+    public void updateEventAttendanceState() {
+        EventDTO event = eventDetailModel.getEvent();
+        if (!(!event.isAttendanceActive() && event.isAttendanceActivated())) {
+            if (!event.isAttendanceActivated()) {
+                event.setAttendanceActive(true);
+                event.setAttendanceActivated(true);
+                event.setAttendancePassword(eventDetailModel.getAttendancePassword());
+            } else if (event.isAttendanceActive() && event.isAttendanceActivated()) {
+                event.setAttendanceActive(false);
+            }
+            try {
+                eventBean.save(event);
+            } catch (EntityValidationException ex) {
+                PresentErrorMessages("eventattendancesform", ex.getEntityValidationErrors(), errorMessages);
+            } catch (EntityNotFoundException ex) {
+                PresentErrorMessage("eventattendancesform", "Verifique que o Evento ainda existe.");
+            }
+        }
+    }
+
+    public void updateAttendanceState(ActionEvent e) throws IOException {
+       
     }
 
     ////////////////////////////////////////////
