@@ -101,9 +101,9 @@ public class MigrationBean {
             event = new EventDTO(1, "DAE T", EventType.AULA, "DAE Teórico", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", uc, manager);
             attendance = new AttendanceDTO(student, event);
             attendanceBean.save(attendance);
-            attendance = new AttendanceDTO(1, student, event, false);
-            userBean.addAttendanceStudent(attendance);
-            eventBean.addAttendanceEvent(attendance);
+            //attendance = new AttendanceDTO(1, student, event, false);
+            //userBean.addAttendanceStudent(attendance);
+            //eventBean.addAttendanceEvent(attendance);
 
             System.out.println("DB seeded");
         } catch (EntityValidationException | EntityNotFoundException e) {

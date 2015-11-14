@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:body>
+        <ui:composition template="/manager/dashboard.xhtml">
+            <ui:define name="title">#{managerManager.eventDetailModel.title}</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Eventos"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>#{managerManager.eventDetailModel.title}</li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >Eventos</h:link></li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="container">
+                    <ul class="nav nav-tabs">
+                        <li class='#{managerManager.eventDetailModel.tab == "details" ? "active" : ""}'><a data-toggle="tab" href="#details">Detalhes Evento</a></li>
+                        <li class='#{managerManager.eventDetailModel.tab == "attendances" ? "active" : ""}'><a data-toggle="tab" href="#attendances">Presenças</a></li>
+                    </ul>
+                    <div class="tab-content" >
+                        <div id="details" class='tab-pane fade #{managerManager.eventDetailModel.tab == "details" ? "in active" : ""} '>
+                            <div class="panel">                       
+                                <div class="panel-body">  
+                                    <h:form id="eventdetailform" class="form-horizontal" a:autocomplete="off">
+                                        <div class="form-group">
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-thumb-tack"></i></span>
+                                                    <p class="form-control-static">#{managerManager.eventDetailModel.eventType}</p>
+                                                    <label class="">Tipo de Evento</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+                                                    <p class="form-control-static">#{managerManager.eventDetailModel.internalId}</p>
+                                                    <label class="">Tag do Evento</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-book"></i></span>
+                                                    <p class="form-control-static">#{managerManager.eventDetailModel.name}</p>
+                                                    <label class="">Nome do Evento</label>
+                                                </div>
+                                            </div>
+                                            <c:if test="#{managerManager.eventDetailModel.uc != null}">
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="input-group input-group-dynamic">
+                                                        <span class="input-group-addon"><i class="fa fa-file-text"></i></span>
+                                                        <p class="form-control-static">#{managerManager.eventDetailModel.uc.name}</p>
+                                                        <label class="">Unidade Curricular</label>
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                    <p class="form-control-static">#{managerManager.eventDetailModel.manager.name}</p>
+                                                    <label class="">Gestor</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                                                    <p class="form-control-static">#{managerManager.eventDetailModel.room}</p>
+                                                    <label class="">Local do Evento</label>
+                                                </div>
+                                            </div>
+                                            <c:if test="#{managerManager.eventDetailModel.startWeek == managerManager.eventDetailModel.endWeek}">
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="input-group input-group-dynamic">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                        <p class="form-control-static">#{managerManager.eventDetailModel.startWeek}</p>
+                                                        <label class="">Semana</label>
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                            <c:if test="#{managerManager.eventDetailModel.startWeek != managerManager.eventDetailModel.endWeek}">
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="input-group input-group-dynamic">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                        <p class="form-control-static">#{managerManager.eventDetailModel.startWeek} - #{managerManager.eventDetailModel.endWeek}</p>
+                                                        <label class="">Semanas</label>
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                                                    <p class="form-control-static">#{managerManager.eventDetailModel.eventDayWeek}</p>
+                                                    <label class="">Dia da Semana</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="input-group input-group-dynamic">
+                                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                                                    <p class="form-control-static">#{managerManager.eventDetailModel.startHour}h - #{managerManager.eventDetailModel.endHour}h</p>
+                                                    <label class="">Horário</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <span class="pull-right">
+                                                    <h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' class="btn btn-link" >Voltar</h:link>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="attendances" class='tab-pane fade #{managerManager.eventDetailModel.tab == "attendances" ? "in active" : ""}'>
+                            <div class="panel">                       
+                                <div class="panel-body">  
+                                    <h:form id="eventattendancesform" class="form-horizontal" a:autocomplete="off">
+                                        <h:inputText class="hidden" value="#{managerManager.eventDetailModel.tab}" a:value="attendances" />
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group input-group-dynamic">
+                                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                            <h:inputText class="form-control" value="#{managerManager.eventDetailModel.userSearch}" a:placeholder="Procurar"  />
+                                                            <label class="">Escreva e pressione Enter para Procurar</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-6">
+                                                    <span class="pull-left">
+                                                        <div style="padding-top: 12.5px;">
+                                                            <h:commandLink id="newUser" class="btn btn-primary btn-circle fa" value="&#xf002;" title="Procurar" a:data-placement="right" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/manager/events-detail")}' >
+                                                                <f:setPropertyActionListener target="#{managerManager.eventDetailModel.tab}" value="#{'attendances'}"/>
+                                                            </h:commandLink>    
+                                                        </div> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-xs-12 text-center">
+                                                <h:messages for="eventattendancesform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                                            </div>
+                                        </div>
+                                        <h:dataTable var="User" value="#{managerManager.eventDetailModel.searchedUsers}" class="table table-striped" >
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Id"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{User.internalId}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Name"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{User.name}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Email"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{User.email}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Tipo"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{User.type}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value=""/>
+                                                </f:facet>  
+                                                <h:commandLink class="pull-right btn btn-seventcess fa " value="&#xf067;" actionListener="#{managerManager.addAttendance}">
+                                                    <f:setPropertyActionListener target="#{managerManager.eventDetailModel.tab}" value="#{'attendances'}"/>
+                                                    <f:param name="user" id="user" value="#{User}" />
+                                                </h:commandLink>
+                                            </h:column>
+                                        </h:dataTable>
+                                        <hr/>
+                                        <h:dataTable var="Attendance" value="#{managerManager.eventDetailModel.attendances}" class="table table-striped" >
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Id"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{Attendance.student.internalId}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Name"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{Attendance.student.name}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Email"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{Attendance.student.email}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Tipo"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{Attendance.student.type}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value="Presente?"/>
+                                                </f:facet>   
+                                                <h:outputText value="#{Attendance.present ? 'Sim' : 'Não'}"/>
+                                            </h:column>
+                                            <h:column> 
+                                                <f:facet name="header">
+                                                    <h:outputText value=""/>
+                                                </f:facet>  
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

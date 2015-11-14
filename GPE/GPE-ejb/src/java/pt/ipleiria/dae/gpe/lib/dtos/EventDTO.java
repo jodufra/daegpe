@@ -11,7 +11,7 @@ import pt.ipleiria.dae.gpe.lib.utilities.Room;
  *
  * @author joeld
  */
-public class EventDTO extends AbstractDTO{
+public class EventDTO extends AbstractDTO {
 
     private Integer idEvent;
     private String internalId;
@@ -26,10 +26,8 @@ public class EventDTO extends AbstractDTO{
     private String semester;
     private UCDTO uc;
     private ManagerDTO manager;
-    
 
-    
-    public EventDTO(Integer idEvent, String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, 
+    public EventDTO(Integer idEvent, String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour,
             Integer startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
         super(null);
         this.idEvent = idEvent;
@@ -48,7 +46,7 @@ public class EventDTO extends AbstractDTO{
         this.New = idEvent == 0;
     }
 
-    public EventDTO( String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, 
+    public EventDTO(String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour,
             Integer startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
         super(null);
         this.idEvent = 0;
@@ -65,7 +63,7 @@ public class EventDTO extends AbstractDTO{
         this.uc = uc;
         this.manager = manager;
     }
-    
+
     public EventDTO(Event event) {
         super(event);
         this.idEvent = event.getIdEvent();
@@ -83,8 +81,6 @@ public class EventDTO extends AbstractDTO{
         this.manager = new ManagerDTO(event.getManager());
     }
 
-   
-    
     public Integer getIdEvent() {
         return idEvent;
     }
@@ -115,11 +111,6 @@ public class EventDTO extends AbstractDTO{
 
     public void setManager(ManagerDTO manager) {
         this.manager = manager;
-    }
-
-    @Override
-    public Object getRelationalId() {
-        return getIdEvent();
     }
 
     public String getInternalId() {
@@ -194,7 +185,9 @@ public class EventDTO extends AbstractDTO{
         this.semester = semester;
     }
 
-    
-    
-    
+    @Override
+    public Object getRelationalId() {
+        return getIdEvent();
+    }
+
 }

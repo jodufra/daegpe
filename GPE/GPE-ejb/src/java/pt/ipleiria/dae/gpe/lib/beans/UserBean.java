@@ -29,6 +29,7 @@ import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
 import pt.ipleiria.dae.gpe.lib.utilities.AdminUserFindOptions;
+import pt.ipleiria.dae.gpe.lib.utilities.ManagerUserFindOptions;
 
 /**
  *
@@ -147,10 +148,10 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         List<EntityValidationError> errors = new ArrayList<>();
 
         if (dto.getStudent() == null || dto.getStudent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_INVALID_STUDENT);
+            errors.add(EntityValidationError.ATTENDANCE_NULL_STUDENT);
         }
         if (dto.getEvent() == null || dto.getEvent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_INVALID_EVENT);
+            errors.add(EntityValidationError.ATTENDANCE_NULL_EVENT);
         }
         if (dto.isNew()) {
             errors.add(EntityValidationError.ATTENDANCE_IS_NEW);
@@ -160,8 +161,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             Attendance attendance = em.find(Attendance.class, dto.getIdAttendance());
             Student student = em.find(Student.class, dto.getStudent().getIdUser());
             if (!student.getAttendances().contains(attendance)) {
-                //TODO - Joel
-                //student.addAttendance(attendance);
+                student.addAttendance(attendance);
                 super.edit(student);
             }
         } else {
@@ -270,9 +270,64 @@ public class UserBean extends AbstractBean<User, UserDTO> {
 
         return generateDTOList(em.createQuery(query, User.class).getResultList());
     }
-    
-    public List<UserDTO> getAllManagers()
-    {
+
+    public List<UserDTO> find(ManagerUserFindOptions options) {
+        String query = "SELECT u FROM User u";
+
+        if (options.search != null && !options.search.isEmpty()) {
+            String[] pieces = options.search.split(" ");
+            boolean first = true;
+            for (int i = 0; i < pieces.length; i++) {
+                if (pieces[i].equals(" ") || pieces[i].isEmpty()) {
+                    continue;
+                }
+                pieces[i] = GenerateSlug(pieces[i], true, true);
+                if (first) {
+                    query += " WHERE ";
+                    first = false;
+                } else {
+                    query += " AND ";
+                }
+                query += "u.search LIKE '%" + pieces[i] + "%'";
+            }
+        }
+
+        switch (options.orderBy) {
+            case EmailAsc:
+                query += " ORDER BY u.email";
+                break;
+            case EmailDesc:
+                query += " ORDER BY u.email desc";
+                break;
+            case InternalIdAsc:
+                query += " ORDER BY u.internalId";
+                break;
+            case InternalIdDesc:
+                query += " ORDER BY u.internalId desc";
+                break;
+            case NameAsc:
+                query += " ORDER BY u.name";
+                break;
+            case NameDesc:
+                query += " ORDER BY u.name desc";
+                break;
+            case TypeAsc:
+                query += " ORDER BY u.type";
+                break;
+            case TypeDesc:
+                query += " ORDER BY u.type desc";
+                break;
+        }
+
+        if (options.pageId > 0 && options.pageSize > 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
+        }
+
+        return generateDTOList(em.createQuery(query, User.class).getResultList());
+    }
+
+    public List<UserDTO> getAllManagers() {
         return generateDTOList(em.createNamedQuery("User.findByManagers").getResultList());
     }
 

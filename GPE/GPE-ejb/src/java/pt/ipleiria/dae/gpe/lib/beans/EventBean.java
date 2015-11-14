@@ -108,10 +108,10 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         List<EntityValidationError> errors = new ArrayList<>();
 
         if (dto.getStudent() == null || dto.getStudent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_INVALID_STUDENT);
+            errors.add(EntityValidationError.ATTENDANCE_NULL_STUDENT);
         }
         if (dto.getEvent() == null || dto.getEvent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_INVALID_EVENT);
+            errors.add(EntityValidationError.ATTENDANCE_NULL_EVENT);
         }
         if (dto.isNew()) {
             errors.add(EntityValidationError.ATTENDANCE_IS_NEW);
@@ -120,8 +120,10 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         if (errors.isEmpty()) {
             Attendance a = em.find(Attendance.class, dto.getIdAttendance());
             Event e = em.find(Event.class, dto.getEvent().getIdEvent());
-            e.addParticipant(a);
-            super.edit(e);
+            if (!e.getParticipants().contains(a)) {
+                e.addParticipant(a);
+                super.edit(e);
+            }
         } else {
             throw new EntityValidationException(errors);
         }

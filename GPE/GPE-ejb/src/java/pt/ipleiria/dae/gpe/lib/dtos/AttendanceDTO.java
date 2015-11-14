@@ -15,11 +15,11 @@ import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 public class AttendanceDTO extends AbstractDTO {
 
     private Integer idAttendance;
-    private StudentDTO student;
+    private UserDTO student;
     private EventDTO event;
     private boolean present;
 
-    public AttendanceDTO(StudentDTO student, EventDTO event) {
+    public AttendanceDTO(UserDTO student, EventDTO event) {
         super(null);
         this.idAttendance = 0;
         this.student = student;
@@ -27,7 +27,7 @@ public class AttendanceDTO extends AbstractDTO {
         this.present = false;
     }
 
-    public AttendanceDTO(Integer idAttendance, StudentDTO student, EventDTO event, boolean present) {
+    public AttendanceDTO(Integer idAttendance, UserDTO student, EventDTO event, boolean present) {
         super(null);
         this.idAttendance = idAttendance;
         this.student = student;
@@ -40,7 +40,7 @@ public class AttendanceDTO extends AbstractDTO {
         super(entity);
         this.idAttendance = entity.getIdAttendance();
         this.event = new EventDTO(entity.getEvent());
-        this.student = new StudentDTO(entity.getStudent());
+        this.student = new UserDTO(entity.getStudent());
         this.present = entity.isPresent();
     }
 
@@ -52,11 +52,11 @@ public class AttendanceDTO extends AbstractDTO {
         this.idAttendance = idAttendance;
     }
 
-    public StudentDTO getStudent() {
+    public UserDTO getStudent() {
         return student;
     }
 
-    public void setStudent(StudentDTO student) {
+    public void setStudent(UserDTO student) {
         this.student = student;
     }
 

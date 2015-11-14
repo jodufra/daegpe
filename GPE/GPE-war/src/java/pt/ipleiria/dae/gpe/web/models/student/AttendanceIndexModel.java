@@ -140,7 +140,7 @@ public class AttendanceIndexModel {
 
     public List<AttendanceDTO> getAttendances() {
         StudentAttendanceFindOptions options = new StudentAttendanceFindOptions(pageId, pageSize, orderBy, (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"), search);
-        List<AttendanceDTO> list = attendanceBean.findFromStudent(options);
+        List<AttendanceDTO> list = attendanceBean.findStudentAttendances(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
         return list;

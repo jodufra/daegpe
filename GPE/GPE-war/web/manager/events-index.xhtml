@@ -105,6 +105,9 @@
                                 <f:facet name="header">
                                     <h:outputText value=""/>
                                 </f:facet>   
+                                <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/manager/events-detail")}' >
+                                    <f:setPropertyActionListener target="#{managerManager.eventDetailModel.event}" value="#{Event}"/>
+                                </h:commandLink>
                             </h:column>
                         </h:dataTable>
                         <div class="row text-center pagination">

@@ -5,6 +5,7 @@
  */
 package pt.ipleiria.dae.gpe.web.managers;
 
+import java.io.IOException;
 import pt.ipleiria.dae.gpe.web.app.AbstractManager;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
@@ -14,9 +15,15 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIParameter;
+import javax.faces.event.ActionEvent;
+import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.web.models.manager.EventDetailModel;
 import pt.ipleiria.dae.gpe.web.models.manager.EventIndexModel;
 import pt.ipleiria.dae.gpe.web.models.manager.UserDetailModel;
 
@@ -29,11 +36,14 @@ import pt.ipleiria.dae.gpe.web.models.manager.UserDetailModel;
 public class ManagerManager extends AbstractManager {
 
     @EJB
+    private AttendanceBean attendanceBean;
+    @EJB
     private EventBean eventBean;
     @EJB
     private UserBean userBean;
 
     private EventIndexModel eventIndexModel;
+    private EventDetailModel eventDetailModel;
     private UserDetailModel userDetailModel;
     private final EnumMap<EntityValidationError, String> errorMessages;
 
@@ -42,11 +52,18 @@ public class ManagerManager extends AbstractManager {
         errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_REQUIRED, "Email é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_PATTERN, "Email inválido.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_NULL_STUDENT, "Estudante Inválido.");        
+        errorMessages.put(EntityValidationError.ATTENDANCE_STUDENT_IS_NEW, "Estudante ainda não registado.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_USER_NOT_STUDENT, "Utilizador não é Estudante.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_NULL_EVENT, "Evento Inválido.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_EVENT_IS_NEW, "Evento ainda não registado.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_CANT_BE_REPEATED, "Utilizador já está registado numa Presença no Evento.");
     }
 
     @PostConstruct
     public void constructModels() {
         eventIndexModel = new EventIndexModel(eventBean);
+        eventDetailModel = new EventDetailModel(userBean, attendanceBean);
         userDetailModel = new UserDetailModel();
     }
 
@@ -65,9 +82,29 @@ public class ManagerManager extends AbstractManager {
     }
 
     ////////////////////////////////////////////
+    ///////////////// Attendance ///////////////
+    public void addAttendance(ActionEvent e) throws IOException {
+        UserDTO user = (UserDTO) ((UIParameter) e.getComponent().findComponent("user")).getValue();
+        EventDTO event = eventDetailModel.getEvent();
+        AttendanceDTO attedance = new AttendanceDTO(user, event);
+        try {
+            attendanceBean.save(attedance);
+            PresentSuccessMessage("eventattendancesform", "Adicionado com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("eventattendancesform", "Verifique que o Estudante e o Evento ainda existem.");
+        }
+    }
+
+    ////////////////////////////////////////////
     ///////////////// Models ///////////////////
     public EventIndexModel getEventIndexModel() {
         return eventIndexModel;
+    }
+
+    public EventDetailModel getEventDetailModel() {
+        return eventDetailModel;
     }
 
     public UserDetailModel getUserDetailModel() {
