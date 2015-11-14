@@ -160,9 +160,13 @@
                                                 <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{11}"/>
                                             </c:otherwise>
                                         </c:choose>
+
                                     </h:commandLink>
-                                </f:facet>   
+                                </f:facet>  
                                 <h:outputText value="#{Attendance.present ? 'Sim' : 'Não' }"/>
+                                <h:commandLink class="btn btn-warning fa" value="&#xf0ec;" title="Registar Presença" a:data-placement="right" a:data-toggle="tooltip" actionListener="#{studentManager.updateAttendanceState}" >
+                                    <f:param name="attendance" id="attendance" value="#{Attendance}" />
+                                </h:commandLink>    
                             </h:column>
                         </h:dataTable>
                         <div class="row text-center pagination">
