@@ -19,11 +19,12 @@ public class AttendanceDTO extends AbstractDTO {
     private EventDTO event;
     private boolean present;
 
-    public AttendanceDTO(StudentDTO student, EventDTO event, boolean present) {
+    public AttendanceDTO(StudentDTO student, EventDTO event) {
         super(null);
+        this.idAttendance = 0;
         this.student = student;
         this.event = event;
-        this.present = present;
+        this.present = false;
     }
 
     public AttendanceDTO(Integer idAttendance, StudentDTO student, EventDTO event, boolean present) {
@@ -40,6 +41,7 @@ public class AttendanceDTO extends AbstractDTO {
         this.idAttendance = entity.getIdAttendance();
         this.event = new EventDTO(entity.getEvent());
         this.student = new StudentDTO(entity.getStudent());
+        this.present = entity.isPresent();
     }
 
     public Integer getIdAttendance() {

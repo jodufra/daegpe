@@ -35,6 +35,18 @@ public class UserIndexModel {
         this.count = 0;
     }
 
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public int getPagesCount() {
+        return pagesCount;
+    }
+
     public int getPageId() {
         return pageId;
     }
@@ -95,10 +107,6 @@ public class UserIndexModel {
         }
     }
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
     public String getSearch() {
         return search;
     }
@@ -107,14 +115,6 @@ public class UserIndexModel {
         this.pageId = 1;
         this.orderBy = UserOrderBy.InternalIdAsc;
         this.search = search;
-    }
-
-    public long getCount() {
-        return count;
-    }
-
-    public int getPagesCount() {
-        return pagesCount;
     }
 
     public List<UserDTO> getUsers() {

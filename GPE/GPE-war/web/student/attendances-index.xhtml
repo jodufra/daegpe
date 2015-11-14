@@ -62,7 +62,7 @@
                             <h:column> 
                                 <f:facet name="header">
                                     <h:commandLink action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
-                                        <h:outputText value="Estudante"/>
+                                        <h:outputText value="Unidade Curricular"/>
                                         <c:choose>
                                             <c:when test="#{studentManager.attendanceIndexModel.orderBy == 3}">
                                                 <i class="fa fa-sort-alpha-asc"></i>
@@ -78,23 +78,44 @@
                                         </c:choose>
                                     </h:commandLink>
                                 </f:facet>   
-                                <h:outputText value="#{Attendance.student.name}"/>
+                                <h:outputText value="#{Attendance.event.uc != null ? Attendance.event.uc.name : ''}"/>
                             </h:column>
                             <h:column> 
                                 <f:facet name="header">
                                     <h:commandLink action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
-                                        <h:outputText value="Presente"/>
+                                        <h:outputText value="Gestor"/>
                                         <c:choose>
-                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 3}">
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 5}">
                                                 <i class="fa fa-sort-alpha-asc"></i>
-                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{4}"/>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{6}"/>
                                             </c:when>
-                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 4}">
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 6}">
                                                 <i class="fa fa-sort-alpha-desc"></i>
-                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{3}"/>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{5}"/>
                                             </c:when>
                                             <c:otherwise>
-                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{3}"/>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{6}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.event.manager.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
+                                        <h:outputText value="Presente?"/>
+                                        <c:choose>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 11}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{12}"/>
+                                            </c:when>
+                                            <c:when test="#{studentManager.attendanceIndexModel.orderBy == 12}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{11}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.orderBy}" value="#{11}"/>
                                             </c:otherwise>
                                         </c:choose>
                                     </h:commandLink>
@@ -170,7 +191,7 @@
                             <c:if test="#{studentManager.attendanceIndexModel.pagesCount - studentManager.attendanceIndexModel.pageId > 1 }">
                                 <span>
                                     <h:commandLink class="fa fa-angle-right" title="Próxima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/student/attendances-index")}' >
-                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pagesCount - 1}"/>
+                                        <f:setPropertyActionListener target="#{studentManager.attendanceIndexModel.pageId}" value="#{studentManager.attendanceIndexModel.pageId - 1}"/>
                                     </h:commandLink>
                                 </span>
                             </c:if>

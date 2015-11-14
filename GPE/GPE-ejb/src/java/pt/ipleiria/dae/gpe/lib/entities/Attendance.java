@@ -47,11 +47,12 @@ public class Attendance extends AbstractEntity implements Serializable {
     private boolean present;
 
     public Attendance() {
+        this.idAttendance = 0;
         this.present = false;
     }
 
     public Attendance(Student student, Event event, boolean present) {
-        this.student = student;
+        this.idAttendance = 0;
         this.event = event;
         this.present = present;
     }
@@ -94,7 +95,7 @@ public class Attendance extends AbstractEntity implements Serializable {
     public void setPresent(boolean present) {
         this.present = present;
     }
-    
+
     @Override
     public boolean isNew() {
         return idAttendance == 0;

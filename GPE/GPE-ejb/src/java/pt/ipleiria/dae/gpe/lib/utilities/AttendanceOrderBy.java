@@ -11,6 +11,7 @@ package pt.ipleiria.dae.gpe.lib.utilities;
  */
 public enum AttendanceOrderBy {
 
-    EventNameAsc, EventNameDesc, StudentNameAsc, StudentNameDesc, IsPresentAsc, IsPresentDesc
+    DateEndAsc, DateEndDesc, DateStartAsc, DateStartDesc, EventNameAsc, EventNameDesc,
+    IsPresentAsc, IsPresentDesc, ManagerNameAsc, ManagerNameDesc, UCNameAsc, UCNameDesc
 
 }

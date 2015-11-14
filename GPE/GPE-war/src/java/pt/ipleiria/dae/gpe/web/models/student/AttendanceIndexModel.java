@@ -51,14 +51,26 @@ public class AttendanceIndexModel {
                 return 1;
             case EventNameDesc:
                 return 2;
-            case StudentNameAsc:
+            case UCNameAsc:
                 return 3;
-            case StudentNameDesc:
+            case UCNameDesc:
                 return 4;
-            case IsPresentAsc:
+            case ManagerNameAsc:
                 return 5;
-            case IsPresentDesc:
+            case ManagerNameDesc:
                 return 6;
+            case DateEndAsc:
+                return 7;
+            case DateEndDesc:
+                return 8;
+            case DateStartAsc:
+                return 9;
+            case DateStartDesc:
+                return 10;
+            case IsPresentAsc:
+                return 11;
+            case IsPresentDesc:
+                return 12;
         }
         return 0;
     }
@@ -72,15 +84,33 @@ public class AttendanceIndexModel {
                 orderBy = AttendanceOrderBy.EventNameDesc;
                 break;
             case 3:
-                orderBy = AttendanceOrderBy.StudentNameAsc;
+                orderBy = AttendanceOrderBy.UCNameAsc;
                 break;
             case 4:
-                orderBy = AttendanceOrderBy.StudentNameDesc;
+                orderBy = AttendanceOrderBy.UCNameDesc;
                 break;
             case 5:
-                orderBy = AttendanceOrderBy.IsPresentAsc;
+                orderBy = AttendanceOrderBy.ManagerNameAsc;
                 break;
             case 6:
+                orderBy = AttendanceOrderBy.ManagerNameDesc;
+                break;
+            case 7:
+                orderBy = AttendanceOrderBy.DateEndAsc;
+                break;
+            case 8:
+                orderBy = AttendanceOrderBy.DateEndDesc;
+                break;
+            case 9:
+                orderBy = AttendanceOrderBy.DateStartAsc;
+                break;
+            case 10:
+                orderBy = AttendanceOrderBy.DateStartDesc;
+                break;
+            case 11:
+                orderBy = AttendanceOrderBy.IsPresentAsc;
+                break;
+            case 12:
                 orderBy = AttendanceOrderBy.IsPresentDesc;
                 break;
         }

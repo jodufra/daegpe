@@ -75,10 +75,13 @@ body .loader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background
 /*  Themes                                          */
 /****************************************************/
 body.user-admin .navbar { background-color: #AC2925; }
+body.user-admin .sidebar #sidebar-options li a:hover { background-color: #888080; }
 body.user-admin .sidebar #sidebar-options > li.active > a { border-left-color: #AC2925; }
 body.user-manager .navbar { background-color: #d35d05; }
+body.user-manager .sidebar #sidebar-options li a:hover { background-color: #888880; }
 body.user-manager .sidebar #sidebar-options > li.active > a { border-left-color: #d35d05; }
 body.user-student .navbar { background-color: #00796b; }
+body.user-student .sidebar #sidebar-options li a:hover { background-color: #808880; }
 body.user-student .sidebar #sidebar-options > li.active > a { border-left-color: #00796b; }
 
 /****************************************************/

@@ -18,6 +18,7 @@ import pt.ipleiria.dae.gpe.lib.entities.Event;
 import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
+import pt.ipleiria.dae.gpe.lib.entities.User;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
@@ -142,7 +143,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         if (event != null) {
             for (UserDTO stu : students) {
                 Student student = em.find(Student.class, stu.getIdUser());
-                Attendance attendeAttendance = new Attendance((Student) student, event, true);
+                Attendance attendeAttendance = new Attendance((Student) student, event, false);
                 event.addParticipant(attendeAttendance);
             }
         }
@@ -174,8 +175,52 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
     }
 
     public List<EventDTO> findEventsManager(ManagerEventFindOptions options) {
-        Manager manager = em.find(Manager.class, options.user.getRelationalId());
-        return generateDTOList((List<Event>) manager.getEvents());
+        String query = "SELECT e FROM Event e JOIN e.manager m, e.uc u WHERE m.idUser = " + options.user.getIdUser();
+
+        if (options.search != null && !options.search.isEmpty()) {
+            for (String piece : options.search.split(" ")) {
+                if (piece.equals(" ") || piece.isEmpty()) {
+                    continue;
+                }
+                query += " AND e.search LIKE '%" + GenerateSlug(piece, true, true) + "%'";
+            }
+        }
+        options.count = (long) em.createQuery(query.replace("SELECT e", "SELECT COUNT(e)")).getSingleResult();
+
+        switch (options.orderBy) {
+            case DateEndAsc:
+                break;
+            case DateEndDesc:
+                break;
+            case DateStartAsc:
+                break;
+            case DateStartDesc:
+                break;
+            case NameAsc:
+                query += " ORDER BY e.name";
+                break;
+            case NameDesc:
+                query += " ORDER BY e.name desc";
+                break;
+            case ManagerNameAsc:
+                query += " ORDER BY m.name";
+                break;
+            case ManagerNameDesc:
+                query += " ORDER BY m.name desc";
+                break;
+            case UCNameAsc:
+                query += " ORDER BY u.name";
+                break;
+            case UCNameDesc:
+                query += " ORDER BY u.name desc";
+                break;
+        }
+
+        if (options.pageId > 0 && options.pageSize > 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
+        }
+        return generateDTOList(em.createQuery(query, Event.class).getResultList());
     }
 
     public Collection<Attendance> findStudentsAttendance(EventDTO eventDTO) {

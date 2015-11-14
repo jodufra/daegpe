@@ -41,7 +41,7 @@
                             <h:column> 
                                 <f:facet name="header">
                                     <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
-                                        <h:outputText value="Id"/>
+                                        <h:outputText value="Evento"/>
                                         <c:choose>
                                             <c:when test="#{managerManager.eventIndexModel.orderBy == 1}">
                                                 <i class="fa fa-sort-alpha-asc"></i>
@@ -57,12 +57,12 @@
                                         </c:choose>
                                     </h:commandLink>
                                 </f:facet>   
-                                <h:outputText value="#{Event.internalId}"/>
+                                <h:outputText value="#{Event.name}"/>
                             </h:column>
                             <h:column> 
                                 <f:facet name="header">
                                     <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
-                                        <h:outputText value="Name"/>
+                                        <h:outputText value="Unidade Curricular"/>
                                         <c:choose>
                                             <c:when test="#{managerManager.eventIndexModel.orderBy == 3}">
                                                 <i class="fa fa-sort-alpha-asc"></i>
@@ -78,7 +78,28 @@
                                         </c:choose>
                                     </h:commandLink>
                                 </f:facet>   
-                                <h:outputText value="#{Event.name}"/>
+                                <h:outputText value="#{Event.uc != null ? Event.uc.name : ''}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
+                                        <h:outputText value="Gestor"/>
+                                        <c:choose>
+                                            <c:when test="#{managerManager.eventIndexModel.orderBy == 5}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{6}"/>
+                                            </c:when>
+                                            <c:when test="#{managerManager.eventIndexModel.orderBy == 6}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{5}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{6}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>   
+                                <h:outputText value="#{Event.manager.name}"/>
                             </h:column>
                             <h:column> 
                                 <f:facet name="header">

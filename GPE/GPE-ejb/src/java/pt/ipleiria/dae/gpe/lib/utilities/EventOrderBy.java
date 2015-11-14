@@ -10,6 +10,9 @@ package pt.ipleiria.dae.gpe.lib.utilities;
  * @author joeld
  */
 public enum EventOrderBy {
-        InternalIdAsc, InternalIdDesc, NameAsc, NameDesc
-    
+
+    InternalIdAsc, InternalIdDesc,
+    DateEndAsc, DateEndDesc, DateStartAsc, DateStartDesc, ManagerNameAsc, ManagerNameDesc,
+    NameAsc, NameDesc, UCNameAsc, UCNameDesc
+
 }

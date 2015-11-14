@@ -76,7 +76,7 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         }
     }
 
-    public void removeById(Object id) throws EntityNotFoundException  {
+    public void removeById(Object id) throws EntityNotFoundException {
         Entity entity = getEntity(id);
         if (!entity.isNew()) {
             getEntityManager().remove(getEntityManager().merge(entity));
@@ -105,8 +105,6 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         cq.select(cq.from(entityClass));
         return generateDTOList(getEntityManager().createQuery(cq).getResultList());
     }
-    
-   
 
     public List<DTO> findRange(int[] range) {
         CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();

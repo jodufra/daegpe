@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.lib.beans;
 
-import java.util.Date;
 import pt.ipleiria.dae.gpe.lib.dtos.AdministratorDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import javax.annotation.PostConstruct;
@@ -16,7 +15,6 @@ import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
-import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
@@ -44,13 +42,6 @@ public class MigrationBean {
     public void populateDB() {
         try {
             System.out.println("Seeding DB");
-
-            // UCs
-            UCDTO uc;
-            for (int i = 1; i <= 100; i++) {
-                uc = new UCDTO("uc" + i, "Unidade Curricular " + i);
-                ucBean.save(uc);
-            }
 
             // Users
             AdministratorDTO admin;
@@ -80,30 +71,37 @@ public class MigrationBean {
                 userBean.save(student);
             }
 
+            // UCs
+            UCDTO uc;
+            uc = new UCDTO("DAE", "Desenvolvimento de Aplicações Empresariais");
+            ucBean.save(uc);
+            for (int i = 1; i <= 100; i++) {
+                uc = new UCDTO("uc" + i, "Unidade Curricular " + i);
+                ucBean.save(uc);
+            }
+
             // Events
             EventDTO event;
-            uc = new UCDTO(1, "uc" + 1, "Unidade Curricular " + 1);
+            uc = new UCDTO(1, "DAE", "Desenvolvimento de Aplicações Empresariais");
             manager = new ManagerDTO(2, "manager", "Manager", "manager@gpe.pt");
-            event = new EventDTO("event1", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", uc, manager);
+            event = new EventDTO("DAE T", EventType.AULA, "DAE Teórico", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", uc, manager);
             eventBean.save(event);
 
-            uc = new UCDTO(2, "uc" + 2, "Unidade Curricular " + 2);
-            event = new EventDTO("event2", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.A, 4, 17, 20, 22, "1:2", uc, manager);
+            event = new EventDTO("DAE P", EventType.AULA, "DAE Prático", EventDayWeek.SABADO, Room.A, 4, 17, 20, 22, "1:2", uc, manager);
             eventBean.save(event);
 
             //UC to Students & Student to UCs
             student = new StudentDTO(3, "student", "Student Dummy", "dummy@my.ipleiria.pt");
-            uc = new UCDTO(10, "uc" + 10, "Unidade Curricular " + 10);
             userBean.addUCStudent(student, uc); //UC to Student
             ucBean.addStudentUC(uc, student); //Student to UC
 
             // Attendances
             AttendanceDTO attendance;
             student = new StudentDTO(3, "student", "Student", "student@my.ipleiria.pt");
-            event = new EventDTO(1, "event1", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", uc, manager);
-            attendance = new AttendanceDTO(student, event, true);
+            event = new EventDTO(1, "DAE T", EventType.AULA, "DAE Teórico", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", uc, manager);
+            attendance = new AttendanceDTO(student, event);
             attendanceBean.save(attendance);
-            attendance = new AttendanceDTO(1, student, event, true);
+            attendance = new AttendanceDTO(1, student, event, false);
             userBean.addAttendanceStudent(attendance);
             eventBean.addAttendanceEvent(attendance);
 

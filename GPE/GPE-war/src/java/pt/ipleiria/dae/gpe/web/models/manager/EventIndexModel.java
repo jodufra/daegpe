@@ -32,7 +32,7 @@ public class EventIndexModel {
     public EventIndexModel(EventBean eventBean) {
         this.eventBean = eventBean;
         this.pageId = 1;
-        this.orderBy = EventOrderBy.InternalIdAsc;
+        this.orderBy = EventOrderBy.NameAsc;
         this.search = "";
         this.count = 0;
     }
@@ -47,14 +47,26 @@ public class EventIndexModel {
 
     public int getOrderBy() {
         switch (orderBy) {
-            case InternalIdAsc:
-                return 1;
-            case InternalIdDesc:
-                return 2;
             case NameAsc:
-                return 3;
+                return 1;
             case NameDesc:
+                return 2;
+            case UCNameAsc:
+                return 3;
+            case UCNameDesc:
                 return 4;
+            case ManagerNameAsc:
+                return 5;
+            case ManagerNameDesc:
+                return 6;
+            case DateEndAsc:
+                return 7;
+            case DateEndDesc:
+                return 8;
+            case DateStartAsc:
+                return 9;
+            case DateStartDesc:
+                return 10;
         }
         return 0;
     }
@@ -62,16 +74,34 @@ public class EventIndexModel {
     public void setOrderBy(int val) {
         switch (val) {
             case 1:
-                orderBy = EventOrderBy.InternalIdAsc;
-                break;
-            case 2:
-                orderBy = EventOrderBy.InternalIdDesc;
-                break;
-            case 3:
                 orderBy = EventOrderBy.NameAsc;
                 break;
-            case 4:
+            case 2:
                 orderBy = EventOrderBy.NameDesc;
+                break;
+            case 3:
+                orderBy = EventOrderBy.UCNameAsc;
+                break;
+            case 4:
+                orderBy = EventOrderBy.UCNameDesc;
+                break;
+            case 5:
+                orderBy = EventOrderBy.ManagerNameAsc;
+                break;
+            case 6:
+                orderBy = EventOrderBy.ManagerNameDesc;
+                break;
+            case 7:
+                orderBy = EventOrderBy.DateEndAsc;
+                break;
+            case 8:
+                orderBy = EventOrderBy.DateEndDesc;
+                break;
+            case 9:
+                orderBy = EventOrderBy.DateStartAsc;
+                break;
+            case 10:
+                orderBy = EventOrderBy.DateStartDesc;
                 break;
         }
     }
@@ -86,7 +116,7 @@ public class EventIndexModel {
 
     public void setSearch(String search) {
         this.pageId = 1;
-        this.orderBy = EventOrderBy.InternalIdAsc;
+        this.orderBy = EventOrderBy.NameAsc;
         this.search = search;
     }
 

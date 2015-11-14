@@ -72,7 +72,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
             }
             uc.setInternalId(dto.getInternalId());
             uc.setName(dto.getName());
-            uc.setSearch(uc.getInternalId() + " " + uc.getName());
+            uc.setSearch(GenerateSlug(uc.getInternalId() + " " + uc.getName(), true, true));
 
             if (uc.isNew()) {
                 super.create(uc);
@@ -103,7 +103,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
                 uc.addStudent(student);
                 edit(uc);
             }
-        }else {
+        } else {
             throw new EntityValidationException(errors);
         }
     }
@@ -170,8 +170,41 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
     }
 
     public List<UCDTO> findFromStudent(StudentUCFindOptions options) {
-        Student student = em.find(Student.class, options.user.getRelationalId());
-        return generateDTOList((List<UC>) student.getUcs());
+        String query = "SELECT u FROM Student s JOIN s.ucs u WHERE s.idUser = " + options.user.getIdUser();
+
+        if (options.search != null && !options.search.isEmpty()) {
+            String[] pieces = options.search.split(" ");
+            for (String piece : pieces) {
+                if (piece.equals(" ") || piece.isEmpty()) {
+                    continue;
+                }
+                query += " AND u.search LIKE '%" + GenerateSlug(piece, true, true) + "%'";
+            }
+        }
+
+        options.count = (long) em.createQuery(query.replace("SELECT u", "SELECT COUNT(u)")).getSingleResult();
+
+        switch (options.orderBy) {
+            case InternalIdAsc:
+                query += " ORDER BY u.internalId";
+                break;
+            case InternalIdDesc:
+                query += " ORDER BY u.internalId desc";
+                break;
+            case NameAsc:
+                query += " ORDER BY u.name";
+                break;
+            case NameDesc:
+                query += " ORDER BY u.name desc";
+                break;
+        }
+
+        if (options.pageId > 0 && options.pageSize > 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
+        }
+
+        return generateDTOList(em.createQuery(query, UC.class).getResultList());
     }
 
 }

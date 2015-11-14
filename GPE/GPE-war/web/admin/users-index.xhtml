@@ -38,7 +38,7 @@
                                 <div class="col-sm-6">
                                     <span class="pull-right">
                                         <div style="padding-top: 12.5px;">
-                                            <h:commandLink id="newUser" class="btn btn-success btn-circle" value="+" title="Adicionar Utilizador" a:data-placement="left" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-detail")}' >
+                                            <h:commandLink id="newUser" class="btn btn-success btn-circle" value="+" title="Adicionar Utilizador" a:data-placement="left" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
                                                 <f:setPropertyActionListener target="#{adminManager.userDetailModel.user}" value="#{null}"/>
                                             </h:commandLink>
                                         </div>
@@ -211,7 +211,7 @@
                             <c:if test="#{adminManager.userIndexModel.pagesCount - adminManager.userIndexModel.pageId > 1 }">
                                 <span>
                                     <h:commandLink class="fa fa-angle-right" title="Próxima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' >
-                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pagesCount - 1}"/>
+                                        <f:setPropertyActionListener target="#{adminManager.userIndexModel.pageId}" value="#{adminManager.userIndexModel.pageId - 1}"/>
                                     </h:commandLink>
                                 </span>
                             </c:if>
