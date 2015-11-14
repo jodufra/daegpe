@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:body>
         <ui:composition template="/admin/dashboard.xhtml">
@@ -21,6 +22,17 @@
 
             <ui:define name="content">
                 <div class="panel">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <h:form>
+                                <div class="input-group input-group-dynamic">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <h:inputText class="form-control" value="#{adminManager.eventIndexModel.search}" a:placeholder="Procurar" />
+                                    <label class="">Escreva e pressione Enter para Procurar</label>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
                     <h:panelGroup layout="block">
                         <h3 style = "float:left; margin-left: 10px;">Events List</h3>
                         <h:form>
@@ -29,11 +41,11 @@
                             </h:commandButton>
                         </h:form>
                     </h:panelGroup>
-                    
+
                     <h:panelGroup>
-                        
+
                     </h:panelGroup>
-                    
+
                     <h:panelGroup layout="block">
                         <h:form>
                             <h:panelGroup layout="block">
@@ -41,7 +53,7 @@
                             </h:panelGroup>
                         </h:form>
                     </h:panelGroup>
-                    
+
                     <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndexModel.events}" style = "width: 100%;">
                         <h:inputHidden value="#{Event.idEvent}" />
                         <h:column>
@@ -72,15 +84,16 @@
                             <f:facet name = "header">Manager</f:facet>
                             <h:outputText value="#{Event.manager.name}"/>
                         </h:column>
-                         <h:column >
+                        <h:column >
                             <f:facet name = "header">Actions</f:facet>
                             <h:form>
                                 <h:commandLink 
                                     actionListener="#{adminManager.removeEvent}" 
                                     value = "Remove" class="btn btn-danger" 
                                     style = "float: right; margin-right: 10px;"
-                                    onclick="if (! confirm('Do you really want DELETE the Event ?')) return false">
-                                    
+                                    onclick="if (!confirm('Do you really want DELETE the Event ?'))
+                                                return false">
+
                                     <f:param name = "deleteEventId" id = "deleteEventId" value = "#{Event.idEvent}"/>
                                 </h:commandLink>
                                 <h:commandButton value = "Edit" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-detail")}'>

@@ -10,6 +10,7 @@ import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.User;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -111,6 +112,7 @@ public class UserBean extends AbstractBean<User, UserDTO> {
             }
         } else {
             throw new EntityValidationException(errors);
+
         }
     }
 
@@ -141,6 +143,12 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         if (!errors.isEmpty()) {
             throw new EntityValidationException(errors);
         }
+    }
+
+    public List<UserDTO> getUserListDTO(UCDTO UCdto) {
+        UC uc = em.find(UC.class, UCdto.getIdUC());
+        List<UserDTO> listDTO = generateDTOList((List<User>) (User) uc.getStudents());
+        return listDTO;
     }
 
     public void addAttendanceStudent(AttendanceDTO dto) throws EntityValidationException {

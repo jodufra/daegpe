@@ -12,6 +12,8 @@ import pt.ipleiria.dae.gpe.lib.entities.UC;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -71,6 +73,8 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
             } else {
                 uc = getEntityFromDTO(dto);
             }
+            
+            
             uc.setInternalId(dto.getInternalId());
             uc.setName(dto.getName());
             uc.setSearch(uc.getInternalId() + " " + uc.getName());
@@ -84,6 +88,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
             throw new EntityValidationException(errors);
         }
     }
+    
 
     public void addStudentUC(UCDTO ucDTO, UserDTO userDTO) throws EntityNotFoundException, EntityValidationException {
         List<EntityValidationError> errors = new ArrayList<>();

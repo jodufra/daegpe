@@ -21,6 +21,7 @@ import pt.ipleiria.dae.gpe.lib.entities.UC;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.lib.utilities.AdminEventFindOptions;
 import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
 import pt.ipleiria.dae.gpe.lib.utilities.EventType;
 import pt.ipleiria.dae.gpe.lib.utilities.ManagerEventFindOptions;
@@ -147,28 +148,84 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             }
         }
     }
-
-    public List<EventDTO> find(int pageId, int pageSize, EventOrderBy orderBy) {
+     public List<EventDTO> find(int pageId, int pageSize, EventOrderBy orderBy) {
+        return find(new AdminEventFindOptions(pageId, pageSize, orderBy, null));
+    }
+    public List<EventDTO> find(AdminEventFindOptions options) {
         String query = "SELECT e FROM Event e";
+        
+        if (options.search != null && !options.search.isEmpty()) {
+            String[] pieces = options.search.split(" ");
+            boolean first = true;
+            for (int i = 0; i < pieces.length; i++) {
+                if (pieces[i].equals(" ") || pieces[i].isEmpty()) {
+                    continue;
+                }
+                pieces[i] = GenerateSlug(pieces[i], true, true);
+                if (first) {
+                    query += " WHERE ";
+                    first = false;
+                } else {
+                    query += " AND ";
+                }
+                query += "e.search LIKE '%" + pieces[i] + "%'";
+            }
+        }
 
-        switch (orderBy) {
-            case InternalIdAsc:
-                query += " ORDER BY e.internalId";
-                break;
-            case InternalIdDesc:
-                query += " ORDER BY e.internalId desc";
-                break;
+        options.count = (long) em.createQuery(query.replace("SELECT e", "SELECT COUNT(e)")).getSingleResult();
+        
+        
+        
+        
+        switch (options.orderBy) {
             case NameAsc:
                 query += " ORDER BY e.name";
                 break;
             case NameDesc:
                 query += " ORDER BY e.name desc";
                 break;
+            case TypeAsc:
+                query += " ORDER BY e.eventtype";
+                break;
+            case TypeDesc:
+                query += " ORDER BY e.eventtype desc";
+                break;
+            case DayWeekAsc:
+                query += " ORDER BY e.eventdayweek";
+                break;
+            case DayWeekDesc:
+                query += " ORDER BY e.eventdayweek desc";
+                break;
+            case TimeAsc:
+                query += " ORDER BY e.starthour";
+                break;
+            case TimeDesc:
+                query += " ORDER BY e.starthour desc";
+                break;
+            case LocalAsc:
+                query += " ORDER BY e.room";
+                break;
+            case LocalDesc:
+                query += " ORDER BY e.room desc";
+                break;
+            case StartWeekAsc:
+                query += " ORDER BY e.startweek";
+                break;
+            case StartWeekDesc:
+                query += " ORDER BY e.startweek desc";
+                break;
+            case ManagerAsc:
+                query += " ORDER BY e.iduser";
+                break;
+            case ManagerDesc:
+                query += " ORDER BY e.iduser desc";
+                break;
+
         }
 
-        if (pageId != 0 && pageSize != 0) {
-            int offset = (pageId - 1) * pageSize;
-            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
+        if (options.pageId != 0 && options.pageSize != 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
         }
         return generateDTOList(em.createQuery(query, Event.class).getResultList());
     }

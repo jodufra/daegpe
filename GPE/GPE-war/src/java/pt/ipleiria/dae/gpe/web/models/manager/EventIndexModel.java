@@ -32,7 +32,7 @@ public class EventIndexModel {
     public EventIndexModel(EventBean eventBean) {
         this.eventBean = eventBean;
         this.pageId = 1;
-        this.orderBy = EventOrderBy.InternalIdAsc;
+        this.orderBy = EventOrderBy.NameAsc;
         this.search = "";
         this.count = 0;
     }
@@ -47,14 +47,34 @@ public class EventIndexModel {
 
     public int getOrderBy() {
         switch (orderBy) {
-            case InternalIdAsc:
-                return 1;
-            case InternalIdDesc:
-                return 2;
             case NameAsc:
-                return 3;
+                return 1;
             case NameDesc:
+                return 2;
+            case TypeAsc:
+                return 3;
+            case TypeDesc:
                 return 4;
+            case DayWeekAsc:
+                return 5;
+            case DayWeekDesc:
+                return 6;
+            case TimeAsc:
+                return 7;
+            case TimeDesc:
+                return 8;
+            case LocalAsc:
+                return 9;
+            case LocalDesc:
+                return 10;
+            case StartWeekAsc:
+                return 11;
+            case StartWeekDesc:
+                return 12;
+            case ManagerAsc:
+                return 13;
+            case ManagerDesc:
+                return 14;
         }
         return 0;
     }
@@ -62,16 +82,46 @@ public class EventIndexModel {
     public void setOrderBy(int val) {
         switch (val) {
             case 1:
-                orderBy = EventOrderBy.InternalIdAsc;
-                break;
-            case 2:
-                orderBy = EventOrderBy.InternalIdDesc;
-                break;
-            case 3:
                 orderBy = EventOrderBy.NameAsc;
                 break;
-            case 4:
+            case 2:
                 orderBy = EventOrderBy.NameDesc;
+                break;
+            case 3:
+                orderBy = EventOrderBy.TypeAsc;
+                break;
+            case 4:
+                orderBy = EventOrderBy.TypeDesc;
+                break;
+            case 5:
+                orderBy = EventOrderBy.DayWeekAsc;
+                break;
+            case 6:
+                orderBy = EventOrderBy.DayWeekDesc;
+                break;
+            case 7:
+                orderBy = EventOrderBy.TimeAsc;
+                break;
+            case 8:
+                orderBy = EventOrderBy.TimeDesc;
+                break;
+            case 9:
+                orderBy = EventOrderBy.LocalAsc;
+                break;
+            case 10:
+                orderBy = EventOrderBy.LocalDesc;
+                break;
+            case 11:
+                orderBy = EventOrderBy.StartWeekAsc;
+                break;
+            case 12:
+                orderBy = EventOrderBy.StartWeekDesc;
+                break;
+            case 13:
+                orderBy = EventOrderBy.ManagerAsc;
+                break;
+            case 14:
+                orderBy = EventOrderBy.ManagerDesc;
                 break;
         }
     }
@@ -79,14 +129,14 @@ public class EventIndexModel {
     public int getPageSize() {
         return pageSize;
     }
-
+    
     public String getSearch() {
         return search;
     }
 
     public void setSearch(String search) {
         this.pageId = 1;
-        this.orderBy = EventOrderBy.InternalIdAsc;
+        this.orderBy = EventOrderBy.NameAsc;
         this.search = search;
     }
 
