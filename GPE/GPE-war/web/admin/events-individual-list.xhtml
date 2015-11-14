@@ -8,7 +8,7 @@
 
     <h:body>
         <ui:composition template="/admin/dashboard.xhtml">
-            <ui:define name="title">Eventos</ui:define>
+            <ui:define name="title">Eventos Geral</ui:define>
 
             <ui:define name="active-sidebar-option">
                 <input type="hidden" name="active-sidebar-option" value="Eventos"/>   
@@ -23,17 +23,13 @@
                 <div class="panel">
                     <h:panelGroup layout="block">
                         <h3 style = "float:left; margin-left: 10px;">Events List</h3>
-                        <h:form>
-                            <h:commandButton value = "Add Event" class="btn btn-primary" action = '#{redirectManager.GenerateRelativeURL("/admin/events-detail")}' style = "float:right; margin: 20px 20px 0 0">
-                                <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{null}"/>
-                            </h:commandButton>
-                        </h:form>
-                    </h:panelGroup>
-                    
-                    <h:panelGroup>
                         
                     </h:panelGroup>
-                    
+
+                    <h:panelGroup>
+
+                    </h:panelGroup>
+
                     <h:panelGroup layout="block">
                         <h:form>
                             <h:panelGroup layout="block">
@@ -41,8 +37,8 @@
                             </h:panelGroup>
                         </h:form>
                     </h:panelGroup>
-                    
-                    <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndexModel.events}" style = "width: 100%;">
+
+                    <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndividualListModel.events}" style = "width: 100%;">
                         <h:inputHidden value="#{Event.idEvent}" />
                         <h:column>
                             <f:facet name = "header">Name</f:facet>
@@ -72,15 +68,27 @@
                             <f:facet name = "header">Manager</f:facet>
                             <h:outputText value="#{Event.manager.name}"/>
                         </h:column>
-                         <h:column >
+                        <h:column >
                             <f:facet name = "header">Actions</f:facet>
                             <h:form>
-                                <h:commandButton value = "Visializar Eventos" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-individual-list")}'>
-                                    <f:setPropertyActionListener target="#{adminManager.eventIndividualListModel.eventDTO}" value="#{Event}"/>
+                                <h:commandLink 
+                                    actionListener="#{adminManager.removeEvent}" 
+                                    value = "Remove" class="btn btn-danger" 
+                                    style = "float: right; margin-right: 10px;"
+                                    onclick="if (!confirm('Do you really want DELETE the Event ?'))
+                                                return false">
+
+                                    <f:param name = "deleteEventId" id = "deleteEventId" value = "#{Event.idEvent}"/>
+                                </h:commandLink>
+                                <h:commandButton value = "Editar" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-detail")}'>
+                                    <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{Event}"/>
                                 </h:commandButton>
                             </h:form>
                         </h:column>
                     </h:dataTable>
+                </div>
+                <div>
+                    <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' class="btn btn-link" >Voltar</h:link>
                 </div>
             </ui:define>
         </ui:composition>

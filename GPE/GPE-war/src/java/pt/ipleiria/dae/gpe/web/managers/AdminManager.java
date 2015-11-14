@@ -39,6 +39,7 @@ import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.web.models.admin.EventDetailModel;
 import pt.ipleiria.dae.gpe.web.models.admin.EventIndexModel;
+import pt.ipleiria.dae.gpe.web.models.admin.EventIndividualListModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UCDetailModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UCIndexModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UserDetailModel;
@@ -64,6 +65,7 @@ public class AdminManager extends AbstractManager {
 
     private EventIndexModel eventIndexModel;
     private EventDetailModel eventDetailModel;
+    private EventIndividualListModel eventIndividualListModel;
     private UCIndexModel ucIndexModel;
     private UCDetailModel ucDetailModel;
     private UserIndexModel userIndexModel;
@@ -96,6 +98,7 @@ public class AdminManager extends AbstractManager {
         userDetailModel = new UserDetailModel();
         eventIndexModel = new EventIndexModel(eventBean);
         eventDetailModel = new EventDetailModel(eventBean, ucBean, userBean);
+        eventIndividualListModel = new EventIndividualListModel(eventBean);
     }
 
    
@@ -316,6 +319,14 @@ public class AdminManager extends AbstractManager {
 
     public EventDetailModel getEventDetailModel() {
         return eventDetailModel;
+    }
+
+    public EventIndividualListModel getEventIndividualListModel() {
+        return eventIndividualListModel;
+    }
+
+    public void setEventIndividualListModel(EventIndividualListModel eventIndividualListModel) {
+        this.eventIndividualListModel = eventIndividualListModel;
     }
     
    

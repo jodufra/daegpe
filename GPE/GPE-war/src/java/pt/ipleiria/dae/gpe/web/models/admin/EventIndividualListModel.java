@@ -14,25 +14,33 @@ import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
  *
  * @author pedroextendssilva
  */
-public class EventIndexModel {
+public class EventIndividualListModel {
     
-    private final EventBean eventBean;
+    private EventBean eventBean;
     
+    private EventDTO eventDTO;
     
     public int pageId;    
     public final int pageSize = 20;
     public EventOrderBy orderBy;
     public List<EventDTO> users;
     
-    public EventIndexModel(EventBean eventBean)
-    {
+    public EventIndividualListModel(EventBean eventBean){
         this.eventBean = eventBean;
         this.pageId = 1;
         this.orderBy = EventOrderBy.NameAsc;
     }
+
+    public EventDTO getEventDTO() {
+        return eventDTO;
+    }
+
+    public void setEventDTO(EventDTO eventDTO) {
+        this.eventDTO = eventDTO;
+    }
     
     public List<EventDTO> getEvents() {
-        return eventBean.findUnique(pageId, pageSize, orderBy);
+        return eventBean.findEventsOfEvent(pageId, pageSize, orderBy, this.eventDTO.getInternalId());
     }
     
     
