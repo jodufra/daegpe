@@ -84,11 +84,11 @@ public class MigrationBean {
             EventDTO event;
             uc = new UCDTO(1, "uc" + 1, "Unidade Curricular " + 1);
             manager = new ManagerDTO(2, "manager", "Manager", "manager@gpe.pt");
-            event = new EventDTO("event1", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", uc, manager);
+            event = new EventDTO("event1", EventType.AULATEORICA, "Aula de DAE1", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
             eventBean.save(event);
 
             uc = new UCDTO(2, "uc" + 2, "Unidade Curricular " + 2);
-            event = new EventDTO("event2", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.A, 4, 17, 20, 22, "1:2", uc, manager);
+            event = new EventDTO("event2", EventType.AULATEORICA, "Aula de DAE2", EventDayWeek.SABADO, Room.A, 4, 17, "2015:13:15;2016:1:8", 22, "1:2", uc, manager);
             eventBean.save(event);
 
             //UC to Students & Student to UCs
@@ -100,7 +100,7 @@ public class MigrationBean {
             // Attendances
             AttendanceDTO attendance;
             student = new StudentDTO(3, "student", "Student", "student@my.ipleiria.pt");
-            event = new EventDTO(1, "event1", EventType.AULA, "Aula de DAE", EventDayWeek.SABADO, Room.D, 4, 17, 20, 22, "1:2", uc, manager);
+            event = new EventDTO(1, "event1", EventType.AULAPRATICA, "Aula de DAE", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:3", 22, "1:2", uc, manager);
             attendance = new AttendanceDTO(student, event, true);
             attendanceBean.save(attendance);
             attendance = new AttendanceDTO(1, student, event, true);

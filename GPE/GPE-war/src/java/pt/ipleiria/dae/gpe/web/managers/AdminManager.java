@@ -85,6 +85,7 @@ public class AdminManager extends AbstractManager {
         errorMessages.put(EntityValidationError.USER_IS_NOT_MANAGER, "O Utilizador não é Gestor.");
         errorMessages.put(EntityValidationError.USER_IS_NOT_STUDENT, "O Utilizador não é Estudante.");
         errorMessages.put(EntityValidationError.USER_IS_NEW, "O Utilizador ainda não existe.");
+        errorMessages.put(EntityValidationError.EVENT_WEEK_INVALID, "As semanas do Evento estão incorrectas");
     }
 
     @PostConstruct

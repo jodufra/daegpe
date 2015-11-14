@@ -30,7 +30,7 @@ public class EventDetailModel {
     private Room room;
     private Integer startHour;
     private Integer endHour;
-    private Integer startWeek;
+    private String startWeek;
     private Integer endWeek;
     private String semester;
     private UCDTO uc;
@@ -69,13 +69,13 @@ public class EventDetailModel {
         } else {
             this.idEvent = 0;
             this.internalId = "";
-            this.eventType = EventType.AULA;
+            this.eventType = EventType.AULATEORICA;
             this.name = "";
             this.eventDayWeek = EventDayWeek.SEGUNDA;
             this.room = Room.A;
             this.startHour = 9;
             this.endHour = 10;
-            this.startWeek = 10;
+            this.startWeek = "2015#13:14;2016#1:2";
             this.endWeek = 20;
             this.semester = "1";
             this.uc = new UCDTO("a", "a");
@@ -173,11 +173,11 @@ public class EventDetailModel {
         this.endHour = endHour;
     }
 
-    public Integer getStartWeek() {
+    public String getStartWeek() {
         return startWeek;
     }
 
-    public void setStartWeek(Integer startWeek) {
+    public void setStartWeek(String startWeek) {
         this.startWeek = startWeek;
     }
 

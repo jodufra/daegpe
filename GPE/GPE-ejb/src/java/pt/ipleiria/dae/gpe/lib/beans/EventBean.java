@@ -1,6 +1,7 @@
 package pt.ipleiria.dae.gpe.lib.beans;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -76,35 +77,76 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             //if (dto.getUc().isNew()) {
             //errors.add(EntityValidationError.UC_IS_NEW);
         //}
-
-        if (errors.isEmpty()) {
-            Event event;
-            if (dto.isNew()) {
-                event = new Event();
-            } else {
-                event = getEntity(dto.getIdEvent());
+        
+        ArrayList<Integer> eventsWeeks = new ArrayList<>();
+        String[] regex = dto.getStartWeek().split(";");
+        if(regex.length > 0){
+            for(String string: regex){
+                String[] calendarString = string.split(":");
+                if(calendarString.length == 3){
+                    System.out.println("CORRECTO");
+                    try{
+                        
+                        Integer startWeek = Integer.parseInt(calendarString[1]);
+                        Integer finalWeek = Integer.parseInt(calendarString[2]);
+                        if(startWeek > finalWeek){
+                            errors.add(EntityValidationError.EVENT_WEEK_INVALID);
+                        }else{
+                            for (int index = startWeek; index <= finalWeek; index++) {
+                               String yearWeek = calendarString[0] + ":" + (index);
+                               if (errors.isEmpty()) {
+                                    Event event;
+                                    if (dto.isNew()) {
+                                        event = new Event();
+                                    } else {
+                                        event = getEntity(dto.getIdEvent());
+                                    }
+                                    event.setInternalId(dto.getInternalId());
+                                    event.setEventType(dto.getEventType());
+                                    event.setName(dto.getName());
+                                    event.setEventDayWeek(dto.getEventDayWeek());
+                                    event.setRoom(dto.getRoom());
+                                    event.setStartHour(dto.getStartHour());
+                                    event.setEndHour(dto.getEndHour());
+                                    event.setStartWeek(yearWeek);
+                                    event.setEndWeek(finalWeek);
+                                    event.setSemester(dto.getSemester());
+                                    event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
+                                    event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
+                                    event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
+                                    if (dto.isNew()) {
+                                        super.create(event);
+                                    } else {
+                                        super.edit(event);
+                                    }
+                                } else {
+                                    throw new EntityValidationException(errors);
+                                }
+                            }
+                        }
+                    }catch(NumberFormatException ex){
+                        System.out.println("ERROR - " + ex);
+                        errors.add(EntityValidationError.EVENT_WEEK_INVALID);
+                    }
+                }
+                
+                
             }
-            event.setInternalId(dto.getInternalId());
-            event.setEventType(dto.getEventType());
-            event.setName(dto.getName());
-            event.setEventDayWeek(dto.getEventDayWeek());
-            event.setRoom(dto.getRoom());
-            event.setStartHour(dto.getStartHour());
-            event.setEndHour(dto.getEndHour());
-            event.setStartWeek(dto.getStartWeek());
-            event.setEndWeek(dto.getEndWeek());
-            event.setSemester(dto.getSemester());
-            event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
-            event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
-            event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
-            if (dto.isNew()) {
-                super.create(event);
-            } else {
-                super.edit(event);
-            }
-        } else {
-            throw new EntityValidationException(errors);
         }
+        System.out.println("WEEKS");   
+        
+        System.out.println("EVENTWEEK " + dto.getStartWeek());
+        
+        System.out.println("ENDWEEKS");
+        /*if(dto.getStartWeek() < dto.getEndWeek()){
+            errors.add(EntityValidationError.EVENT_WEEK_INVALID);
+        }else if(dto.getStartWeek() < 1){
+            errors.add(EntityValidationError.EVENT_WEEK_INVALID);
+        }else if(dto.getEndWeek() > 52){
+             errors.add(EntityValidationError.EVENT_WEEK_INVALID);
+        }*/
+
+        
     }
 
     public void addAttendanceEvent(AttendanceDTO dto) throws EntityValidationException {
