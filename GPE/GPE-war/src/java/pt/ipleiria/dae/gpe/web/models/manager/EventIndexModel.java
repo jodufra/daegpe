@@ -47,25 +47,25 @@ public class EventIndexModel {
 
     public int getOrderBy() {
         switch (orderBy) {
-            case NameAsc:
+            case InternalIdAsc:
                 return 1;
-            case NameDesc:
+            case InternalIdDesc:
                 return 2;
-            case UCNameAsc:
+            case NameAsc:
                 return 3;
-            case UCNameDesc:
+            case NameDesc:
                 return 4;
-            case ManagerNameAsc:
+            case TypeAsc:
                 return 5;
-            case ManagerNameDesc:
+            case TypeDesc:
                 return 6;
-            case DateEndAsc:
+            case UCNameAsc:
                 return 7;
-            case DateEndDesc:
+            case UCNameDesc:
                 return 8;
-            case DateStartAsc:
+            case ManagerNameAsc:
                 return 9;
-            case DateStartDesc:
+            case ManagerNameDesc:
                 return 10;
         }
         return 0;
@@ -74,34 +74,34 @@ public class EventIndexModel {
     public void setOrderBy(int val) {
         switch (val) {
             case 1:
-                orderBy = EventOrderBy.NameAsc;
+                orderBy = EventOrderBy.InternalIdAsc;
                 break;
             case 2:
-                orderBy = EventOrderBy.NameDesc;
+                orderBy = EventOrderBy.InternalIdDesc;
                 break;
             case 3:
-                orderBy = EventOrderBy.UCNameAsc;
+                orderBy = EventOrderBy.NameAsc;
                 break;
             case 4:
-                orderBy = EventOrderBy.UCNameDesc;
+                orderBy = EventOrderBy.NameDesc;
                 break;
             case 5:
-                orderBy = EventOrderBy.ManagerNameAsc;
+                orderBy = EventOrderBy.TypeAsc;
                 break;
             case 6:
-                orderBy = EventOrderBy.ManagerNameDesc;
+                orderBy = EventOrderBy.TypeDesc;
                 break;
             case 7:
-                orderBy = EventOrderBy.DateEndAsc;
+                orderBy = EventOrderBy.UCNameAsc;
                 break;
             case 8:
-                orderBy = EventOrderBy.DateEndDesc;
+                orderBy = EventOrderBy.UCNameDesc;
                 break;
             case 9:
-                orderBy = EventOrderBy.DateStartAsc;
+                orderBy = EventOrderBy.ManagerNameAsc;
                 break;
             case 10:
-                orderBy = EventOrderBy.DateStartDesc;
+                orderBy = EventOrderBy.ManagerNameDesc;
                 break;
         }
     }

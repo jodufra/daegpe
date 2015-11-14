@@ -8,7 +8,7 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <h:body>
-        <ui:composition template="/admin/dashboard.xhtml">
+        <ui:composition template="/manager/dashboard.xhtml">
             <ui:define name="title">Eventos Geral</ui:define>
 
             <ui:define name="active-sidebar-option">
@@ -17,7 +17,7 @@
 
             <ui:define name="breadcrumb">
                 <li>Eventos</li>
-                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
             <ui:define name="content">
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndividualListModel.events}" style = "width: 100%;">
+                    <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{managerManager.eventIndividualListModel.events}" style = "width: 100%;">
                         <h:inputHidden value="#{Event.idEvent}" />
                         <h:column>
                             <f:facet name = "header">Name</f:facet>
@@ -62,19 +62,10 @@
                             <h:outputText value="#{Event.manager.name}"/>
                         </h:column>
                         <h:column >
-                            <f:facet name = "header">Actions</f:facet>
+                            <f:facet name = "header"></f:facet>
                             <h:form>
-                                <h:commandLink 
-                                    actionListener="#{adminManager.removeEvent}" 
-                                    value = "Remove" class="btn btn-danger" 
-                                    style = "float: right; margin-right: 10px;"
-                                    onclick="if (!confirm('Do you really want DELETE the Event ?'))
-                                                return false">
-
-                                    <f:param name = "deleteEventId" id = "deleteEventId" value = "#{Event.idEvent}"/>
-                                </h:commandLink>
-                                <h:commandButton value = "Editar" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-detail")}'>
-                                    <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{Event}"/>
+                                <h:commandButton value = "Editar" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/manager/events-detail")}'>
+                                    <f:setPropertyActionListener target="#{managerManager.eventDetailModel.event}" value="#{Event}"/>
                                 </h:commandButton>
                             </h:form>
                         </h:column>

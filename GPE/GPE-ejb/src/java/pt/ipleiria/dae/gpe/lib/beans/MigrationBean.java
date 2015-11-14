@@ -73,7 +73,7 @@ public class MigrationBean {
 
             // UCs
             UCDTO uc;
-            uc = new UCDTO("DAE", "Desenvolvimento de Aplica��es Empresariais");
+            uc = new UCDTO("DAE", "Desenvolvimento de Aplicações Empresariais");
             ucBean.save(uc);
             for (int i = 1; i <= 100; i++) {
                 uc = new UCDTO("uc" + i, "Unidade Curricular " + i);
@@ -82,12 +82,11 @@ public class MigrationBean {
 
             // Events
             EventDTO event;
-            uc = new UCDTO(1, "DAE", "Desenvolvimento de Aplica��es Empresariais");
+            uc = new UCDTO(1, "DAE", "Desenvolvimento de Aplicações Empresariais");
             manager = new ManagerDTO(2, "manager", "Manager", "manager@gpe.pt");
-            event = new EventDTO("DAE T", EventType.AULATEORICA, "DAE Te�rico", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
+            event = new EventDTO("DAE T", EventType.AULATEORICA, "DAE Teórico", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
             eventBean.save(event);
-
-            event = new EventDTO("DAE P", EventType.AULAPRATICA, "DAE Pr�tico", EventDayWeek.SABADO, Room.A, 4, 17, "2015:13:15;2016:1:8", 22, "1:2", uc, manager);
+            event = new EventDTO("DAE P", EventType.AULAPRATICA, "DAE Prático", EventDayWeek.SABADO, Room.A, 4, 17, "2015:13:15;2016:1:8", 22, "1:2", uc, manager);
             eventBean.save(event);
 
             //UC to Students & Student to UCs
@@ -96,11 +95,11 @@ public class MigrationBean {
             ucBean.addStudentUC(uc, student); //Student to UC
 
             // Attendances
-            AttendanceDTO attendance;
-            student = new StudentDTO(3, "student", "Student", "student@my.ipleiria.pt");
-            event = new EventDTO(1, "DAE T", EventType.AULATEORICA, "DAE Te�rico", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
-            attendance = new AttendanceDTO(student, event);
-            attendanceBean.save(attendance);
+            //AttendanceDTO attendance;
+            //student = new StudentDTO(3, "student", "Student", "student@my.ipleiria.pt");
+            //event = new EventDTO(1, "DAE T", EventType.AULATEORICA, "DAE Te�rico", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
+            //attendance = new AttendanceDTO(student, event);
+            //attendanceBean.save(attendance);
             //attendance = new AttendanceDTO(1, student, event, false);
             //userBean.addAttendanceStudent(attendance);
             //eventBean.addAttendanceEvent(attendance);

@@ -11,8 +11,7 @@ package pt.ipleiria.dae.gpe.lib.utilities;
  */
 public enum EventOrderBy {
 
-    InternalIdAsc, InternalIdDesc,
-    DateEndAsc, DateEndDesc, DateStartAsc, DateStartDesc, ManagerNameAsc, ManagerNameDesc,
-    NameAsc, NameDesc, UCNameAsc, UCNameDesc
+    InternalIdAsc, InternalIdDesc, NameAsc, NameDesc, TypeAsc, TypeDesc, 
+    ManagerNameAsc, ManagerNameDesc, UCNameAsc, UCNameDesc
 
 }

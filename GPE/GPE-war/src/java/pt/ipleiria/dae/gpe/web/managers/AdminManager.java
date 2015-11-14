@@ -27,7 +27,6 @@ import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
-import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.entities.Student;

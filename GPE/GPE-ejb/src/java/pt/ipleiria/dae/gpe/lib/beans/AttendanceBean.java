@@ -95,7 +95,7 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
         }
 
         String query = "SELECT a FROM Attendance a JOIN a.event e, a.student s "
-                + "WHERE e.idEvent = " + event.getIdEvent() + " AND s.idUser = "+ student.getIdUser();
+                + "WHERE e.idEvent = " + event.getIdEvent() + " AND s.idUser = " + student.getIdUser();
         try {
             return generateDTO(em.createQuery(query, Attendance.class).getSingleResult());
         } catch (Exception e) {
@@ -108,12 +108,12 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
         String query = "SELECT a FROM Attendance a JOIN a.event e WHERE e.idEvent = " + event.getIdEvent();
         return generateDTOList(em.createQuery(query, Attendance.class).getResultList());
     }
-    
-    
+
     public List<AttendanceDTO> findFromEvent(EventDTO eventDTO) {
         Event event = em.find(Event.class, eventDTO.getIdEvent());
         return generateDTOList((List<Attendance>) event.getParticipants());
     }
+
     public List<AttendanceDTO> findStudentAttendances(StudentAttendanceFindOptions options) {
         String query = "SELECT a FROM Attendance a JOIN a.event e, a.student s, e.manager m, e.uc u"
                 + " WHERE s.idUser = " + options.user.getIdUser();

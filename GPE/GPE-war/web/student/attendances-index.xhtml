@@ -23,6 +23,48 @@
 
             <ui:define name="content">
                 <div class="panel">
+                    <h:form id="todayattendanceindexform" >
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="">Eventos de Hoje</label>
+                                </div>
+                            </div>
+                        </div>
+                        <h:dataTable var="Attendance" value="#{studentManager.attendanceIndexModel.attendances}" class="table table-striped" >
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Evento"/>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.event.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Unidade Curricular"/>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.event.uc != null ? Attendance.event.uc.name : ''}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Gestor"/>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.event.manager.name}"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="Presente?"/>
+                                </f:facet>   
+                                <h:outputText value="#{Attendance.present ? 'Sim' : 'Não' }"/>
+                            </h:column>
+                            <h:column> 
+                                <f:facet name="header">
+                                    <h:outputText value=""/>
+                                </f:facet>   
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+                <div class="panel">
                     <h:form id="attendanceindexform" >
                         <div class="panel-heading">
                             <div class="row">
@@ -121,11 +163,6 @@
                                     </h:commandLink>
                                 </f:facet>   
                                 <h:outputText value="#{Attendance.present ? 'Sim' : 'Não' }"/>
-                            </h:column>
-                            <h:column> 
-                                <f:facet name="header">
-                                    <h:outputText value=""/>
-                                </f:facet>   
                             </h:column>
                         </h:dataTable>
                         <div class="row text-center pagination">

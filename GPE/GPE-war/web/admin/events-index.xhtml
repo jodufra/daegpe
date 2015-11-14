@@ -4,7 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <h:body>
         <ui:composition template="/admin/dashboard.xhtml">
@@ -21,66 +23,221 @@
 
             <ui:define name="content">
                 <div class="panel">
-                    <h:panelGroup layout="block">
-                        <h3 style = "float:left; margin-left: 10px;">Events List</h3>
-                        <h:form>
-                            <h:commandButton value = "Add Event" class="btn btn-primary" action = '#{redirectManager.GenerateRelativeURL("/admin/events-detail")}' style = "float:right; margin: 20px 20px 0 0">
-                                <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{null}"/>
-                            </h:commandButton>
-                        </h:form>
-                    </h:panelGroup>
-                    
-                    <h:panelGroup>
-                        
-                    </h:panelGroup>
-                    
-                    <h:panelGroup layout="block">
-                        <h:form>
-                            <h:panelGroup layout="block">
-                                <h:inputText class = "form-control"></h:inputText>
-                            </h:panelGroup>
-                        </h:form>
-                    </h:panelGroup>
-                    
-                    <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndexModel.events}" style = "width: 100%;">
-                        <h:inputHidden value="#{Event.idEvent}" />
-                        <h:column>
-                            <f:facet name = "header">Name</f:facet>
-                            <h:outputText value="#{Event.name}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name = "header">Type</f:facet>
-                            <h:outputText value="#{Event.eventType}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name = "header">Day of Week</f:facet>
-                            <h:outputText value="#{Event.eventDayWeek}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name = "header">Time</f:facet>
-                            <h:outputText value="#{Event.startHour}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name = "header">Local</f:facet>
-                            <h:outputText value="#{Event.room}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name = "header">Start Week</f:facet>
-                            <h:outputText value="#{Event.startWeek}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name = "header">Manager</f:facet>
-                            <h:outputText value="#{Event.manager.name}"/>
-                        </h:column>
-                         <h:column >
-                            <f:facet name = "header">Actions</f:facet>
-                            <h:form>
-                                <h:commandButton value = "Visializar Eventos" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-individual-list")}'>
-                                    <f:setPropertyActionListener target="#{adminManager.eventIndividualListModel.eventDTO}" value="#{Event}"/>
-                                </h:commandButton>
-                            </h:form>
-                        </h:column>
-                    </h:dataTable>
+                    <h:form>
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-dynamic">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <h:inputText class="form-control" value="#{adminManager.eventIndexModel.search}" a:placeholder="Procurar"  />
+                                            <label class="">Escreva e pressione Enter para Procurar</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <span class="pull-right">
+                                        <div style="padding-top: 12.5px;">
+                                            <h:commandLink id="newUser" class="btn btn-success btn-circle" value="+" title="Adicionar Evento" a:data-placement="left" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                                <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{null}"/>
+                                            </h:commandLink>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndexModel.events}" style = "width: 100%;">
+                            <h:inputHidden value="#{Event.idEvent}" />
+                            <h:column>
+                                <f:facet name = "header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Tag"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 1}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{2}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 2}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{1}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{1}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
+                                <h:outputText value="#{Event.internalId}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name = "header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Nome"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 3}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{4}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 4}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{3}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{3}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
+                                <h:outputText value="#{Event.name}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name = "header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Tipo"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 5}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{6}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 6}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{5}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{5}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
+                                <h:outputText value="#{Event.eventType}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name = "header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Unidade Curricular"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 7}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{8}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 8}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{7}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{7}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
+                                <h:outputText value="#{Event.uc != null ? Event.uc.name : ''}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name = "header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Gestor"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 9}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{10}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 10}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{9}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{9}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
+                                <h:outputText value="#{Event.manager.name}"/>
+                            </h:column>
+                            <h:column >
+                                <f:facet name = "header"></f:facet>
+                                <h:form>
+                                    <h:commandButton value = "Visualizar Eventos" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-individual-list")}'>
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndividualListModel.eventDTO}" value="#{Event}"/>
+                                    </h:commandButton>
+                                </h:form>
+                            </h:column>
+                        </h:dataTable>
+                        <div class="row text-center pagination">
+                            <c:if test="#{adminManager.eventIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  class="fa fa-angle-double-left" title="Primeira Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.eventIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-left" title="Página Anterior" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.eventIndexModel.pageId > 3 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.eventIndexModel.pageId - 3}" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pageId - 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{adminManager.eventIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink value="#{adminManager.eventIndexModel.pageId - 2}" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pageId - 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <c:if test="#{adminManager.eventIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink   value="#{adminManager.eventIndexModel.pageId - 1}" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pageId - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>   
+                            <span>
+                                <b>#{adminManager.eventIndexModel.pageId}</b>
+                            </span>
+                            <c:if test="#{adminManager.eventIndexModel.pagesCount - adminManager.eventIndexModel.pageId > 0 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.eventIndexModel.pageId + 1}" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pageId + 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{adminManager.eventIndexModel.pagesCount - adminManager.eventIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.eventIndexModel.pageId + 2}" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pageId + 2}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>  
+                            <c:if test="#{adminManager.eventIndexModel.pagesCount - adminManager.eventIndexModel.pageId > 2 }">
+                                <span>
+                                    <h:commandLink  value="#{adminManager.eventIndexModel.pageId + 3}" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pageId + 3}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if> 
+                            <c:if test="#{adminManager.eventIndexModel.pagesCount - adminManager.eventIndexModel.pageId > 1 }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-right" title="Próxima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pagesCount - 1}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                            <c:if test="#{adminManager.eventIndexModel.pagesCount != adminManager.eventIndexModel.pageId }">
+                                <span>
+                                    <h:commandLink class="fa fa-angle-double-right" title="Ultima Página" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <f:setPropertyActionListener target="#{adminManager.eventIndexModel.pageId}" value="#{adminManager.eventIndexModel.pagesCount}"/>
+                                    </h:commandLink>
+                                </span>
+                            </c:if>
+                        </div>
+                    </h:form>
                 </div>
             </ui:define>
         </ui:composition>

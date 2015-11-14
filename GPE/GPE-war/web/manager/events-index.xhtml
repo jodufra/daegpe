@@ -23,7 +23,7 @@
 
             <ui:define name="content">
                 <div class="panel">
-                    <h:form id="ucindexform" >
+                    <h:form id="searcheventindexform" >
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-sm-6">
@@ -37,11 +37,14 @@
                                 </div>
                             </div>
                         </div>
-                        <h:dataTable var="Event" value="#{managerManager.eventIndexModel.events}" class="table table-striped" >
-                            <h:column> 
-                                <f:facet name="header">
+                    </h:form>
+                    <h:form id="eventindexform" >
+                        <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{managerManager.eventIndexModel.events}" style = "width: 100%;">
+                            <h:inputHidden value="#{Event.idEvent}" />
+                            <h:column>
+                                <f:facet name = "header">
                                     <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
-                                        <h:outputText value="Evento"/>
+                                        <h:outputText value="Tag"/>
                                         <c:choose>
                                             <c:when test="#{managerManager.eventIndexModel.orderBy == 1}">
                                                 <i class="fa fa-sort-alpha-asc"></i>
@@ -56,13 +59,13 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </h:commandLink>
-                                </f:facet>   
-                                <h:outputText value="#{Event.name}"/>
+                                </f:facet>
+                                <h:outputText value="#{Event.internalId}"/>
                             </h:column>
-                            <h:column> 
-                                <f:facet name="header">
+                            <h:column>
+                                <f:facet name = "header">
                                     <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
-                                        <h:outputText value="Unidade Curricular"/>
+                                        <h:outputText value="Nome"/>
                                         <c:choose>
                                             <c:when test="#{managerManager.eventIndexModel.orderBy == 3}">
                                                 <i class="fa fa-sort-alpha-asc"></i>
@@ -77,13 +80,13 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </h:commandLink>
-                                </f:facet>   
-                                <h:outputText value="#{Event.uc != null ? Event.uc.name : ''}"/>
+                                </f:facet>
+                                <h:outputText value="#{Event.name}"/>
                             </h:column>
-                            <h:column> 
-                                <f:facet name="header">
+                            <h:column>
+                                <f:facet name = "header">
                                     <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
-                                        <h:outputText value="Gestor"/>
+                                        <h:outputText value="Tipo"/>
                                         <c:choose>
                                             <c:when test="#{managerManager.eventIndexModel.orderBy == 5}">
                                                 <i class="fa fa-sort-alpha-asc"></i>
@@ -94,20 +97,62 @@
                                                 <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{5}"/>
                                             </c:when>
                                             <c:otherwise>
-                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{6}"/>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{5}"/>
                                             </c:otherwise>
                                         </c:choose>
                                     </h:commandLink>
-                                </f:facet>   
+                                </f:facet>
+                                <h:outputText value="#{Event.eventType}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name = "header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
+                                        <h:outputText value="Unidade Curricular"/>
+                                        <c:choose>
+                                            <c:when test="#{managerManager.eventIndexModel.orderBy == 7}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{8}"/>
+                                            </c:when>
+                                            <c:when test="#{managerManager.eventIndexModel.orderBy == 8}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{7}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{7}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
+                                <h:outputText value="#{Event.uc != null ? Event.uc.name : ''}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name = "header">
+                                    <h:commandLink action='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' >
+                                        <h:outputText value="Gestor"/>
+                                        <c:choose>
+                                            <c:when test="#{managerManager.eventIndexModel.orderBy == 9}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{10}"/>
+                                            </c:when>
+                                            <c:when test="#{managerManager.eventIndexModel.orderBy == 10}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{9}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{managerManager.eventIndexModel.orderBy}" value="#{9}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
                                 <h:outputText value="#{Event.manager.name}"/>
                             </h:column>
-                            <h:column> 
-                                <f:facet name="header">
-                                    <h:outputText value=""/>
-                                </f:facet>   
-                                <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/manager/events-detail")}' >
-                                    <f:setPropertyActionListener target="#{managerManager.eventDetailModel.event}" value="#{Event}"/>
-                                </h:commandLink>
+                            <h:column >
+                                <f:facet name = "header"></f:facet>
+                                <h:form>
+                                    <h:commandButton value = "Visualizar Eventos" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/manager/events-individual-list")}'>
+                                        <f:setPropertyActionListener target="#{managerManager.eventIndividualListModel.eventDTO}" value="#{Event}"/>
+                                    </h:commandButton>
+                                </h:form>
                             </h:column>
                         </h:dataTable>
                         <div class="row text-center pagination">

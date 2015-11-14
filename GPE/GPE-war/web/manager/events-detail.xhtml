@@ -114,7 +114,7 @@
                                         <div class="row">
                                             <div class="col-xs-12">
                                                 <span class="pull-right">
-                                                    <h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/events-index")}' class="btn btn-link" >Voltar</h:link>
+                                                    <h:link outcome='#{redirectManager.GenerateRelativeURL("/manager/events-individual-list")}' class="btn btn-link" >Voltar</h:link>
                                                 </span>
                                             </div>
                                         </div>
@@ -190,6 +190,28 @@
                                             </h:column>
                                         </h:dataTable>
                                         <hr/>
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-md-4 col-md-offset-7 col-sm-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group input-group-dynamic">
+                                                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                                            <h:inputSecret class="form-control" value="#{managerManager.eventDetailModel.userSearch}" a:placeholder="Password"  />
+                                                            <label class="">Escreva a Password para autenticar as Presenças</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 col-sm-2">
+                                                    <span class="pull-left">
+                                                        <div style="padding-top: 12.5px;">
+                                                            <h:commandLink class="btn btn-warning btn-circle fa" value="&#xf023;" title="Activar Presenças" a:data-placement="right" a:data-toggle="tooltip" action='#{redirectManager.GenerateRelativeURL("/manager/events-detail")}' >
+                                                                <f:setPropertyActionListener target="#{managerManager.eventDetailModel.tab}" value="#{'attendances'}"/>
+                                                            </h:commandLink>    
+                                                        </div> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <h:dataTable var="Attendance" value="#{managerManager.eventDetailModel.attendances}" class="table table-striped" >
                                             <h:column> 
                                                 <f:facet name="header">

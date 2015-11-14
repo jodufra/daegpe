@@ -23,6 +23,7 @@ import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.web.models.manager.EventIndividualListModel;
 import pt.ipleiria.dae.gpe.web.models.manager.EventDetailModel;
 import pt.ipleiria.dae.gpe.web.models.manager.EventIndexModel;
 import pt.ipleiria.dae.gpe.web.models.manager.UserDetailModel;
@@ -44,6 +45,7 @@ public class ManagerManager extends AbstractManager {
 
     private EventIndexModel eventIndexModel;
     private EventDetailModel eventDetailModel;
+    private EventIndividualListModel eventIndividualListModel;
     private UserDetailModel userDetailModel;
     private final EnumMap<EntityValidationError, String> errorMessages;
 
@@ -64,6 +66,7 @@ public class ManagerManager extends AbstractManager {
     public void constructModels() {
         eventIndexModel = new EventIndexModel(eventBean);
         eventDetailModel = new EventDetailModel(userBean, attendanceBean);
+        eventIndividualListModel = new EventIndividualListModel(eventBean);
         userDetailModel = new UserDetailModel();
     }
 
@@ -105,6 +108,10 @@ public class ManagerManager extends AbstractManager {
 
     public EventDetailModel getEventDetailModel() {
         return eventDetailModel;
+    }
+
+    public EventIndividualListModel getEventIndividualListModel() {
+        return eventIndividualListModel;
     }
 
     public UserDetailModel getUserDetailModel() {

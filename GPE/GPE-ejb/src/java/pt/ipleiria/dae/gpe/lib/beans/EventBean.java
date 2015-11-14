@@ -1,10 +1,7 @@
 package pt.ipleiria.dae.gpe.lib.beans;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -26,6 +23,7 @@ import pt.ipleiria.dae.gpe.lib.entities.User;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.lib.utilities.AdminEventFindOptions;
 import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
 import pt.ipleiria.dae.gpe.lib.utilities.EventType;
 import pt.ipleiria.dae.gpe.lib.utilities.ManagerEventFindOptions;
@@ -67,18 +65,12 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         }
         if (dto.getManager() == null) {
             errors.add(EntityValidationError.USER_IS_REQUIRED);
-        } //else if (dto.getManager().isNew()) {
-        //  errors.add(EntityValidationError.USER_IS_NEW);
-        //} 
-        else if (dto.getManager().getType() != UserType.Manager) {
+        } else if (dto.getManager().getType() != UserType.Manager) {
             errors.add(EntityValidationError.USER_IS_NOT_MANAGER);
         }
         if (dto.getManager() == null) {
             errors.add(EntityValidationError.UC_IS_REQUIRED);
-        } //else 
-        //if (dto.getUc().isNew()) {
-        //errors.add(EntityValidationError.UC_IS_NEW);
-        //}
+        }
 
         ArrayList<Integer> eventsWeeks = new ArrayList<>();
         String[] regex = dto.getStartWeek().split(";");
@@ -86,7 +78,6 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             for (String string : regex) {
                 String[] calendarString = string.split(":");
                 if (calendarString.length == 3) {
-                    System.out.println("CORRECTO");
                     try {
 
                         Integer startWeek = Integer.parseInt(calendarString[1]);
@@ -127,26 +118,11 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
                             }
                         }
                     } catch (NumberFormatException ex) {
-                        System.out.println("ERROR - " + ex);
                         errors.add(EntityValidationError.EVENT_WEEK_INVALID);
                     }
                 }
-
             }
         }
-        System.out.println("WEEKS");
-
-        System.out.println("EVENTWEEK " + dto.getStartWeek());
-
-        System.out.println("ENDWEEKS");
-        /*if(dto.getStartWeek() < dto.getEndWeek()){
-         errors.add(EntityValidationError.EVENT_WEEK_INVALID);
-         }else if(dto.getStartWeek() < 1){
-         errors.add(EntityValidationError.EVENT_WEEK_INVALID);
-         }else if(dto.getEndWeek() > 52){
-         errors.add(EntityValidationError.EVENT_WEEK_INVALID);
-         }*/
-
     }
 
     public void addAttendanceEvent(AttendanceDTO dto) throws EntityValidationException {
@@ -172,17 +148,6 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         } else {
             throw new EntityValidationException(errors);
         }
-    }
-
-    public EventDTO find(String internalId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT u FROM Event u WHERE u.internalId = \"").append(internalId).append("\"");
-        TypedQuery<Event> query = em.createQuery(sb.toString(), Event.class);
-        List<Event> events = query.getResultList();
-        if (events.isEmpty()) {
-            return null;
-        }
-        return generateDTO(events.get(0));
     }
 
     public void addStudentsToEvent(List<UserDTO> students, EventDTO eventDTO) {
@@ -229,7 +194,6 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             for (User user : uc.getStudents()) {
                 if (user.getType() == UserType.Student) {
                     boolean find = false;
-                    System.out.println("Pedro1");
                     for (AttendanceDTO attendace : attendances) {
                         if (attendace.getEvent().getIdEvent().equals(event.getIdEvent()) && attendace.getStudent().getIdUser().equals(user.getIdUser())) {
                             find = true;
@@ -248,146 +212,81 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
                 throw new EntityValidationException(errors);
             }
         }
+    }
 
+    public EventDTO find(String internalId) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT u FROM Event u WHERE u.internalId = \"").append(internalId).append("\"");
+        TypedQuery<Event> query = em.createQuery(sb.toString(), Event.class);
+        List<Event> events = query.getResultList();
+        if (events.isEmpty()) {
+            return null;
+        }
+        return generateDTO(events.get(0));
     }
 
     public List<EventDTO> find(int pageId, int pageSize, EventOrderBy orderBy) {
-        String query = "SELECT e FROM Event e";
-
-        switch (orderBy) {
-            case InternalIdAsc:
-                query += " ORDER BY e.internalId";
-                break;
-            case InternalIdDesc:
-                query += " ORDER BY e.internalId desc";
-                break;
-            case NameAsc:
-                query += " ORDER BY e.name";
-                break;
-            case NameDesc:
-                query += " ORDER BY e.name desc";
-                break;
-        }
-
-        if (pageId != 0 && pageSize != 0) {
-            int offset = (pageId - 1) * pageSize;
-            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
-        }
-        return generateDTOList(em.createQuery(query, Event.class).getResultList());
+        return find(new AdminEventFindOptions(pageId, pageSize, orderBy, null));
     }
 
-    public List<EventDTO> findUnique(int pageId, int pageSize, EventOrderBy orderBy) {
-        String query = "SELECT e FROM Event e";
-
-        switch (orderBy) {
-            case InternalIdAsc:
-                query += " ORDER BY e.internalId";
-                break;
-            case InternalIdDesc:
-                query += " ORDER BY e.internalId desc";
-                break;
-            case NameAsc:
-                query += " ORDER BY e.name";
-                break;
-            case NameDesc:
-                query += " ORDER BY e.name desc";
-                break;
-        }
-
-        if (pageId != 0 && pageSize != 0) {
-            int offset = (pageId - 1) * pageSize;
-            List<EventDTO> event = generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
-            ArrayList<EventDTO> events = new ArrayList<>();
-            for (EventDTO eventDTO : event) {
-                if (!events.isEmpty()) {
-                    boolean find = false;
-                    for (EventDTO ev : events) {
-                        if (Objects.equals(ev.getInternalId(), eventDTO.getInternalId())) {
-                            find = true;
-                        }
-                    }
-
-                    if (find == false) {
-                        events.add(eventDTO);
-                    }
-                } else {
-                    events.add(eventDTO);
-                }
-            }
-            System.out.println("SIZE: " + events.size() + " - " + event.size());
-            return events;
-        }
-
-        List<EventDTO> event = generateDTOList(em.createQuery(query, Event.class).getResultList());
-        ArrayList<EventDTO> events = new ArrayList<>();
-        for (EventDTO eventDTO : event) {
-            if (!events.isEmpty()) {
-                boolean find = false;
-                for (EventDTO ev : events) {
+    public List<EventDTO> findUnique(AdminEventFindOptions options) {
+        List<EventDTO> allEvents = find(options);
+        ArrayList<EventDTO> uniqueEvents = new ArrayList<>();
+        boolean find;
+        for (EventDTO eventDTO : allEvents) {
+            if (!uniqueEvents.isEmpty()) {
+                find = false;
+                for (EventDTO ev : uniqueEvents) {
                     if (Objects.equals(ev.getInternalId(), eventDTO.getInternalId())) {
                         find = true;
                     }
                 }
-
                 if (find == false) {
-                    events.add(eventDTO);
+                    uniqueEvents.add(eventDTO);
                 }
             } else {
-                events.add(eventDTO);
+                uniqueEvents.add(eventDTO);
             }
         }
 
-        return events;
+        return uniqueEvents;
     }
-    
-    public List<EventDTO> findEventsOfEvent(int pageId, int pageSize, EventOrderBy orderBy,String eventDTOId){
-        String query = "SELECT e FROM Event e Where e.internalId= " + "'"+eventDTOId + "'";
 
-        switch (orderBy) {
+    public List<EventDTO> find(AdminEventFindOptions options) {
+        String query = "SELECT e FROM Event e JOIN e.uc u, e.manager m";
+
+        if (options.search != null && !options.search.isEmpty()) {
+            String[] pieces = options.search.split(" ");
+            boolean first = true;
+            for (int i = 0; i < pieces.length; i++) {
+                if (pieces[i].equals(" ") || pieces[i].isEmpty()) {
+                    continue;
+                }
+                pieces[i] = GenerateSlug(pieces[i], true, true);
+                if (first) {
+                    query += " WHERE ";
+                    first = false;
+                } else {
+                    query += " AND ";
+                }
+                query += "e.search LIKE '%" + pieces[i] + "%'";
+            }
+        }
+
+        options.count = (long) em.createQuery(query.replace("SELECT e", "SELECT COUNT(e)")).getSingleResult();
+
+        switch (options.orderBy) {
             case InternalIdAsc:
                 query += " ORDER BY e.internalId";
                 break;
             case InternalIdDesc:
                 query += " ORDER BY e.internalId desc";
                 break;
-            case NameAsc:
-                query += " ORDER BY e.name";
+            case TypeAsc:
+                query += " ORDER BY e.eventType";
                 break;
-            case NameDesc:
-                query += " ORDER BY e.name desc";
-                break;
-        }
-        
-        
-        
-        if (pageId != 0 && pageSize != 0) {
-            int offset = (pageId - 1) * pageSize;
-            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
-        }
-        return generateDTOList(em.createQuery(query, Event.class).getResultList());
-    }
-
-    public List<EventDTO> findEventsManager(ManagerEventFindOptions options) {
-        String query = "SELECT e FROM Event e JOIN e.manager m, e.uc u WHERE m.idUser = " + options.user.getIdUser();
-
-        if (options.search != null && !options.search.isEmpty()) {
-            for (String piece : options.search.split(" ")) {
-                if (piece.equals(" ") || piece.isEmpty()) {
-                    continue;
-                }
-                query += " AND e.search LIKE '%" + GenerateSlug(piece, true, true) + "%'";
-            }
-        }
-        options.count = (long) em.createQuery(query.replace("SELECT e", "SELECT COUNT(e)")).getSingleResult();
-
-        switch (options.orderBy) {
-            case DateEndAsc:
-                break;
-            case DateEndDesc:
-                break;
-            case DateStartAsc:
-                break;
-            case DateStartDesc:
+            case TypeDesc:
+                query += " ORDER BY e.eventType desc";
                 break;
             case NameAsc:
                 query += " ORDER BY e.name";
@@ -409,11 +308,129 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
                 break;
         }
 
-        if (options.pageId > 0 && options.pageSize > 0) {
+        if (options.pageId != 0 && options.pageSize != 0) {
             int offset = (options.pageId - 1) * options.pageSize;
             return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
         }
         return generateDTOList(em.createQuery(query, Event.class).getResultList());
+    }
+
+    public List<EventDTO> findEventsByInternalId(int pageId, int pageSize, EventOrderBy orderBy, String eventInternalId) {
+        String query = "SELECT e FROM Event e WHERE e.internalId = '" + eventInternalId + "'";
+
+        switch (orderBy) {
+            case InternalIdAsc:
+                query += " ORDER BY e.internalId";
+                break;
+            case InternalIdDesc:
+                query += " ORDER BY e.internalId desc";
+                break;
+            case TypeAsc:
+                query += " ORDER BY e.eventType";
+                break;
+            case TypeDesc:
+                query += " ORDER BY e.eventType desc";
+                break;
+            case NameAsc:
+                query += " ORDER BY e.name";
+                break;
+            case NameDesc:
+                query += " ORDER BY e.name desc";
+                break;
+            case ManagerNameAsc:
+                query += " ORDER BY m.name";
+                break;
+            case ManagerNameDesc:
+                query += " ORDER BY m.name desc";
+                break;
+            case UCNameAsc:
+                query += " ORDER BY u.name";
+                break;
+            case UCNameDesc:
+                query += " ORDER BY u.name desc";
+                break;
+        }
+
+        if (pageId != 0 && pageSize != 0) {
+            int offset = (pageId - 1) * pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
+        }
+        return generateDTOList(em.createQuery(query, Event.class).getResultList());
+    }
+
+    public List<EventDTO> findEventsManager(ManagerEventFindOptions options) {
+        String query = "SELECT e FROM Event e JOIN e.manager m, e.uc u WHERE m.idUser = " + options.user.getIdUser();
+
+        if (options.search != null && !options.search.isEmpty()) {
+            for (String piece : options.search.split(" ")) {
+                if (piece.equals(" ") || piece.isEmpty()) {
+                    continue;
+                }
+                query += " AND e.search LIKE '%" + GenerateSlug(piece, true, true) + "%'";
+            }
+        }
+        options.count = (long) em.createQuery(query.replace("SELECT e", "SELECT COUNT(e)")).getSingleResult();
+
+        switch (options.orderBy) {
+            case InternalIdAsc:
+                query += " ORDER BY e.internalId";
+                break;
+            case InternalIdDesc:
+                query += " ORDER BY e.internalId desc";
+                break;
+            case TypeAsc:
+                query += " ORDER BY e.eventType";
+                break;
+            case TypeDesc:
+                query += " ORDER BY e.eventType desc";
+                break;
+            case NameAsc:
+                query += " ORDER BY e.name";
+                break;
+            case NameDesc:
+                query += " ORDER BY e.name desc";
+                break;
+            case ManagerNameAsc:
+                query += " ORDER BY m.name";
+                break;
+            case ManagerNameDesc:
+                query += " ORDER BY m.name desc";
+                break;
+            case UCNameAsc:
+                query += " ORDER BY u.name";
+                break;
+            case UCNameDesc:
+                query += " ORDER BY u.name desc";
+                break;
+        }
+
+        List<EventDTO> allEvents;
+        if (options.pageId != 0 && options.pageSize != 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            allEvents = generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
+        } else {
+            allEvents = generateDTOList(em.createQuery(query, Event.class).getResultList());
+        }
+
+        ArrayList<EventDTO> uniqueEvents = new ArrayList<>();
+        boolean find;
+        for (EventDTO eventDTO : allEvents) {
+            if (!uniqueEvents.isEmpty()) {
+                find = false;
+                for (EventDTO ev : uniqueEvents) {
+                    if (Objects.equals(ev.getInternalId(), eventDTO.getInternalId())) {
+                        find = true;
+                    }
+                }
+                if (find == false) {
+                    uniqueEvents.add(eventDTO);
+                }
+            } else {
+                uniqueEvents.add(eventDTO);
+            }
+        }
+
+        return uniqueEvents;
     }
 
     public Collection<Attendance> findStudentsAttendance(EventDTO eventDTO) {

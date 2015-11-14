@@ -169,7 +169,8 @@
                                                     <f:facet name="header">
                                                         <h:outputText value=""/>
                                                     </f:facet> 
-                                                    <h:commandLink class="pull-right btn btn-danger fa " value="&#xf068;" actionListener="#{adminManager.addStudentUC}" onclick="return confirm('Conrfirma que pretende retirar este Utilizador da UC?');">
+                                                    
+                                                    <h:commandLink class="pull-right btn btn-danger fa " value="&#xf068;" actionListener="#{adminManager.removeStudentUC}" onclick="return confirm('Conrfirma que pretende retirar este Utilizador da UC?');">
                                                         <f:setPropertyActionListener target="#{adminManager.ucDetailModel.tab}" value="#{'students'}"/>
                                                         <f:param name="user" id="user" value="#{User}" />
                                                     </h:commandLink>  
