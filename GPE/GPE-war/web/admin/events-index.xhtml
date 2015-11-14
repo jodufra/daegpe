@@ -98,23 +98,103 @@
                                 <h:outputText value="#{Event.eventType}"/>
                             </h:column>
                             <h:column>
-                                <f:facet name = "header">Day of Week</f:facet>
+                                <f:facet name = "header"><h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Day of Week"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 5}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{6}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 6}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{5}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{5}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
                                 <h:outputText value="#{Event.eventDayWeek}"/>
                             </h:column>
                             <h:column>
-                                <f:facet name = "header">Time</f:facet>
+                                <f:facet name = "header"><h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Time"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 7}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{8}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 8}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{7}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{7}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
                                 <h:outputText value="#{Event.startHour}"/>
                             </h:column>
                             <h:column>
-                                <f:facet name = "header">Local</f:facet>
+                                <f:facet name = "header"><h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Local"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 9}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{10}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 10}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{9}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{9}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
                                 <h:outputText value="#{Event.room}"/>
                             </h:column>
                             <h:column>
-                                <f:facet name = "header">Start Week</f:facet>
+                                <f:facet name = "header"><h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Start Week"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 11}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{12}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 12}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{11}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{11}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
                                 <h:outputText value="#{Event.startWeek}"/>
                             </h:column>
                             <h:column>
-                                <f:facet name = "header">Manager</f:facet>
+                                <f:facet name = "header"><h:commandLink action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' >
+                                        <h:outputText value="Start Week"/>
+                                        <c:choose>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 13}">
+                                                <i class="fa fa-sort-alpha-asc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{14}"/>
+                                            </c:when>
+                                            <c:when test="#{adminManager.eventIndexModel.orderBy == 14}">
+                                                <i class="fa fa-sort-alpha-desc"></i>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{13}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <f:setPropertyActionListener target="#{adminManager.eventIndexModel.orderBy}" value="#{13}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:commandLink>
+                                </f:facet>
                                 <h:outputText value="#{Event.manager.name}"/>
                             </h:column>
                             <h:column >
