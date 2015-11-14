@@ -10,7 +10,5 @@ package pt.ipleiria.dae.gpe.lib.utilities;
  * @author pedroextendssilva
  */
 public enum EventType {
-    AULA, SEMINÁRIO, REUNIÃO
-    
-    
+    AULATEORICA, AULAPRATICA, AULATEORICAPRATICA, SEMINÁRIO, REUNIÃO
 }

@@ -6,6 +6,7 @@
 package pt.ipleiria.dae.gpe.web.managers;
 
 import java.io.IOException;
+import java.util.Collection;
 import pt.ipleiria.dae.gpe.web.app.AbstractManager;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
@@ -21,16 +22,20 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.web.models.admin.EventDetailModel;
 import pt.ipleiria.dae.gpe.web.models.admin.EventIndexModel;
+import pt.ipleiria.dae.gpe.web.models.admin.EventIndividualListModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UCDetailModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UCIndexModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UserDetailModel;
@@ -51,8 +56,12 @@ public class AdminManager extends AbstractManager {
     @EJB
     private EventBean eventBean;
 
+    @EJB
+    private AttendanceBean attendanceBean;
+
     private EventIndexModel eventIndexModel;
     private EventDetailModel eventDetailModel;
+    private EventIndividualListModel eventIndividualListModel;
     private UCIndexModel ucIndexModel;
     private UCDetailModel ucDetailModel;
     private UserIndexModel userIndexModel;
@@ -74,6 +83,13 @@ public class AdminManager extends AbstractManager {
         errorMessages.put(EntityValidationError.USER_IS_NOT_MANAGER, "O Utilizador não é Gestor.");
         errorMessages.put(EntityValidationError.USER_IS_NOT_STUDENT, "O Utilizador não é Estudante.");
         errorMessages.put(EntityValidationError.USER_IS_NEW, "O Utilizador ainda não existe.");
+        errorMessages.put(EntityValidationError.EVENT_WEEK_INVALID, "As semanas do Evento estão incorrectas");
+        errorMessages.put(EntityValidationError.ATTENDANCE_NULL_STUDENT, "Estudante Inválido.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_STUDENT_IS_NEW, "Estudante ainda não registado.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_USER_NOT_STUDENT, "Utilizador não é Estudante.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_NULL_EVENT, "Evento Inválido.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_EVENT_IS_NEW, "Evento ainda não registado.");
+        errorMessages.put(EntityValidationError.ATTENDANCE_CANT_BE_REPEATED, "Utilizador já está registado numa Presença no Evento.");
     }
 
     @PostConstruct
@@ -84,6 +100,7 @@ public class AdminManager extends AbstractManager {
         userDetailModel = new UserDetailModel();
         eventIndexModel = new EventIndexModel(eventBean);
         eventDetailModel = new EventDetailModel(eventBean, ucBean, userBean);
+        eventIndividualListModel = new EventIndividualListModel(eventBean);
     }
 
     ////////////////////////////////////////////
@@ -125,23 +142,22 @@ public class AdminManager extends AbstractManager {
         } catch (EntityValidationException eve) {
             PresentErrorMessages("ucstudentsform", eve.getEntityValidationErrors(), errorMessages);
         } catch (EntityNotFoundException enf) {
-            PresentErrorMessage("ucstudentsform", "Verifique que o estudante e a UC ainda existem.");
+            PresentErrorMessage("ucstudentsform", "Verifique que o Estudante e a UC ainda existem.");
         }
     }
 
     public void removeStudentUC(ActionEvent event) throws IOException {
-        StudentDTO user = (StudentDTO) ((UIParameter) event.getComponent().findComponent("user")).getValue();
+        UserDTO user = (UserDTO) ((UIParameter) event.getComponent().findComponent("user")).getValue();
         UCDTO uc = ucDetailModel.provideUCDTO();
-        PresentErrorMessage("ucstudentsform", "Não implementado.");
-        //        try {
-        //            ucBean.addStudentUC(uc, (StudentDTO) user);
-        //            userBean.addUCStudent(user, uc);
-        //            PresentSuccessMessage("ucstudentsform", "Adicionado com sucesso");
-        //        } catch (EntityValidationException eve) {
-        //            PresentErrorMessages("ucstudentsform", eve.getEntityValidationErrors(), errorMessages);
-        //        } catch (EntityNotFoundException enf) {
-        //            PresentErrorMessage("ucstudentsform", "Verifique que o estudante e a UC ainda existem.");
-        //        }
+        try {
+            ucBean.removeStudentUC(uc, user);
+            ucDetailModel.setUc(ucBean.find(uc.getIdUC()));
+            PresentSuccessMessage("ucstudentsform", "Removido com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("ucstudentsform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException ex) {
+            PresentErrorMessage("ucstudentsform", "Verifique que o Estudante e a UC ainda existem.");
+        }
     }
 
     ////////////////////////////////////////////
@@ -213,6 +229,7 @@ public class AdminManager extends AbstractManager {
                         studentsId.add(studentString);
                     } catch (NumberFormatException ex) {
                         System.out.println("ERROR: " + ex);
+                        PresentErrorMessage("eventstudentsform", "Valor introduzido não é valido");
                     }
                 }
             }
@@ -230,6 +247,7 @@ public class AdminManager extends AbstractManager {
                         }
                     } catch (EntityNotFoundException ex) {
                         PresentErrorMessage("eventdetailform", "Estudante não encontrado");
+                        PresentErrorMessage("eventstudentsform", "Estudante não encontrado");
                     }
 
                 }
@@ -240,6 +258,32 @@ public class AdminManager extends AbstractManager {
                 }
             }
         }
+    }
+
+    public void importStudentsFromUC() {
+        EventDTO eventDTO = eventDetailModel.provideEventDTO();
+        Collection<AttendanceDTO> attendances;
+        if (eventDetailModel.getStudentsUCDTO() != 0 && eventDetailModel.getStudentsUCDTO() != null) {
+            try {
+                UCDTO ucDTO = ucBean.find(eventDetailModel.getStudentsUCDTO());
+                //TODO - implementar studentsDTO não se pode usar a entidade
+                List<Student> students = ucBean.getStudentList(ucDTO);
+                if (students == null || students.isEmpty()) {
+                    PresentErrorMessage("eventstudentsform", "A UC Seleccionada não tem estudantes inscritos");
+                }
+
+                try {
+                    attendances = attendanceBean.findFromEvent(eventDTO);
+                    eventBean.addStudentsToEvent(attendances, ucDTO, eventDTO);
+                } catch (EntityValidationException ex) {
+                    PresentErrorMessage("eventstudentsform", "O Aluno já se encontra na lista de presenças do Evento");
+                }
+            } catch (EntityNotFoundException ex) {
+                PresentErrorMessage("eventstudentsform", "UC não disponivel");
+            }
+
+        }
+
     }
 
     ////////////////////////////////////////////
@@ -266,6 +310,14 @@ public class AdminManager extends AbstractManager {
 
     public EventDetailModel getEventDetailModel() {
         return eventDetailModel;
+    }
+
+    public EventIndividualListModel getEventIndividualListModel() {
+        return eventIndividualListModel;
+    }
+
+    public void setEventIndividualListModel(EventIndividualListModel eventIndividualListModel) {
+        this.eventIndividualListModel = eventIndividualListModel;
     }
 
 }

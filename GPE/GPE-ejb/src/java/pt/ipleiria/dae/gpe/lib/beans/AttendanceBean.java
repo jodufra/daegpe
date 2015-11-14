@@ -57,6 +57,7 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
                 errors.add(EntityValidationError.ATTENDANCE_USER_NOT_STUDENT);
             }
         }
+
         if (dto.getEvent() == null) {
             errors.add(EntityValidationError.ATTENDANCE_NULL_EVENT);
         } else if (dto.getEvent().isNew()) {
@@ -107,7 +108,12 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
         String query = "SELECT a FROM Attendance a JOIN a.event e WHERE e.idEvent = " + event.getIdEvent();
         return generateDTOList(em.createQuery(query, Attendance.class).getResultList());
     }
-
+    
+    
+    public List<AttendanceDTO> findFromEvent(EventDTO eventDTO) {
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        return generateDTOList((List<Attendance>) event.getParticipants());
+    }
     public List<AttendanceDTO> findStudentAttendances(StudentAttendanceFindOptions options) {
         String query = "SELECT a FROM Attendance a JOIN a.event e, a.student s, e.manager m, e.uc u"
                 + " WHERE s.idUser = " + options.user.getIdUser();

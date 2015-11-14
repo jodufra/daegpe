@@ -95,7 +95,7 @@ public class EventDetailModel {
         return event.getEndHour();
     }
 
-    public Integer getStartWeek() {
+    public String getStartWeek() {
         return event.getStartWeek();
     }
 

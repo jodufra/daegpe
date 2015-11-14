@@ -57,7 +57,7 @@ public class UCDetailModel {
     }
 
     public String title() {
-        return isNew ? "Adicionar Unidade Curricular" : name;
+        return isNew ? "Adicionar Evento" : name;
     }
 
     public UCDTO provideUCDTO() {

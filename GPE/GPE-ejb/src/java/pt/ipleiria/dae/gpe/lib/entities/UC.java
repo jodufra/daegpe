@@ -126,6 +126,14 @@ public class UC extends AbstractEntity implements Serializable {
         this.students = students;
     }
 
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public void removeStudent(Student student) {
+        students.remove(student);
+    }
+
     @Override
     public boolean isNew() {
         return this.idUC == 0;
@@ -151,10 +159,6 @@ public class UC extends AbstractEntity implements Serializable {
             return false;
         }
         return true;
-    }
-
-    public void addStudent(Student student) {
-        students.add(student);
     }
 
 }

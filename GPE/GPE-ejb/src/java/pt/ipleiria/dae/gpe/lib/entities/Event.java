@@ -67,7 +67,7 @@ public class Event extends AbstractEntity implements Serializable {
     
     @Basic(optional = false)
     @NotNull
-    private Integer startWeek;
+    private String startWeek;
     
     
     @Basic(optional = false)
@@ -101,7 +101,7 @@ public class Event extends AbstractEntity implements Serializable {
     }
 
     
-    public Event(String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, Integer startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
+    public Event(String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
         this.internalId = internalId;
         this.eventType = eventType;
         this.name = name;
@@ -117,7 +117,7 @@ public class Event extends AbstractEntity implements Serializable {
         this.participants = new ArrayList<>();
     }
 
-    public Event(Integer idEvent, String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, Integer startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
+    public Event(Integer idEvent, String internalId, EventType eventType,  String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
         this.idEvent = idEvent;
         this.internalId = internalId;
         this.eventType = eventType;
@@ -246,11 +246,11 @@ public class Event extends AbstractEntity implements Serializable {
         this.endHour = endHour;
     }
 
-    public Integer getStartWeek() {
+    public String getStartWeek() {
         return startWeek;
     }
 
-    public void setStartWeek(Integer startWeek) {
+    public void setStartWeek(String startWeek) {
         this.startWeek = startWeek;
     }
 

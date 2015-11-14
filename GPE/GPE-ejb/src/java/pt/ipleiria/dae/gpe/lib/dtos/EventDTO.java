@@ -21,14 +21,14 @@ public class EventDTO extends AbstractDTO {
     private Room room;
     private Integer startHour;
     private Integer endHour;
-    private Integer startWeek;
+    private String startWeek;
     private Integer endWeek;
     private String semester;
     private UCDTO uc;
     private ManagerDTO manager;
 
     public EventDTO(Integer idEvent, String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour,
-            Integer startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
+            String startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
         super(null);
         this.idEvent = idEvent;
         this.internalId = internalId;
@@ -47,7 +47,7 @@ public class EventDTO extends AbstractDTO {
     }
 
     public EventDTO(String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour,
-            Integer startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
+            String startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
         super(null);
         this.idEvent = 0;
         this.internalId = internalId;
@@ -161,11 +161,11 @@ public class EventDTO extends AbstractDTO {
         this.endHour = endHour;
     }
 
-    public Integer getStartWeek() {
+    public String getStartWeek() {
         return startWeek;
     }
 
-    public void setStartWeek(Integer startWeek) {
+    public void setStartWeek(String startWeek) {
         this.startWeek = startWeek;
     }
 

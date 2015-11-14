@@ -207,4 +207,33 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
         return generateDTOList(em.createQuery(query, UC.class).getResultList());
     }
 
+    public List<Student> getStudentList(UCDTO dto) throws EntityNotFoundException {
+        UC uc = getEntityFromDTO(dto);
+        List<Student> list = (List<Student>) uc.getStudents();
+        return list;
+    }
+
+    public void removeStudentUC(UCDTO unidade, UserDTO userDTO) throws EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+        if (userDTO.isNew()) {
+            errors.add(EntityValidationError.UC_IS_NEW);
+        }
+        if (userDTO.getType() != UserType.Student) {
+            errors.add(EntityValidationError.USER_IS_NOT_STUDENT);
+        }
+        if (userDTO.isNew()) {
+            errors.add(EntityValidationError.UC_IS_NEW);
+        }
+
+        if (errors.isEmpty()) {
+            UC uc = em.find(UC.class, unidade.getIdUC());
+            Student student = em.find(Student.class, userDTO.getIdUser());
+            if (uc.getStudents().contains(student)) {
+                uc.removeStudent(student);
+                edit(uc);
+            }
+        } else {
+            throw new EntityValidationException(errors);
+        }
+    }
 }
