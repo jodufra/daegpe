@@ -21,47 +21,53 @@
 
             <ui:define name="content">
                 <div class="panel">
-                    <h:panelGroup layout="block">
-                        <h3 style = "float:left; margin-left: 10px;">Events List</h3>
-                        
+
+                    <h:panelGroup layout="block" style = "height: 60px; width: 100%;">
+                        <h3 style = "float:left; margin-left: 10px;">Events List of <h:outputText value = "#{adminManager.eventIndividualListModel.eventDTO.name}"/></h3>
                     </h:panelGroup>
 
-                    <h:panelGroup>
-
-                    </h:panelGroup>
-
-                    <h:panelGroup layout="block">
-                        <h:form>
-                            <h:panelGroup layout="block">
-                                <h:inputText class = "form-control"></h:inputText>
-                            </h:panelGroup>
+                    <h:panelGroup layout="block" style = "height: 60px; width: 100%; ">
+                        <h:form id ="importstudentsform">
+                            <div class="row ">
+                                <div class="col-xs-12 text-center">
+                                    <h:messages for="importstudentsform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                                </div>
+                            </div>
+                            <h:commandButton value = "Importar Estudantes" action = "#{adminManager.addStudentsToEvents()}" class="btn btn-info" style = "float:right; margin-right: 2%;" title="Importar todos os estudantes da UC para o Evento(Todas as semanas do Evento)"/>
+                            <h:outputLabel style = "float:right; margin-right: 5%; color: grey">
+                                Importar estudantes da UC  
+                                <span>#{adminManager.eventIndividualListModel.eventDTO.uc.name}</span> para a lista de Eventos
+                            </h:outputLabel>
                         </h:form>
                     </h:panelGroup>
+
+
+
 
                     <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndividualListModel.events}" style = "width: 100%;">
                         <h:inputHidden value="#{Event.idEvent}" />
                         <h:column>
-                            <f:facet name = "header">Name</f:facet>
+                            <f:facet name = "header">Nome</f:facet>
                             <h:outputText value="#{Event.name}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name = "header">Type</f:facet>
+                            <f:facet name = "header">Tipo</f:facet>
                             <h:outputText value="#{Event.eventType}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name = "header">Day of Week</f:facet>
+                            <f:facet name = "header">Dia da Semana</f:facet>
                             <h:outputText value="#{Event.eventDayWeek}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name = "header">Time</f:facet>
+                            <f:facet name = "header">Hora Inicial</f:facet>
                             <h:outputText value="#{Event.startHour}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name = "header">Local</f:facet>
+                            <f:facet name = "header">Sala</f:facet>
                             <h:outputText value="#{Event.room}"/>
                         </h:column>
                         <h:column>
-                            <f:facet name = "header">Start Week</f:facet>
+                            <f:facet name = "header">Ano/Semana</f:facet>
                             <h:outputText value="#{Event.startWeek}"/>
                         </h:column>
                         <h:column>
@@ -69,7 +75,7 @@
                             <h:outputText value="#{Event.manager.name}"/>
                         </h:column>
                         <h:column >
-                            <f:facet name = "header">Actions</f:facet>
+                            <f:facet name = "header">Acções</f:facet>
                             <h:form>
                                 <h:commandLink 
                                     actionListener="#{adminManager.removeEvent}" 

@@ -84,4 +84,6 @@ public class UCDTO extends AbstractDTO {
     public void setStudent(Collection<StudentDTO> student) {
         this.student = student;
     }
+    
+    
 }

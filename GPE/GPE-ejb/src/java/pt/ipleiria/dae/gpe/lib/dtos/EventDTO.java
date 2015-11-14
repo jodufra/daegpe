@@ -42,7 +42,7 @@ public class EventDTO extends AbstractDTO{
         this.endHour = endHour;
         this.startWeek = startWeek;
         this.endWeek = endWeek;
-        this.semester = semester;
+        this.semester = "1";
         this.uc = uc;
         this.manager = manager;
         this.New = idEvent == 0;
@@ -61,7 +61,7 @@ public class EventDTO extends AbstractDTO{
         this.endHour = endHour;
         this.startWeek = startWeek;
         this.endWeek = endWeek;
-        this.semester = semester;
+        this.semester = "2";
         this.uc = uc;
         this.manager = manager;
     }

@@ -62,7 +62,7 @@ public class EventDetailModel {
             this.endHour = eventDTO.getEndHour();
             this.startWeek = eventDTO.getStartWeek();
             this.endWeek = eventDTO.getEndWeek();
-            this.semester = eventDTO.getSemester();
+            this.semester = "1";
             this.uc = eventDTO.getUc();
             this.manager = eventDTO.getManager();
             this.isNew = eventDTO.isNew();
@@ -75,7 +75,7 @@ public class EventDetailModel {
             this.room = Room.A;
             this.startHour = 9;
             this.endHour = 10;
-            this.startWeek = "2015#13:14;2016#1:2";
+            this.startWeek = "2015:13:14;2016:1:2";
             this.endWeek = 20;
             this.semester = "1";
             this.uc = new UCDTO("a", "a");

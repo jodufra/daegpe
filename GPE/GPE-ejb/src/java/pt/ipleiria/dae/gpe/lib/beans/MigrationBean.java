@@ -98,14 +98,14 @@ public class MigrationBean {
             ucBean.addStudentUC(uc, student); //Student to UC
 
             // Attendances
-            AttendanceDTO attendance;
+            /*AttendanceDTO attendance;
             student = new StudentDTO(3, "student", "Student", "student@my.ipleiria.pt");
             event = new EventDTO(1, "event1", EventType.AULAPRATICA, "Aula de DAE", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:3", 22, "1:2", uc, manager);
             attendance = new AttendanceDTO(student, event, true);
             attendanceBean.save(attendance);
             attendance = new AttendanceDTO(1, student, event, true);
             userBean.addAttendanceStudent(attendance);
-            eventBean.addAttendanceEvent(attendance);
+            eventBean.addAttendanceEvent(attendance);*/
 
             System.out.println("DB seeded");
         } catch (EntityValidationException | EntityNotFoundException e) {
