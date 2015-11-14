@@ -12,12 +12,14 @@ import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
 import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
+import pt.ipleiria.dae.gpe.lib.entities.User;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
@@ -62,16 +64,18 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         }
         if (dto.getManager() == null) {
             errors.add(EntityValidationError.USER_IS_REQUIRED);
-        } else if (dto.getManager().isNew()) {
-            errors.add(EntityValidationError.USER_IS_NEW);
-        } else if (dto.getManager().getType() != UserType.Manager) {
+        } //else if (dto.getManager().isNew()) {
+          //  errors.add(EntityValidationError.USER_IS_NEW);
+        //} 
+        else if (dto.getManager().getType() != UserType.Manager) {
             errors.add(EntityValidationError.USER_IS_NOT_MANAGER);
         }
         if (dto.getManager() == null) {
             errors.add(EntityValidationError.UC_IS_REQUIRED);
-        } else if (dto.getUc().isNew()) {
-            errors.add(EntityValidationError.UC_IS_NEW);
-        }
+        } //else 
+            //if (dto.getUc().isNew()) {
+            //errors.add(EntityValidationError.UC_IS_NEW);
+        //}
 
         if (errors.isEmpty()) {
             Event event;
@@ -146,6 +150,63 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
                 event.addParticipant(attendeAttendance);
             }
         }
+    }
+    
+    public void addStudentsToEvent(UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException 
+    {
+        List<EntityValidationError> errors = new ArrayList<>();
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        
+        UC uc = em.find(UC.class, ucDTO.getIdUC());
+        if (event != null && uc != null) {
+            for(User user: uc.getStudents()){
+                if(user.getType() == UserType.Student){
+                    Attendance attendeAttendance = new Attendance((Student)user, event, true);
+                    if(!(event.getParticipants().contains(attendeAttendance))){
+                        event.addParticipant(attendeAttendance);
+                    }else{
+                        errors.add(EntityValidationError.ATTENDANCE_ALREADY_EXISTS);
+                    }
+                }
+            }
+            
+            if(!errors.isEmpty()){
+                throw new EntityValidationException(errors);
+            }
+        }
+        
+    }
+    
+    public void addStudentsToEvent(Collection<AttendanceDTO> attendances, UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException 
+    {
+        List<EntityValidationError> errors = new ArrayList<>();
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        
+        UC uc = em.find(UC.class, ucDTO.getIdUC());
+        if (event != null && uc != null) {
+            for(User user: uc.getStudents()){
+                if(user.getType() == UserType.Student){
+                    boolean find = false;
+                    System.out.println("Pedro1");
+                    for(AttendanceDTO attendace: attendances){
+                        if(attendace.getEvent().getIdEvent().equals(event.getIdEvent()) && attendace.getStudent().getIdUser().equals(user.getIdUser())){
+                            find = true;
+                        }
+                    }
+                    if(find == true){
+                        errors.add(EntityValidationError.ATTENDACE_ALREADY_HAVE_STUDENT);
+                    }else{
+                        Attendance attendeAttendance = new Attendance((Student)user, event, true);
+                        event.addParticipant(attendeAttendance);
+                    }
+                }
+            }
+            
+            if(!errors.isEmpty()){
+                throw new EntityValidationException(errors);
+            }
+        }
+        
     }
 
     public List<EventDTO> find(int pageId, int pageSize, EventOrderBy orderBy) {

@@ -174,4 +174,10 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
         return generateDTOList((List<UC>) student.getUcs());
     }
 
+    
+    public List<Student> getStudentList (UCDTO dto) throws EntityNotFoundException{
+        UC uc = getEntityFromDTO(dto);
+        List<Student> list = (List<Student>) uc.getStudents();
+        return list;
+    }
 }

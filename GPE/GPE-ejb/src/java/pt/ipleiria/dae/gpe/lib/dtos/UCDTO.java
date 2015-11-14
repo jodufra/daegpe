@@ -5,7 +5,9 @@
  */
 package pt.ipleiria.dae.gpe.lib.dtos;
 
+import java.util.Collection;
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
+import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
 
 /**
@@ -17,6 +19,7 @@ public class UCDTO extends AbstractDTO {
     private Integer idUC;
     private String internalId;
     private String name;
+    private Collection<StudentDTO> student;
 
     public UCDTO(Integer idUc, String internalId, String name) {
         super(null);
@@ -68,5 +71,17 @@ public class UCDTO extends AbstractDTO {
     public Object getRelationalId() {
         return getIdUC();
     }
+    
+    @Override
+    public String toString(){
+        return this.name;
+    }
 
+    public Collection<StudentDTO> getStudent() {
+        return student;
+    }
+    
+    public void setStudent(Collection<StudentDTO> student) {
+        this.student = student;
+    }
 }

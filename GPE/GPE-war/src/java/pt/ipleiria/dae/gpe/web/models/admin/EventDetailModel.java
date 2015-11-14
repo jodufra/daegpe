@@ -1,9 +1,9 @@
-
 package pt.ipleiria.dae.gpe.web.models.admin;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import javax.faces.event.ValueChangeEvent;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
@@ -16,13 +16,12 @@ import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
 import pt.ipleiria.dae.gpe.lib.utilities.EventType;
 import pt.ipleiria.dae.gpe.lib.utilities.Room;
 
-
 public class EventDetailModel {
-    
+
     private EventBean eventBean;
     private UCBean ucBean;
     private UserBean userBean;
-    
+
     private Integer idEvent;
     private String internalId;
     private EventType eventType;
@@ -39,19 +38,20 @@ public class EventDetailModel {
     private boolean isNew;
     private String stringIdImport;
     private Collection<Attendance> studentsAttendance;
+    private Integer studentsUCDTO;
     
-    
-    public EventDetailModel(EventBean eventBean, UCBean ucBean, UserBean userBean)
-    {
+    private String tab;
+
+    public EventDetailModel(EventBean eventBean, UCBean ucBean, UserBean userBean) {
         this.eventBean = eventBean;
         this.ucBean = ucBean;
         this.userBean = userBean;
         this.studentsAttendance = new LinkedList<>();
+        this.tab = "details";
     }
-    
-    public void setEvent(EventDTO eventDTO)
-    {
-        if(eventDTO != null && !eventDTO.isNew()){
+
+    public void setEvent(EventDTO eventDTO) {
+        if (eventDTO != null && !eventDTO.isNew()) {
             this.idEvent = eventDTO.getIdEvent();
             this.internalId = eventDTO.getInternalId();
             this.eventType = eventDTO.getEventType();
@@ -66,7 +66,7 @@ public class EventDetailModel {
             this.uc = eventDTO.getUc();
             this.manager = eventDTO.getManager();
             this.isNew = eventDTO.isNew();
-        }else{
+        } else {
             this.idEvent = 0;
             this.internalId = "";
             this.eventType = EventType.AULA;
@@ -83,11 +83,12 @@ public class EventDetailModel {
             this.isNew = true;
         }
     }
+
+    public String title() {
+        return isNew ? "Adicionar Unidade Curricular" : name;
+    }
     
-    public EventDTO provideEventDTO()
-    {
-        System.out.println("EE");
-        System.out.println("EE: " + manager.getName());
+    public EventDTO provideEventDTO() {
         EventDTO eventDTO = new EventDTO(idEvent, internalId, eventType, name, eventDayWeek, room, startHour, endHour, startWeek, endWeek, semester, uc, manager);
         return eventDTO;
     }
@@ -201,7 +202,6 @@ public class EventDetailModel {
     }
 
     public void setUc(UCDTO uc) {
-        System.out.println("UC: " + uc.getName());
         this.uc = uc;
     }
 
@@ -212,9 +212,8 @@ public class EventDetailModel {
     public void setManager(ManagerDTO manager) {
         this.manager = manager;
     }
-    
-    public Collection<Attendance> getStudentsAttendance()
-    {
+
+    public Collection<Attendance> getStudentsAttendance() {
         EventDTO eventDTO = this.provideEventDTO();
         return eventBean.findStudentsAttendance(eventDTO);
     }
@@ -226,38 +225,43 @@ public class EventDetailModel {
     public void setEventBean(EventBean eventBean) {
         this.eventBean = eventBean;
     }
-    
-    public EventType[] getEventTypes()
-    {
+
+    public EventType[] getEventTypes() {
         return EventType.values();
     }
-   
-    public EventDayWeek[] getEventDayWeekTypes()
-    {
+
+    public EventDayWeek[] getEventDayWeekTypes() {
         return EventDayWeek.values();
     }
-    
-    public Room[] getRoomTypes()
-    {
+
+    public Room[] getRoomTypes() {
         return Room.values();
     }
-  
-    public List<UCDTO> getAllUCs()
-    {
-        List<UCDTO> ucsDTO = ucBean.findAll();
-        return ucsDTO;
+
+    public List<UCDTO> getAllUCs() {
+        return ucBean.findAll();
     }
- 
-    public List<UserDTO> getAllManagers()
-    {
+
+    public List<UserDTO> getAllManagers() {
         List<UserDTO> managers = userBean.getAllManagers();
         return managers;
     }
-    
-    public void getImportStudentsFromUC()
-    {
-        EventDTO eventDTO = this.provideEventDTO();
-        
+
+    public Integer getStudentsUCDTO() {
+        return studentsUCDTO;
     }
-}
+
+    public void setStudentsUCDTO(Integer studentsUCDTO) {
+        this.studentsUCDTO = studentsUCDTO;
+    }
+
+    public String getTab() {
+        return tab;
+    }
+
+    public void setTab(String tab) {
+        this.tab = tab;
+    }
     
+    
+}

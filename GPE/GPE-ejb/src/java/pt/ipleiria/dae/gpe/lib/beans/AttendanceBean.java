@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
@@ -78,5 +79,10 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
         Student student = em.find(Student.class, options.user.getIdUser());
         return generateDTOList((List<Attendance>) student.getAttendances());
     }
-
+    
+    
+    public List<AttendanceDTO> findFromEvent(EventDTO eventDTO) {
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        return generateDTOList((List<Attendance>) event.getParticipants());
+    }
 }
