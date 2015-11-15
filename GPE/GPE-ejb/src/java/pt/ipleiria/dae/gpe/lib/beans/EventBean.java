@@ -54,11 +54,6 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
 
         if (dto.getInternalId().isEmpty()) {
             errors.add(EntityValidationError.USER_INTERNALID_REQUIRED);
-        } else {
-            EventDTO eventWithSameId = find(dto.getInternalId());
-            if (eventWithSameId != null && !Objects.equals(eventWithSameId.getIdEvent(), dto.getIdEvent())) {
-                errors.add(EntityValidationError.USER_INTERNALID_NOT_UNIQUE);
-            }
         }
         if (dto.getName().isEmpty()) {
             errors.add(EntityValidationError.USER_NAME_REQUIRED);
@@ -71,61 +66,73 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         if (dto.getManager() == null) {
             errors.add(EntityValidationError.UC_IS_REQUIRED);
         }
+        if (errors.isEmpty()) {
+            Event event;
+            if (dto.isNew()) {
+                String[] regex = dto.getStartWeek().split(";");
+                if (regex.length > 0) {
+                    for (String string : regex) {
+                        errors.clear();
+                        String[] calendarString = string.split(":");
+                        if (calendarString.length == 3) {
+                            try {
 
-        ArrayList<Integer> eventsWeeks = new ArrayList<>();
-        String[] regex = dto.getStartWeek().split(";");
-        if (regex.length > 0) {
-            for (String string : regex) {
-                String[] calendarString = string.split(":");
-                if (calendarString.length == 3) {
-                    try {
-
-                        Integer startWeek = Integer.parseInt(calendarString[1]);
-                        Integer finalWeek = Integer.parseInt(calendarString[2]);
-                        if (startWeek > finalWeek) {
-                            errors.add(EntityValidationError.EVENT_WEEK_INVALID);
-                        } else {
-                            for (int index = startWeek; index <= finalWeek; index++) {
-                                String yearWeek = calendarString[0] + ":" + (index);
-                                if (errors.isEmpty()) {
-                                    Event event;
-                                    if (dto.isNew()) {
-                                        event = new Event();
-                                    } else {
-                                        event = getEntity(dto.getIdEvent());
-                                    }
-                                    event.setInternalId(dto.getInternalId());
-                                    event.setEventType(dto.getEventType());
-                                    event.setName(dto.getName());
-                                    event.setEventDayWeek(dto.getEventDayWeek());
-                                    event.setRoom(dto.getRoom());
-                                    event.setStartHour(dto.getStartHour());
-                                    event.setEndHour(dto.getEndHour());
-                                    event.setStartWeek(yearWeek);
-                                    event.setEndWeek(finalWeek);
-                                    event.setSemester(dto.getSemester());
-                                    event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
-                                    event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
-                                    event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
-                                    event.setAttendanceActive(dto.isAttendanceActive());
-                                    event.setAttendanceActivated(dto.isAttendanceActivated());                                    
-                                    event.setAttendancePassword(dto.getAttendancePassword());
-
-                                    if (dto.isNew()) {
-                                        super.create(event);
-                                    } else {
-                                        super.edit(event);
-                                    }
+                                Integer startWeek = Integer.parseInt(calendarString[1]);
+                                Integer finalWeek = Integer.parseInt(calendarString[2]);
+                                if (startWeek > finalWeek) {
+                                    errors.add(EntityValidationError.EVENT_WEEK_INVALID);
                                 } else {
-                                    throw new EntityValidationException(errors);
+                                    for (int index = startWeek; index <= finalWeek; index++) {
+                                        event = new Event();
+                                        String yearWeek = calendarString[0] + ":" + (index);
+                                        event.setInternalId(dto.getInternalId());
+                                        event.setEventType(dto.getEventType());
+                                        event.setName(dto.getName());
+                                        event.setEventDayWeek(dto.getEventDayWeek());
+                                        event.setRoom(dto.getRoom());
+                                        event.setStartHour(dto.getStartHour());
+                                        event.setEndHour(dto.getEndHour());
+                                        event.setStartWeek(yearWeek);
+                                        event.setEndWeek(finalWeek);
+                                        event.setSemester(dto.getSemester());
+                                        event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
+                                        event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
+                                        event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
+                                        event.setAttendanceActive(dto.isAttendanceActive());
+                                        event.setAttendanceActivated(dto.isAttendanceActivated());
+                                        event.setAttendancePassword(dto.getAttendancePassword());
+                                        super.create(event);
+                                    }
                                 }
+                            } catch (NumberFormatException ex) {
+                                errors.add(EntityValidationError.EVENT_WEEK_INVALID);
                             }
                         }
-                    } catch (NumberFormatException ex) {
-                        errors.add(EntityValidationError.EVENT_WEEK_INVALID);
                     }
                 }
+
+            } else {
+                event = getEntity(dto.getIdEvent());
+                event.setInternalId(dto.getInternalId());
+                event.setEventType(dto.getEventType());
+                event.setName(dto.getName());
+                event.setEventDayWeek(dto.getEventDayWeek());
+                event.setRoom(dto.getRoom());
+                event.setStartHour(dto.getStartHour());
+                event.setEndHour(dto.getEndHour());
+                event.setStartWeek(dto.getStartWeek());
+                event.setEndWeek(dto.getEndWeek());
+                event.setSemester(dto.getSemester());
+                event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
+                event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
+                event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
+                event.setAttendanceActive(dto.isAttendanceActive());
+                event.setAttendanceActivated(dto.isAttendanceActivated());
+                event.setAttendancePassword(dto.getAttendancePassword());
+                super.edit(event);
             }
+        } else {
+            throw new EntityValidationException(errors);
         }
     }
 
@@ -153,17 +160,46 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             throw new EntityValidationException(errors);
         }
     }
-
-    public void addStudentsToEvent(List<UserDTO> students, EventDTO eventDTO) {
-        Event event = em.find(Event.class, eventDTO.getIdEvent());
-        if (event != null) {
-            for (UserDTO stu : students) {
-                Student student = em.find(Student.class, stu.getIdUser());
-                Attendance attendeAttendance = new Attendance((Student) student, event, false);
-                event.addParticipant(attendeAttendance);
+/*
+    public void addStudentsToEvents(UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+        if (ucDTO == null) {
+            errors.add(EntityValidationError.UC_IS_REQUIRED);
+            return;
+        }
+        System.out.println("1");
+        List<EventDTO> evsDTO = findEventsOfEvent(0, 0, EventOrderBy.NameAsc, eventDTO.getInternalId());
+        for (EventDTO evDTO : evsDTO) {
+            System.out.println("2");
+            Event event = em.find(Event.class, evDTO.getIdEvent());
+            UC uc = em.find(UC.class, ucDTO.getIdUC());
+            if (event != null && uc != null) {
+                if (uc.getStudents().isEmpty()) {
+                    errors.add(EntityValidationError.UC_WITHOUT_STUDENTS);
+                }
+                System.out.println("3");
+                for (Student user : uc.getStudents()) {
+                    System.out.println("4");
+                    if (user.getType() == UserType.Student) {
+                        String query = "SELECT COUNT(a) FROM Attendance a JOIN a.event e, a.student s WHERE e.idEvent = " + event.getIdEvent() + " AND s.idUser = " + user.getIdUser();
+                        long count = (long) em.createQuery(query).getSingleResult();
+                        if (count == 0) {
+                            System.out.println("5");
+                            Attendance attendeAttendance = new Attendance(user, event, false);
+                            event.addParticipant(attendeAttendance);
+                        } else {
+                            System.out.println("6");
+                            errors.add(EntityValidationError.ATTENDANCE_CANT_BE_REPEATED);
+                        }
+                    }
+                }
+                if (!errors.isEmpty()) {
+                    throw new EntityValidationException(errors);
+                }
             }
         }
-    }
+    }*/
+
 
     public void addStudentsToEvent(UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException {
         List<EntityValidationError> errors = new ArrayList<>();
@@ -187,6 +223,46 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             }
         }
 
+    }
+
+    public void addStudentsToEvent(List<UserDTO> students, EventDTO eventDTO) throws EntityNotFoundException, EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        if (event != null) {
+            Collection<Attendance> attendances = event.getParticipants();
+            for (UserDTO stu : students) {
+                Student student = em.find(Student.class, stu.getIdUser());
+                if (student != null) {
+                    if (attendances.isEmpty()) {
+
+                        Attendance attendeAttendance = new Attendance((Student) student, event, false);
+                        event.addParticipant(attendeAttendance);
+
+                    } else {
+                        boolean find = false;
+                        for (Attendance att : attendances) {
+                            if (att.getStudent().getIdUser().equals(stu.getIdUser())) {
+                                find = true;
+                                errors.add(EntityValidationError.EVENT_ALREADY_HAVE_STUDENT);
+                            }
+                        }
+
+                        if (!find) {
+                            Attendance attendeAttendance = new Attendance((Student) student, event, false);
+                            event.addParticipant(attendeAttendance);
+                        }
+
+                    }
+                }
+
+            }
+        } else {
+            errors.add(EntityValidationError.EVENT_NOT_FOUND);
+        }
+
+        if (!errors.isEmpty()) {
+            throw new EntityValidationException(errors);
+        }
     }
 
     public void addStudentsToEvent(Collection<AttendanceDTO> attendances, UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException {
@@ -231,29 +307,6 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
 
     public List<EventDTO> find(int pageId, int pageSize, EventOrderBy orderBy) {
         return find(new AdminEventFindOptions(pageId, pageSize, orderBy, null));
-    }
-
-    public List<EventDTO> findUnique(AdminEventFindOptions options) {
-        List<EventDTO> allEvents = find(options);
-        ArrayList<EventDTO> uniqueEvents = new ArrayList<>();
-        boolean find;
-        for (EventDTO eventDTO : allEvents) {
-            if (!uniqueEvents.isEmpty()) {
-                find = false;
-                for (EventDTO ev : uniqueEvents) {
-                    if (Objects.equals(ev.getInternalId(), eventDTO.getInternalId())) {
-                        find = true;
-                    }
-                }
-                if (find == false) {
-                    uniqueEvents.add(eventDTO);
-                }
-            } else {
-                uniqueEvents.add(eventDTO);
-            }
-        }
-
-        return uniqueEvents;
     }
 
     public List<EventDTO> find(AdminEventFindOptions options) {
@@ -315,6 +368,54 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         if (options.pageId != 0 && options.pageSize != 0) {
             int offset = (options.pageId - 1) * options.pageSize;
             return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
+        }
+        return generateDTOList(em.createQuery(query, Event.class).getResultList());
+    }
+
+    public List<EventDTO> findUnique(AdminEventFindOptions options) {
+        List<EventDTO> allEvents = find(options);
+        ArrayList<EventDTO> uniqueEvents = new ArrayList<>();
+        boolean find;
+        for (EventDTO eventDTO : allEvents) {
+            if (!uniqueEvents.isEmpty()) {
+                find = false;
+                for (EventDTO ev : uniqueEvents) {
+                    if (Objects.equals(ev.getInternalId(), eventDTO.getInternalId())) {
+                        find = true;
+                    }
+                }
+                if (find == false) {
+                    uniqueEvents.add(eventDTO);
+                }
+            } else {
+                uniqueEvents.add(eventDTO);
+            }
+        }
+
+        return uniqueEvents;
+    }
+
+    public List<EventDTO> findEventsOfEvent(int pageId, int pageSize, EventOrderBy orderBy, String eventInternalId) {
+        String query = "SELECT e FROM Event e Where e.internalId= " + "'" + eventInternalId + "'";
+
+        switch (orderBy) {
+            case InternalIdAsc:
+                query += " ORDER BY e.internalId";
+                break;
+            case InternalIdDesc:
+                query += " ORDER BY e.internalId desc";
+                break;
+            case NameAsc:
+                query += " ORDER BY e.name";
+                break;
+            case NameDesc:
+                query += " ORDER BY e.name desc";
+                break;
+        }
+
+        if (pageId != 0 && pageSize != 0) {
+            int offset = (pageId - 1) * pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
         }
         return generateDTOList(em.createQuery(query, Event.class).getResultList());
     }

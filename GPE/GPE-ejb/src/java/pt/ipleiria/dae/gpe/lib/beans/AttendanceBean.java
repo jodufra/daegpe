@@ -6,6 +6,7 @@
 package pt.ipleiria.dae.gpe.lib.beans;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,13 +15,16 @@ import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
+import pt.ipleiria.dae.gpe.lib.entities.UC;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
+import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
 import pt.ipleiria.dae.gpe.lib.utilities.StudentAttendanceFindOptions;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
 
@@ -84,6 +88,45 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
                 super.edit(attendance);
             }
         } else {
+            throw new EntityValidationException(errors);
+        }
+    }
+
+    public void addStudentsToEvents(UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+        if (ucDTO == null) {
+            errors.add(EntityValidationError.UC_IS_REQUIRED);
+            throw new EntityValidationException(errors);
+        }
+        if (eventDTO == null) {
+            errors.add(EntityValidationError.EVENT_IS_REQUIRED);
+            throw new EntityValidationException(errors);
+        }
+        UC uc = em.find(UC.class, ucDTO.getIdUC());
+        if (uc == null) {
+            errors.add(EntityValidationError.UC_IS_REQUIRED);
+            throw new EntityValidationException(errors);
+        }
+        String query = "SELECT e FROM Event e WHERE e.internalId = '" + eventDTO.getInternalId() + "'";
+        List<Event> events = em.createQuery(query, Event.class).getResultList();
+        query = "SELECT s FROM UC u JOIN u.students s WHERE u.idUC = " + ucDTO.getIdUC();
+        List<Student> students = em.createQuery(query, Student.class).getResultList();
+        for (Event event : events) {
+            for (Student student : students) {
+                if (student.getType() != UserType.Student) {
+                    continue;
+                }
+                query = "SELECT COUNT(a) FROM Attendance a JOIN a.event e, a.student s WHERE e.idEvent = " + event.getIdEvent() + " AND s.idUser = " + student.getIdUser();
+                long count = (long) em.createQuery(query).getSingleResult();
+                System.out.println("Count: " + count);
+                if (count == 0) {
+                    Attendance attendance = new Attendance(student, event, false);
+                    super.create(attendance);
+                    System.out.println("after create");
+                }
+            }
+        }
+        if (!errors.isEmpty()) {
             throw new EntityValidationException(errors);
         }
     }

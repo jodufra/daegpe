@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UserType;
@@ -206,11 +207,14 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
 
         return generateDTOList(em.createQuery(query, UC.class).getResultList());
     }
-
-    public List<Student> getStudentList(UCDTO dto) throws EntityNotFoundException {
-        UC uc = getEntityFromDTO(dto);
-        List<Student> list = (List<Student>) uc.getStudents();
-        return list;
+    
+    public List<StudentDTO> getUCStudents(UCDTO ucDTO) throws EntityNotFoundException{
+        UC uc = getEntityFromDTO(ucDTO);
+        List<StudentDTO> studentsDTO = new ArrayList<>();
+        for (Student s : uc.getStudents()) {
+            studentsDTO.add(new StudentDTO(s));
+        }
+        return studentsDTO;
     }
 
     public void removeStudentUC(UCDTO unidade, UserDTO userDTO) throws EntityValidationException {

@@ -1,14 +1,18 @@
 package pt.ipleiria.dae.gpe.web.managers;
 
+import java.io.IOException;
 import java.util.EnumMap;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIParameter;
+import javax.faces.event.ActionEvent;
 import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
@@ -63,6 +67,19 @@ public class StudentManager extends AbstractManager {
             PresentErrorMessages("userdetailform", eve.getEntityValidationErrors(), errorMessages);
         } catch (EntityNotFoundException enf) {
             PresentErrorMessage("userdetailform", "Utilizador a ser editado, não foi encontrado ou foi removido.");
+        }
+    }
+    
+    public void updateAttendanceState(ActionEvent e)  throws IOException {
+        AttendanceDTO attedance = (AttendanceDTO) ((UIParameter) e.getComponent().findComponent("attendance")).getValue();
+        attedance.setPresent(true);
+        try {
+            attendanceBean.save(attedance);
+            PresentSuccessMessage("eventattendancesform", "Participação registada com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("eventattendancesform", "Verifique se o evento ainda existe ou se os registos de presenças estão abertos.");
         }
     }
 

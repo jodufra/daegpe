@@ -82,7 +82,10 @@ public class AdminManager extends AbstractManager {
         errorMessages.put(EntityValidationError.USER_IS_NOT_MANAGER, "O Utilizador não é Gestor.");
         errorMessages.put(EntityValidationError.USER_IS_NOT_STUDENT, "O Utilizador não é Estudante.");
         errorMessages.put(EntityValidationError.USER_IS_NEW, "O Utilizador ainda não existe.");
+        errorMessages.put(EntityValidationError.USER_INVALID, "O ID inserido não é valido");
         errorMessages.put(EntityValidationError.EVENT_WEEK_INVALID, "As semanas do Evento estão incorrectas");
+        errorMessages.put(EntityValidationError.EVENT_NOT_FOUND, "Evento por criar");
+        errorMessages.put(EntityValidationError.EVENT_ALREADY_HAVE_STUDENT, "O Estudante já se encontra associado ao Evento");
         errorMessages.put(EntityValidationError.ATTENDANCE_NULL_STUDENT, "Estudante Inválido.");
         errorMessages.put(EntityValidationError.ATTENDANCE_STUDENT_IS_NEW, "Estudante ainda não registado.");
         errorMessages.put(EntityValidationError.ATTENDANCE_USER_NOT_STUDENT, "Utilizador não é Estudante.");
@@ -215,10 +218,10 @@ public class AdminManager extends AbstractManager {
     }
 
     public void importStudentsFromText() {
+        List<EntityValidationError> errors = new LinkedList<>();
         EventDTO eventDTO = eventDetailModel.provideEventDTO();
         List<String> studentsId = new LinkedList<>();
         List<UserDTO> students = new LinkedList<>();
-
         if (!eventDetailModel.getStringIdImport().isEmpty()) {
             String[] studentsIDString = eventDetailModel.getStringIdImport().split(";");
             for (String studentString : studentsIDString) {
@@ -227,50 +230,55 @@ public class AdminManager extends AbstractManager {
                         studentString = studentString.replaceFirst("[^0-9]", "");
                         studentsId.add(studentString);
                     } catch (NumberFormatException ex) {
-                        System.out.println("ERROR: " + ex);
-                        PresentErrorMessage("eventstudentsform", "Valor introduzido não é valido");
+                        errors.add(EntityValidationError.USER_INVALID);
+                        PresentErrorMessages("eventstudentsform", errors, errorMessages);
                     }
                 }
             }
-
             if (!studentsId.isEmpty()) {
-                //TODO - usar userBean.find(internalID)
-                for (String str : studentsId) {
-                    try {
+                try {
+                    for (String str : studentsId) {
                         UserDTO userDTO = userBean.find(str);
                         if (userDTO != null) {
                             if (userDTO.getType() == UserType.Student) {
-                                System.out.println("STU" + userDTO.getType());
                                 students.add(userDTO);
                             }
+                        } else {
+                            errors.add(EntityValidationError.USER_INVALID);
                         }
-                    } catch (EntityNotFoundException ex) {
-                        PresentErrorMessage("eventdetailform", "Estudante não encontrado");
-                        PresentErrorMessage("eventstudentsform", "Estudante não encontrado");
                     }
-
+                } catch (EntityNotFoundException ex) {
+                    errors.add(EntityValidationError.USER_INVALID);
                 }
-
-                if (eventDTO != null) {
-                    System.out.println("PAssei aqui");
-                    eventBean.addStudentsToEvent(students, eventDTO);
+                if (!students.isEmpty()) {
+                    if (eventDTO != null) {
+                        try {
+                            eventBean.addStudentsToEvent(students, eventDTO);
+                        } catch (EntityValidationException ex) {
+                            errors.add(EntityValidationError.EVENT_ALREADY_HAVE_STUDENT);
+                            PresentErrorMessages("eventstudentsform", ex.getEntityValidationErrors(), errorMessages);
+                        } catch (EntityNotFoundException ex) {
+                            errors.add(EntityValidationError.USER_INVALID);
+                        }
+                    }
+                }
+                if (errors.isEmpty()) {
+                    PresentSuccessMessage("eventstudentsform", "Estudantes adicionados com sucesso");
+                } else {
+                    PresentErrorMessage("eventstudentsform", "");
                 }
             }
+        } else {
+            PresentErrorMessage("eventstudentsform", "Tem de introduzir o id de estudantes");
         }
     }
 
-    public void importStudentsFromUC() {
+    public void importStudentsFromUC() { 
         EventDTO eventDTO = eventDetailModel.provideEventDTO();
         Collection<AttendanceDTO> attendances;
         if (eventDetailModel.getStudentsUCDTO() != 0 && eventDetailModel.getStudentsUCDTO() != null) {
             try {
                 UCDTO ucDTO = ucBean.find(eventDetailModel.getStudentsUCDTO());
-                //TODO - implementar studentsDTO não se pode usar a entidade
-                List<Student> students = ucBean.getStudentList(ucDTO);
-                if (students == null || students.isEmpty()) {
-                    PresentErrorMessage("eventstudentsform", "A UC Seleccionada não tem estudantes inscritos");
-                }
-
                 try {
                     attendances = attendanceBean.findFromEvent(eventDTO);
                     eventBean.addStudentsToEvent(attendances, ucDTO, eventDTO);
@@ -280,9 +288,17 @@ public class AdminManager extends AbstractManager {
             } catch (EntityNotFoundException ex) {
                 PresentErrorMessage("eventstudentsform", "UC não disponivel");
             }
-
         }
+    }
 
+    public void addStudentsToEvents() {
+        EventDTO eventDTO = this.eventIndividualListModel.getEventDTO();
+        try {
+            attendanceBean.addStudentsToEvents(eventDTO.getUc(), eventDTO);
+            PresentSuccessMessage("importstudentsform", "Estudantes adicionados com Sucesso");
+        } catch (EntityValidationException ex) {
+            PresentErrorMessage("importstudentsform", "A UC Seleccionada não têm Alunos");
+        }
     }
 
     ////////////////////////////////////////////

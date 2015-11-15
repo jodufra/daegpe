@@ -55,11 +55,12 @@
                                     <h:outputText value="Presente?"/>
                                 </f:facet>   
                                 <h:outputText value="#{Attendance.present ? 'Sim' : 'Não' }"/>
-                            </h:column>
-                            <h:column> 
-                                <f:facet name="header">
-                                    <h:outputText value=""/>
-                                </f:facet>   
+                            </h:column>                            
+                            <h:column>
+                                <f:facet name="header"></f:facet>  
+                                    <h:commandLink class="btn btn-success fa fa-check fa-3" title="Registar Presença" a:data-placement="right" a:data-toggle="tooltip" actionListener="#{studentManager.updateAttendanceState}" >
+                                        <f:param name="attendance" id="attendance" value="#{Attendance}" />
+                                    </h:commandLink> 
                             </h:column>
                         </h:dataTable>
                     </h:form>

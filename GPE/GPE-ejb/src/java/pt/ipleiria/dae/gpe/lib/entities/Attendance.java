@@ -34,7 +34,7 @@ public class Attendance extends AbstractEntity implements Serializable {
     private Integer idAttendance;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "IDSTUDENT")
+    @JoinColumn(name = "IDUSER")
     @NotNull
     private Student student;
 
@@ -44,6 +44,7 @@ public class Attendance extends AbstractEntity implements Serializable {
     private Event event;
 
     @Basic(optional = false)
+    @NotNull
     private boolean present;
 
     public Attendance() {
@@ -53,6 +54,7 @@ public class Attendance extends AbstractEntity implements Serializable {
 
     public Attendance(Student student, Event event, boolean present) {
         this.idAttendance = 0;
+        this.student = student;
         this.event = event;
         this.present = present;
     }
