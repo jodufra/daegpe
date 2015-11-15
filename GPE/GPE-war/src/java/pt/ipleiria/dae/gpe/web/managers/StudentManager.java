@@ -75,11 +75,11 @@ public class StudentManager extends AbstractManager {
         attedance.setPresent(true);
         try {
             attendanceBean.save(attedance);
-            PresentSuccessMessage("eventattendancesform", "Registada com sucesso");
+            PresentSuccessMessage("eventattendancesform", "Participação registada com sucesso");
         } catch (EntityValidationException eve) {
             PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
         } catch (EntityNotFoundException enf) {
-            PresentErrorMessage("eventattendancesform", "Verifique que o Evento ainda existem.");
+            PresentErrorMessage("eventattendancesform", "Verifique se o evento ainda existe ou se os registos de presenças estão abertos.");
         }
     }
 
