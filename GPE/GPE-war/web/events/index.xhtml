@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:body>
+        <ui:composition template="/dashboard.xhtml">
+            <ui:define name="title">Eventos</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Eventos"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Eventos</li>
+                <li><h:link outcome='#{redirect.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">lista de Eventos</div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="input-group input-group-dynamic ">
+                                <input type="text" class="form-control" value=""/>
+                                <label>Id Utilizador</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="input-group input-group-dynamic ">
+                                <input type="text" class="form-control" value="Some name"/>
+                                <label>Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

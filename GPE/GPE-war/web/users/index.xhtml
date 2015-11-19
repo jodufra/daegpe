@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <ui:composition template="/dashboard.xhtml">
+            <ui:define name="title">Utilizadores</ui:define>
+
+            <ui:define name="active-sidebar-option">
+                <input type="hidden" name="active-sidebar-option" value="Utilizadores"/>   
+            </ui:define>
+
+            <ui:define name="breadcrumb">
+                <li>Utilizadores</li>
+                <li><h:link outcome='#{redirect.GenerateRelativeURL("/dashboard")}' >Dashboard </h:link></li>
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="panel">
+                    <div class="panel-heading">
+                        Listagem Utilizadores
+                        <h:form class="pull-right">
+                            <h:commandLink id="newUser" class="btn btn-success" value="Adicionar" action='#{redirect.GenerateRelativeURL("/users/detail")}' >
+                                <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{null}"/>
+                            </h:commandLink>
+                        </h:form>
+                    </div>
+
+                    <h:dataTable var="User" value="#{usersManager.userIndexModel.users}" class="table table-striped" >
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Id"/>
+                            </f:facet>   
+                            <h:outputText value="#{User.internalId}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Name"/>
+                            </f:facet>   
+                            <h:outputText value="#{User.name}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value="Email"/>
+                            </f:facet>   
+                            <h:outputText value="#{User.email}"/>
+                        </h:column>
+                        <h:column> 
+                            <f:facet name="header">
+                                <h:outputText value=""/>
+                            </f:facet>   
+                            <h:form>
+                                <h:commandLink actionListener="#{usersManager.removeUser}" class="pull-right btn btn-danger fa " value="&#xf1f8;"  />
+                                <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirect.GenerateRelativeURL("/users/detail")}' >
+                                    <f:setPropertyActionListener target="#{usersManager.userDetailModel.user}" value="#{User}"/>
+                                </h:commandLink>
+                            </h:form>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
