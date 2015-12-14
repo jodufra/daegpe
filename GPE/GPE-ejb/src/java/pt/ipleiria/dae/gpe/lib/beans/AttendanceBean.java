@@ -21,11 +21,11 @@ import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
-import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
-import pt.ipleiria.dae.gpe.lib.utilities.StudentAttendanceFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.EventOrderBy;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentAttendanceFindOptions;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
 
 /**
@@ -57,7 +57,7 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
             if (dto.getStudent().isNew()) {
                 errors.add(EntityValidationError.ATTENDANCE_STUDENT_IS_NEW);
             }
-            if (dto.getStudent().getType() != UserType.Student) {
+            if (dto.getStudent().getGroup() != GROUP.Student) {
                 errors.add(EntityValidationError.ATTENDANCE_USER_NOT_STUDENT);
             }
         }
@@ -113,7 +113,7 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
         List<Student> students = em.createQuery(query, Student.class).getResultList();
         for (Event event : events) {
             for (Student student : students) {
-                if (student.getType() != UserType.Student) {
+                if (student.getUserGroup().getGroupName() != GROUP.Student) {
                     continue;
                 }
                 query = "SELECT COUNT(a) FROM Attendance a JOIN a.event e, a.student s WHERE e.idEvent = " + event.getIdEvent() + " AND s.idUser = " + student.getIdUser();

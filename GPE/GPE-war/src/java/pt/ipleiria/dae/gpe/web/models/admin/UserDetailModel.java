@@ -6,7 +6,7 @@
 package pt.ipleiria.dae.gpe.web.models.admin;
 
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 
 /**
  *
@@ -20,7 +20,7 @@ public class UserDetailModel {
     private String email;
     private String newPassword;
     private boolean isNew;
-    private UserType type;
+    private GROUP type;
 
     public UserDetailModel() {
     }
@@ -37,7 +37,7 @@ public class UserDetailModel {
             this.email = user.getEmail();
             this.newPassword = "";
             this.isNew = user.isNew();
-            this.type = user.getType();
+            this.type = user.getGroup();
         } else {
             this.idUser = 0;
             this.internalId = "";
@@ -45,7 +45,7 @@ public class UserDetailModel {
             this.email = "";
             this.newPassword = "";
             this.isNew = true;
-            this.type = UserType.Student;
+            this.type = GROUP.Student;
         }
     }
 
@@ -57,8 +57,8 @@ public class UserDetailModel {
         return user;
     }
 
-    public UserType[] getUserTypes() {
-        return UserType.values();
+    public GROUP[] getUserTypes() {
+        return GROUP.values();
     }
 
     public String getInternalId() {
@@ -69,11 +69,11 @@ public class UserDetailModel {
         this.internalId = internalId;
     }
 
-    public UserType getType() {
+    public GROUP getType() {
         return type;
     }
 
-    public void setType(UserType type) {
+    public void setType(GROUP type) {
         this.type = type;
     }
 

@@ -8,8 +8,8 @@ package pt.ipleiria.dae.gpe.web.models.admin;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.List;
-import pt.ipleiria.dae.gpe.lib.utilities.AdminUserFindOptions;
-import pt.ipleiria.dae.gpe.lib.utilities.UserOrderBy;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.AdminUserFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.UserOrderBy;
 
 /**
  *

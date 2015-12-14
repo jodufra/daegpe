@@ -8,12 +8,15 @@ package pt.ipleiria.dae.gpe.lib.entities;
 import pt.ipleiria.dae.gpe.lib.core.AbstractEntity;
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -27,25 +30,25 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findByIduser", query = "SELECT u FROM User u WHERE u.idUser = :iduser"),
-    @NamedQuery(name = "User.findByInternalid", query = "SELECT u FROM User u WHERE u.internalId = :internalid"),
+    @NamedQuery(name = "User.findByInternalid", query = "SELECT u FROM User u WHERE u.internalId = :internalId"),
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
+    @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.internalId = :internalId OR u.email = :email"),
     @NamedQuery(name = "User.findBySearch", query = "SELECT u FROM User u WHERE u.search = :search"),
-    @NamedQuery(name = "User.findByManagers", query = "SELECT u FROM User u WHERE u.type = pt.ipleiria.dae.gpe.lib.entities.UserType.Manager")
 })
 @Table(name = "USERS", uniqueConstraints = @UniqueConstraint(columnNames = {"INTERNALID"}))
 public class User extends AbstractEntity implements Serializable {
 
     public static boolean IsAdministrator(User user) {
-        return (user instanceof Administrator || user.type == UserType.Administrator);
+        return (user instanceof Administrator || user.userGroup.getGroupName() == GROUP.Administrator);
     }
 
     public static boolean IsManager(User user) {
-        return (user instanceof Manager || user.type == UserType.Manager);
+        return (user instanceof Manager || user.userGroup.getGroupName() == GROUP.Manager);
     }
 
     public static boolean IsStudent(User user) {
-        return (user instanceof Student || user.type == UserType.Student);
+        return (user instanceof Student || user.userGroup.getGroupName() == GROUP.Student);
     }
 
     @Id
@@ -55,7 +58,8 @@ public class User extends AbstractEntity implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    protected UserType type;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    protected UserGroup userGroup;
 
     @Basic(optional = false)
     @NotNull
@@ -81,22 +85,24 @@ public class User extends AbstractEntity implements Serializable {
     @Size(max = 255)
     protected String search;
 
-    public User() {
+    protected User() {
     }
 
-    public User(String internalId, String name, String email, String password) {
+    protected User(String internalId, String name, String email, String password, GROUP group) {
         this.internalId = internalId;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.userGroup = new UserGroup(group, this);
     }
 
-    public User(Integer idUser, String internalId, String name, String email, String password, String search) {
+    protected User(Integer idUser, String internalId, String name, String email, String password, GROUP group, String search) {
         this.idUser = idUser;
         this.internalId = internalId;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.userGroup = new UserGroup(group, this);
         this.search = search;
     }
 
@@ -108,12 +114,12 @@ public class User extends AbstractEntity implements Serializable {
         this.idUser = idUser;
     }
 
-    public UserType getType() {
-        return type;
+    public UserGroup getUserGroup() {
+        return userGroup;
     }
 
-    public void setType(UserType type) {
-        this.type = type;
+    public void setUserGroup(UserGroup group) {
+        this.userGroup = group;
     }
 
     public String getInternalId() {

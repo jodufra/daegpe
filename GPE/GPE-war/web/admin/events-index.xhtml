@@ -17,7 +17,13 @@
             </ui:define>
 
             <ui:define name="breadcrumb">
-                <li>Eventos</li>
+                <c:if test="#{adminManager.eventDetailModel.internalId != null}">
+                    <li>Grupo #{adminManager.eventDetailModel.internalId}</li>
+                </c:if>
+                <c:if test="#{adminManager.eventDetailModel.internalId == null}">
+                    <li>Eventos</li>
+                </c:if>
+                <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-group-index")}' >Grupos de Eventos</h:link></li>
                 <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' >Dashboard </h:link></li>
             </ui:define>
 
@@ -155,11 +161,9 @@
                             </h:column>
                             <h:column >
                                 <f:facet name = "header"></f:facet>
-                                <h:form>
-                                    <h:commandButton value = "Visualizar Eventos" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-individual-list")}'>
-                                        <f:setPropertyActionListener target="#{adminManager.eventIndividualListModel.eventDTO}" value="#{Event}"/>
-                                    </h:commandButton>
-                                </h:form>
+                                <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/admin/events-detail")}' >
+                                    <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{Event}"/>
+                                </h:commandLink>
                             </h:column>
                         </h:dataTable>
                         <div class="row text-center pagination">

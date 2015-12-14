@@ -5,20 +5,20 @@
  */
 package pt.ipleiria.dae.gpe.web.models.manager;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
-import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
-import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
-import pt.ipleiria.dae.gpe.lib.utilities.EventType;
-import pt.ipleiria.dae.gpe.lib.utilities.ManagerUserFindOptions;
-import pt.ipleiria.dae.gpe.lib.utilities.Room;
-import pt.ipleiria.dae.gpe.lib.utilities.UserOrderBy;
+import pt.ipleiria.dae.gpe.lib.entities.EventType;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.ManagerUserFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.UserOrderBy;
 
 /**
  *
@@ -46,6 +46,10 @@ public class EventDetailModel {
     public String getTitle() {
         return event.getName();
     }
+    
+    public EventDTO getEvent(){
+        return event;
+    }
 
     public void setEvent(EventDTO event) {
         this.event = event;
@@ -54,24 +58,8 @@ public class EventDetailModel {
         this.attendancePassword = "";
     }
 
-    public EventDTO getEvent() {
-        return event;
-    }
-
     public Integer getIdEvent() {
         return event.getIdEvent();
-    }
-
-    public String getName() {
-        return event.getName();
-    }
-
-    public UCDTO getUc() {
-        return event.getUc();
-    }
-
-    public ManagerDTO getManager() {
-        return event.getManager();
     }
 
     public String getInternalId() {
@@ -82,32 +70,20 @@ public class EventDetailModel {
         return event.getEventType();
     }
 
-    public EventDayWeek getEventDayWeek() {
-        return event.getEventDayWeek();
+    public String getName() {
+        return event.getName();
     }
 
-    public Room getRoom() {
+    public String getRoom() {
         return event.getRoom();
     }
 
-    public Integer getStartHour() {
-        return event.getStartHour();
+    public Calendar getEventDate() {
+        return event.getEventDate();
     }
 
-    public Integer getEndHour() {
-        return event.getEndHour();
-    }
-
-    public String getStartWeek() {
-        return event.getStartWeek();
-    }
-
-    public Integer getEndWeek() {
-        return event.getEndWeek();
-    }
-
-    public String getSemester() {
-        return event.getSemester();
+    public Calendar getEventDuration() {
+        return event.getEventDuration();
     }
 
     public boolean isAttendanceActive() {
@@ -116,6 +92,18 @@ public class EventDetailModel {
 
     public boolean isAttendanceActivated() {
         return event.isAttendanceActivated();
+    }
+
+    public String getAttendancePassword() {
+        return event.getAttendancePassword();
+    }
+
+    public UCDTO getUc() {
+        return event.getUc();
+    }
+
+    public UserDTO getManager() {
+        return event.getManager();
     }
 
     public String getTab() {
@@ -132,10 +120,6 @@ public class EventDetailModel {
 
     public void setUserSearch(String userSearch) {
         this.userSearch = userSearch;
-    }
-
-    public String getAttendancePassword() {
-        return attendancePassword;
     }
 
     public void setAttendancePassword(String attendancePassword) {

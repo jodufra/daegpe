@@ -7,7 +7,7 @@ package pt.ipleiria.dae.gpe.lib.dtos;
 
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
 import pt.ipleiria.dae.gpe.lib.entities.User;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 
 /**
@@ -17,29 +17,29 @@ import pt.ipleiria.dae.gpe.lib.utilities.Security;
 public class UserDTO extends AbstractDTO {
 
     public static boolean IsAdministrator(UserDTO user) {
-        return (user instanceof AdministratorDTO || user.type == UserType.Administrator);
+        return (user instanceof AdministratorDTO || user.group == GROUP.Administrator);
     }
 
     public static boolean IsManager(UserDTO user) {
-        return (user instanceof ManagerDTO || user.type == UserType.Manager);
+        return (user instanceof ManagerDTO || user.group == GROUP.Manager);
     }
 
     public static boolean IsStudent(UserDTO user) {
-        return (user instanceof StudentDTO || user.type == UserType.Student);
+        return (user instanceof StudentDTO || user.group == GROUP.Student);
     }
 
     protected Integer idUser;
-    protected UserType type;
+    protected GROUP group;
     protected String internalId;
     protected String name;
     protected String email;
     protected final String password;
     protected String newPassword;
 
-    public UserDTO(Integer idUser, UserType type, String internalId, String name, String email) {
+    public UserDTO(Integer idUser, GROUP type, String internalId, String name, String email) {
         super(null);
         this.idUser = idUser;
-        this.type = type;
+        this.group = type;
         this.internalId = internalId;
         this.name = name;
         this.email = email;
@@ -48,10 +48,10 @@ public class UserDTO extends AbstractDTO {
         this.New = idUser == 0;
     }
 
-    public UserDTO(UserType type, String internalId, String name, String email, String newPassword) {
+    public UserDTO(GROUP type, String internalId, String name, String email, String newPassword) {
         super(null);
         this.idUser = 0;
-        this.type = type;
+        this.group = type;
         this.internalId = internalId;
         this.name = name;
         this.email = email;
@@ -62,7 +62,7 @@ public class UserDTO extends AbstractDTO {
     public UserDTO(User user) {
         super(user);
         this.idUser = user.getIdUser();
-        this.type = user.getType();
+        this.group = user.getUserGroup().getGroupName();
         this.internalId = user.getInternalId();
         this.name = user.getName();
         this.email = user.getEmail();
@@ -78,8 +78,8 @@ public class UserDTO extends AbstractDTO {
         this.idUser = idUser;
     }
 
-    public UserType getType() {
-        return type;
+    public GROUP getGroup() {
+        return group;
     }
 
     public String getInternalId() {
@@ -111,7 +111,7 @@ public class UserDTO extends AbstractDTO {
     }
 
     public final void setNewPassword(String newPassword) {
-        this.newPassword = Security.GenerateMD5Hash(newPassword);
+        this.newPassword = Security.GenerateSHA256Hash(newPassword);
     }
 
     public boolean hasNewPassword() {

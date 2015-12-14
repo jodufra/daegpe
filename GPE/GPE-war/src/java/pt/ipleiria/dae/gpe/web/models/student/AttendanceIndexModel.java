@@ -10,8 +10,8 @@ import javax.faces.context.FacesContext;
 import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
-import pt.ipleiria.dae.gpe.lib.utilities.AttendanceOrderBy;
-import pt.ipleiria.dae.gpe.lib.utilities.StudentAttendanceFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.AttendanceOrderBy;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentAttendanceFindOptions;
 
 /**
  *

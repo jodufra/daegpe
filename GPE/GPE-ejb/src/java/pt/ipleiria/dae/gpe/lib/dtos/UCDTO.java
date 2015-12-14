@@ -7,9 +7,7 @@ package pt.ipleiria.dae.gpe.lib.dtos;
 
 import java.util.Collection;
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
-import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
-import static pt.ipleiria.dae.gpe.lib.entities.UserType.Student;
 
 /**
  *

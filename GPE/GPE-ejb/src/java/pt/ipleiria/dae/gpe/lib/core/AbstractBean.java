@@ -100,6 +100,15 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         return generateDTO(entity);
     }
 
+    public DTO findFirst() {
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        List<Entity> list = getEntityManager().createQuery(cq).setFirstResult(0).setMaxResults(1).getResultList();
+        if(list.isEmpty())
+            return null;
+        return generateDTO(list.get(0));
+    }
+
     public List<DTO> findAll() {
         CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));

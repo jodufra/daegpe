@@ -6,7 +6,7 @@
 package pt.ipleiria.dae.gpe.lib.dtos;
 
 import pt.ipleiria.dae.gpe.lib.entities.Administrator;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 
 /**
  *
@@ -15,11 +15,11 @@ import pt.ipleiria.dae.gpe.lib.entities.UserType;
 public class AdministratorDTO extends UserDTO {
 
     public AdministratorDTO(Integer idUser, String internalId, String name, String email) {
-        super(idUser, UserType.Administrator, internalId, name, email);
+        super(idUser, GROUP.Administrator, internalId, name, email);
     }
 
     public AdministratorDTO(String internalId, String name, String email, String newPassword) {
-        super(UserType.Administrator, internalId, name, email, newPassword);
+        super(GROUP.Administrator, internalId, name, email, newPassword);
     }
 
     public AdministratorDTO(Administrator admin) {

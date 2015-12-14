@@ -15,6 +15,8 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -22,19 +24,22 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.ServletException;
 import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.EventGroup;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.web.models.admin.EventDetailModel;
+import pt.ipleiria.dae.gpe.web.models.admin.EventGroupDetailModel;
+import pt.ipleiria.dae.gpe.web.models.admin.EventGroupIndexModel;
 import pt.ipleiria.dae.gpe.web.models.admin.EventIndexModel;
-import pt.ipleiria.dae.gpe.web.models.admin.EventIndividualListModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UCDetailModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UCIndexModel;
 import pt.ipleiria.dae.gpe.web.models.admin.UserDetailModel;
@@ -60,7 +65,8 @@ public class AdminManager extends AbstractManager {
 
     private EventIndexModel eventIndexModel;
     private EventDetailModel eventDetailModel;
-    private EventIndividualListModel eventIndividualListModel;
+    private EventGroupIndexModel eventGroupIndexModel;
+    private EventGroupDetailModel eventGroupDetailModel;
     private UCIndexModel ucIndexModel;
     private UCDetailModel ucDetailModel;
     private UserIndexModel userIndexModel;
@@ -74,14 +80,15 @@ public class AdminManager extends AbstractManager {
         errorMessages.put(EntityValidationError.UC_NAME_REQUIRED, "Nome é Obrigatório.");
         errorMessages.put(EntityValidationError.UC_IS_NEW, "A UC ainda não existe.");
         errorMessages.put(EntityValidationError.USER_INTERNALID_REQUIRED, "Id Utilizador é obrigatório.");
+        errorMessages.put(EntityValidationError.USER_USERGROUP_INVALID, "Tipo de Utilizador inválido.");
         errorMessages.put(EntityValidationError.USER_NAME_REQUIRED, "Nome é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_REQUIRED, "Email é obrigatório.");
         errorMessages.put(EntityValidationError.USER_EMAIL_PATTERN, "Email inválido.");
-        errorMessages.put(EntityValidationError.USER_USERTYPE_INVALID, "Tipo de Utilizador inválido.");
         errorMessages.put(EntityValidationError.USER_IS_NOT_ADMIN, "O Utilizador não é Administrador.");
         errorMessages.put(EntityValidationError.USER_IS_NOT_MANAGER, "O Utilizador não é Gestor.");
         errorMessages.put(EntityValidationError.USER_IS_NOT_STUDENT, "O Utilizador não é Estudante.");
         errorMessages.put(EntityValidationError.USER_IS_NEW, "O Utilizador ainda não existe.");
+        errorMessages.put(EntityValidationError.USER_IS_REQUIRED, "O Utilizador é obrigatório.");
         errorMessages.put(EntityValidationError.USER_INVALID, "O ID inserido não é valido");
         errorMessages.put(EntityValidationError.EVENT_WEEK_INVALID, "As semanas do Evento estão incorrectas");
         errorMessages.put(EntityValidationError.EVENT_NOT_FOUND, "Evento por criar");
@@ -92,6 +99,10 @@ public class AdminManager extends AbstractManager {
         errorMessages.put(EntityValidationError.ATTENDANCE_NULL_EVENT, "Evento Inválido.");
         errorMessages.put(EntityValidationError.ATTENDANCE_EVENT_IS_NEW, "Evento ainda não registado.");
         errorMessages.put(EntityValidationError.ATTENDANCE_CANT_BE_REPEATED, "Utilizador já está registado numa Presença no Evento.");
+        errorMessages.put(EntityValidationError.EVENTGROUP_DATESTART_REQUIRED, "A Data de Inicio é obrigatória.");
+        errorMessages.put(EntityValidationError.EVENTGROUP_DATEEND_REQUIRED, "A Data de Fim é obrigatória.");
+        errorMessages.put(EntityValidationError.EVENTGROUP_DATESTART_HIGHER_DATEEND, "A Data de Inicio não pode ser superior à Data de Fim.");
+        errorMessages.put(EntityValidationError.EVENTGROUP_DAYOFWEEK_REQUIRED, "Seleccione pelo menos um dia da semana.");
     }
 
     @PostConstruct
@@ -102,7 +113,8 @@ public class AdminManager extends AbstractManager {
         userDetailModel = new UserDetailModel();
         eventIndexModel = new EventIndexModel(eventBean);
         eventDetailModel = new EventDetailModel(eventBean, ucBean, userBean);
-        eventIndividualListModel = new EventIndividualListModel(eventBean);
+        eventGroupIndexModel = new EventGroupIndexModel(eventBean);
+        eventGroupDetailModel = new EventGroupDetailModel(ucBean, userBean);
     }
 
     ////////////////////////////////////////////
@@ -178,7 +190,7 @@ public class AdminManager extends AbstractManager {
         }
     }
 
-    public void removeUser(ActionEvent event) throws IOException {
+    public void removeUser(ActionEvent event) throws IOException, ServletException {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("userId");
             Object id = param.getValue();
@@ -186,7 +198,7 @@ public class AdminManager extends AbstractManager {
 
             UserDTO user = (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
             if (Objects.equals(user.getIdUser(), id)) {
-                SessionManager sessionManager = new SessionManager();
+                UserManager sessionManager = new UserManager();
                 sessionManager.logout();
             } else {
                 PresentSuccessMessage("userindexform", "Utilizador removido com sucesso.");
@@ -198,6 +210,21 @@ public class AdminManager extends AbstractManager {
 
     ////////////////////////////////////////////
     ///////////////// Events ///////////////////
+    public void saveEventGroup() {
+        EventGroup eventGroup = this.eventGroupDetailModel.provideEventGroup();
+        try {
+            eventBean.save(eventGroup);
+            eventIndexModel.setInternalId(eventGroup.getInternalId());
+            Redirect("admin/events-index");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("eventgroupdetailform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("eventgroupdetailform", "Verifique se o Gestor do Evento e a Unidade Curricular ainda existem.");
+        } catch (IOException ex) {
+            PresentErrorMessage("eventgroupdetailform", ex.getMessage());
+        }
+    }
+
     public void saveEvent() {
         EventDTO eventDTO = this.eventDetailModel.provideEventDTO();
         boolean wasNew = eventDTO.isNew();
@@ -207,7 +234,7 @@ public class AdminManager extends AbstractManager {
         } catch (EntityValidationException eve) {
             PresentErrorMessages("eventdetailform", eve.getEntityValidationErrors(), errorMessages);
         } catch (EntityNotFoundException enf) {
-            PresentErrorMessage("eventdetailform", "Utilizador a ser editado, não foi encontrado ou foi removido.");
+            PresentErrorMessage("eventdetailform", "Evento a ser editado não foi encontrado ou foi removido.");
         }
     }
 
@@ -217,6 +244,7 @@ public class AdminManager extends AbstractManager {
         eventBean.remove(id);
     }
 
+    /*
     public void importStudentsFromText() {
         List<EntityValidationError> errors = new LinkedList<>();
         EventDTO eventDTO = eventDetailModel.provideEventDTO();
@@ -240,7 +268,7 @@ public class AdminManager extends AbstractManager {
                     for (String str : studentsId) {
                         UserDTO userDTO = userBean.find(str);
                         if (userDTO != null) {
-                            if (userDTO.getType() == UserType.Student) {
+                            if (userDTO.getGroup() == GROUP.Student) {
                                 students.add(userDTO);
                             }
                         } else {
@@ -273,7 +301,7 @@ public class AdminManager extends AbstractManager {
         }
     }
 
-    public void importStudentsFromUC() { 
+    public void importStudentsFromUC() {
         EventDTO eventDTO = eventDetailModel.provideEventDTO();
         Collection<AttendanceDTO> attendances;
         if (eventDetailModel.getStudentsUCDTO() != 0 && eventDetailModel.getStudentsUCDTO() != null) {
@@ -299,7 +327,7 @@ public class AdminManager extends AbstractManager {
         } catch (EntityValidationException ex) {
             PresentErrorMessage("importstudentsform", "A UC Seleccionada não têm Alunos");
         }
-    }
+    }*/
 
     ////////////////////////////////////////////
     ///////////////// Models ///////////////////
@@ -327,12 +355,12 @@ public class AdminManager extends AbstractManager {
         return eventDetailModel;
     }
 
-    public EventIndividualListModel getEventIndividualListModel() {
-        return eventIndividualListModel;
+    public EventGroupIndexModel getEventGroupIndexModel() {
+        return eventGroupIndexModel;
     }
 
-    public void setEventIndividualListModel(EventIndividualListModel eventIndividualListModel) {
-        this.eventIndividualListModel = eventIndividualListModel;
+    public EventGroupDetailModel getEventGroupDetailModel() {
+        return eventGroupDetailModel;
     }
 
 }

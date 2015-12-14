@@ -26,17 +26,17 @@
                     <div class="btn-group">
                         <h:form>
                             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                #{sessionManager.user.name} <span class="caret"></span>
+                                #{userManager.user.name} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li>
                                     <h:commandLink  class="" value="Minha Conta" action='#{redirectManager.GenerateRelativeURL("/student/users-detail")}' >
-                                        <f:setPropertyActionListener target="#{studentManager.userDetailModel.user}" value="#{sessionManager.user}"/>
+                                        <f:setPropertyActionListener target="#{studentManager.userDetailModel.user}" value="#{userManager.user}"/>
                                     </h:commandLink>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
-                                    <h:commandLink action="#{sessionManager.logout()}" class="" value="Logout"/>
+                                    <h:commandLink action="#{userManager.logout()}" class="" value="Logout"/>
                                 </li>
                             </ul>
                         </h:form>
