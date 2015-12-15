@@ -5,13 +5,14 @@
  */
 package pt.ipleiria.dae.gpe.lib.dtos;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 
-/**
- *
- * @author joeld
- */
+@XmlRootElement(name = "student")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class StudentDTO extends UserDTO {
 
     public StudentDTO(Integer idUser, String internalId, String name, String email) {

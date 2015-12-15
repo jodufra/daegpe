@@ -7,10 +7,7 @@ package pt.ipleiria.dae.gpe.lib.core;
 
 import java.io.Serializable;
 
-/**
- *
- * @author Joel
- */
+
 public abstract class AbstractDTO implements Serializable {
 
     protected boolean New;

@@ -5,15 +5,16 @@
  */
 package pt.ipleiria.dae.gpe.lib.dtos;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
 import pt.ipleiria.dae.gpe.lib.entities.User;
 import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 
-/**
- *
- * @author joeld
- */
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class UserDTO extends AbstractDTO {
 
     public static boolean IsAdministrator(UserDTO user) {

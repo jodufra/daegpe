@@ -5,13 +5,14 @@
  */
 package pt.ipleiria.dae.gpe.lib.dtos;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import pt.ipleiria.dae.gpe.lib.entities.Administrator;
 import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 
-/**
- *
- * @author joeld
- */
+@XmlRootElement(name = "administrator")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AdministratorDTO extends UserDTO {
 
     public AdministratorDTO(Integer idUser, String internalId, String name, String email) {
