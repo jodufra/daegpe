@@ -207,9 +207,12 @@ public class EventDetailModel {
     public String getTab() {
         return tab;
     }
-
+    
     public void setTab(String tab) {
         this.tab = tab;
     }
-
+    public EventType[] getEventTypes()
+    {
+        return EventType.values();
+    }
 }

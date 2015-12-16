@@ -26,7 +26,7 @@ public class EventGroupDetailModel {
 
     private final UCBean ucBean;
     private final UserBean userBean;
-
+    private Integer idEvent;
     private String internalId;
     private EventType eventType;
     private String name;
@@ -53,6 +53,7 @@ public class EventGroupDetailModel {
 
     public void setEventGroup(EventGroup eventGroup) {
         if (eventGroup != null) {
+            this.idEvent = 0;
             this.internalId = eventGroup.getInternalId();
             this.eventType = eventGroup.getEventType();
             this.name = eventGroup.getName();
@@ -72,6 +73,7 @@ public class EventGroupDetailModel {
             this.uc = eventGroup.getUc();
             this.manager = eventGroup.getManager();
         } else {
+            this.idEvent = 0;
             this.internalId = "";
             this.eventType = EventType.AULATEORICA;
             this.name = "";
@@ -171,7 +173,7 @@ public class EventGroupDetailModel {
 
     public String getTimetableStart() {
         if(timetableStart == null) return "";
-        int hour = timetableStart.get(Calendar.HOUR_OF_DAY) + 1;
+        int hour = timetableStart.get(Calendar.HOUR_OF_DAY);
         int minute = timetableStart.get(Calendar.MINUTE);
         return hour + ":" + minute;
     }
@@ -185,7 +187,7 @@ public class EventGroupDetailModel {
 
     public String getTimetableDuration() {
         if(timetableDuration == null) return "";
-        int hour = timetableDuration.get(Calendar.HOUR_OF_DAY) + 1;
+        int hour = timetableDuration.get(Calendar.HOUR_OF_DAY);
         int minute = timetableDuration.get(Calendar.MINUTE);
         return hour + ":" + minute;
     }
