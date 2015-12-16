@@ -38,10 +38,8 @@ public class UserRESTLayer {
     @Path("/{id}/ucs")
     //URL: http://localhost:8080/GPE_RESTWS/gpeapi/users/student/ucs
     public List<UCDTO> getAll(@PathParam("id") String idUser) throws EntityNotFoundException{
-        return ucBean.findFromStudent(new StudentUCFindOptions(1, 100, UCOrderBy.NameAsc, userBean.find(idUser), "search"));
+        StudentUCFindOptions options = new StudentUCFindOptions(1, 100, UCOrderBy.NameAsc, userBean.find(idUser), "");
+        return ucBean.findFromStudent(options);
     }
-    
-    
-    
    
 }
