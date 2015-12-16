@@ -1,14 +1,15 @@
 package pt.ipleiria.dae.gpe.lib.dtos;
 
 import java.util.Calendar;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
 import pt.ipleiria.dae.gpe.lib.entities.EventType;
 
-/**
- *
- * @author joeld
- */
+@XmlRootElement(name = "evento")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class EventDTO extends AbstractDTO {
 
     private final Integer idEvent;
@@ -24,6 +25,7 @@ public class EventDTO extends AbstractDTO {
     private UCDTO uc;
     private UserDTO manager;
 
+    
     public EventDTO() {
         super(null);
         idEvent = 0;

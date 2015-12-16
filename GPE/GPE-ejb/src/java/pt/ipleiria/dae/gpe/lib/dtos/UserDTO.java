@@ -37,6 +37,11 @@ public class UserDTO extends AbstractDTO {
     protected final String password;
     protected String newPassword;
 
+    public UserDTO(){
+        super();
+        this.password = "";
+    }
+    
     public UserDTO(Integer idUser, GROUP type, String internalId, String name, String email) {
         super(null);
         this.idUser = idUser;
@@ -70,6 +75,8 @@ public class UserDTO extends AbstractDTO {
         this.password = user.getPassword();
         this.newPassword = "";
     }
+    
+    
 
     public Integer getIdUser() {
         return idUser;

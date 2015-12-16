@@ -26,5 +26,8 @@ public class AdministratorDTO extends UserDTO {
     public AdministratorDTO(Administrator admin) {
         super(admin);
     }
-
+    
+    public AdministratorDTO(){
+        super();
+    }
 }

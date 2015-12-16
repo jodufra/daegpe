@@ -26,5 +26,9 @@ public class StudentDTO extends UserDTO {
     public StudentDTO(Student student) {
         super(student);
     }
+    
+    public StudentDTO(){
+        super();
+    }
 
 }

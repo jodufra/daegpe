@@ -26,5 +26,8 @@ public class ManagerDTO extends UserDTO {
     public ManagerDTO(Manager manager) {
         super(manager);
     }
-
+    
+    public ManagerDTO(){
+        super();
+    }
 }

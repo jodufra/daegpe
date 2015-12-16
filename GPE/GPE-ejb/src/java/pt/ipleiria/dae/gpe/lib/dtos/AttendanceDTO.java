@@ -5,13 +5,14 @@
  */
 package pt.ipleiria.dae.gpe.lib.dtos;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 
-/**
- *
- * @author joeld
- */
+@XmlRootElement(name = "attendance")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AttendanceDTO extends AbstractDTO {
 
     private Integer idAttendance;
@@ -19,6 +20,10 @@ public class AttendanceDTO extends AbstractDTO {
     private EventDTO event;
     private boolean present;
 
+    public AttendanceDTO(){
+        super();
+    }
+    
     public AttendanceDTO(UserDTO student, EventDTO event) {
         super(null);
         this.idAttendance = 0;
