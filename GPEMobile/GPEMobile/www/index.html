@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-pt">
+
 <head>
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
@@ -17,12 +18,17 @@
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/app/main.ctrl.js"></script>
     <script type="text/javascript" src="js/app/login.ctrl.js"></script>
-    <script type="text/javascript" src="js/app/admin/dashboard.ctrl.js"></script>
-    <script type="text/javascript" src="js/app/admin/ucs/ucs-index.ctrl.js"></script>
-    <script type="text/javascript" src="js/app/admin/ucs/ucs-detail.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/dashboard.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/uc/uc-list.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/uc/uc-detail.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/event/event-list.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/user/user-detail.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/user/user-list.ctrl.js"></script>
+
     <script type="text/javascript" src="js/services/login.svc.js"></script>
     <title>GPE</title>
 </head>
+
 <body ng-app="GPE" ng-controller="MainController">
     <div class="sidebar sidebar-left" ui-yield-to="leftSidebar"></div>
     <div class="app">
@@ -55,4 +61,5 @@
         //app.initialize();
     </script>
 </body>
+
 </html>

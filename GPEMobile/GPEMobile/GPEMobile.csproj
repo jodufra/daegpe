@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -42,11 +42,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="www\js\app\admin\dashboard.tpl.html" />
-    <Content Include="www\js\app\admin\leftsidebar.tpl.html" />
-    <Content Include="www\js\app\admin\uc\uc-detail.ctrl.js" />
-    <Content Include="www\js\app\admin\uc\uc-list.ctrl.js" />
-    <Content Include="www\js\app\admin\dashboard.ctrl.js" />
+    <Content Include="www\js\app\student\dashboard.tpl.html" />
+    <Content Include="www\js\app\student\leftsidebar.tpl.html" />
+    <Content Include="www\js\app\student\uc\uc-detail.ctrl.js" />
+    <Content Include="www\js\app\student\uc\uc-list.ctrl.js" />
+    <Content Include="www\js\app\student\dashboard.ctrl.js" />
     <Content Include="www\js\app\main.ctrl.js" />
     <Content Include="www\js\app\login.tpl.html" />
     <Content Include="www\js\app\login.ctrl.js" />
