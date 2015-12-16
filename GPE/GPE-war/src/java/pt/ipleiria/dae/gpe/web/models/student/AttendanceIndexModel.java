@@ -8,10 +8,12 @@ package pt.ipleiria.dae.gpe.web.models.student;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
+import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.beans.query.order.AttendanceOrderBy;
 import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentAttendanceFindOptions;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 
 /**
  *
@@ -20,6 +22,8 @@ import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentAttendanceFindOptions;
 public class AttendanceIndexModel {
 
     private final AttendanceBean attendanceBean;
+    
+    private final UserBean userBean;
 
     public int pageId;
     public final int pageSize = 20;
@@ -29,8 +33,9 @@ public class AttendanceIndexModel {
     public long count;
     public int pagesCount;
 
-    public AttendanceIndexModel(AttendanceBean attendanceBean) {
+    public AttendanceIndexModel(AttendanceBean attendanceBean, UserBean userBean) {
         this.attendanceBean = attendanceBean;
+        this.userBean = userBean;
         this.pageId = 1;
         this.orderBy = AttendanceOrderBy.EventNameAsc;
         this.search = "";
@@ -138,8 +143,10 @@ public class AttendanceIndexModel {
         return pagesCount;
     }
 
-    public List<AttendanceDTO> getAttendances() {
-        StudentAttendanceFindOptions options = new StudentAttendanceFindOptions(pageId, pageSize, orderBy, (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"), search);
+    //TODO - Melhorar
+    public List<AttendanceDTO> getAttendances() throws EntityNotFoundException {
+        UserDTO userDTO = userBean.findByUsername(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+        StudentAttendanceFindOptions options = new StudentAttendanceFindOptions(pageId, pageSize, orderBy, userDTO, search);
         List<AttendanceDTO> list = attendanceBean.findStudentAttendances(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
