@@ -5,21 +5,23 @@
  */
 package pt.ipleiria.dae.gpe.lib.beans;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import pt.ipleiria.dae.gpe.lib.dtos.AdministratorDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
-import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
+import pt.ipleiria.dae.gpe.lib.entities.EventGroup;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
-import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
-import pt.ipleiria.dae.gpe.lib.utilities.EventType;
-import pt.ipleiria.dae.gpe.lib.utilities.Room;
+import pt.ipleiria.dae.gpe.lib.entities.EventType;
 
 /**
  *
@@ -59,11 +61,11 @@ public class MigrationBean {
             student = new StudentDTO("2120189", "Duarte Mateus", "2120189@my.ipleiria.pt", "student");
             userBean.save(student);
 
-            student = new StudentDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "student");
+            student = new StudentDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "student");
             userBean.save(student);
 
-            admin = new AdministratorDTO("2120680", "Pedro Silva", "2120680@my.ipleiria.pt", "student");
-            userBean.save(admin);
+            student = new StudentDTO("2121000", "Joel Francisco", "2121000@my.ipleiria.pt", "student");
+            userBean.save(student);
 
             for (int i = 0; i < 100; i++) {
                 String id = (9999000 + i) + "";
@@ -81,13 +83,19 @@ public class MigrationBean {
             }
 
             // Events
-            EventDTO event;
+            EventGroup eventGroup;
             uc = new UCDTO(1, "DAE", "Desenvolvimento de Aplicações Empresariais");
             manager = new ManagerDTO(2, "manager", "Manager", "manager@gpe.pt");
-            event = new EventDTO("DAE T", EventType.AULATEORICA, "DAE Teórico", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
-            eventBean.save(event);
-            event = new EventDTO("DAE P", EventType.AULAPRATICA, "DAE Prático", EventDayWeek.SABADO, Room.A, 4, 17, "2015:13:15;2016:1:8", 22, "1:2", uc, manager);
-            eventBean.save(event);
+            Calendar dateStart = new GregorianCalendar(2015, 8, 13);
+            Calendar dateEnd = new GregorianCalendar(2016, 0, 8);
+            Calendar timeStart = new GregorianCalendar(0, 0, 0, 18, 0, 0);
+            Calendar timeDuration = new GregorianCalendar(0, 0, 0, 2, 0, 0);
+            eventGroup = new EventGroup("DAE (T)", EventType.AULATEORICA, "DAE Teórico", "A.S.2.12", dateStart, dateEnd, timeStart, timeDuration, false, false, true, false, false, false, false, new ArrayList<Integer>(), uc, manager);
+            eventBean.save(eventGroup);
+            timeStart = new GregorianCalendar(0, 0, 0, 15, 0, 0);
+            timeDuration = new GregorianCalendar(0, 0, 0, 2, 0, 0);
+            eventGroup = new EventGroup("DAE (PL1)", EventType.AULAPRATICA, "DAE Prático Laboratorial 1", "A.S.2.12", dateStart, dateEnd, timeStart, timeDuration, false, true, false, false, false, false, false, new ArrayList<Integer>(), uc, manager);
+            eventBean.save(eventGroup);
 
             //UC to Students & Student to UCs
             student = new StudentDTO(3, "student", "Student Dummy", "dummy@my.ipleiria.pt");
@@ -97,13 +105,12 @@ public class MigrationBean {
             // Attendances
             //AttendanceDTO attendance;
             //student = new StudentDTO(3, "student", "Student", "student@my.ipleiria.pt");
-            //event = new EventDTO(1, "DAE T", EventType.AULATEORICA, "DAE Te�rico", EventDayWeek.SABADO, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
+            //event = new EventDTO(1, "DAE T", EventType.AULATEORICA, "DAE Te�rico", WeekDay.SATURDAY, Room.D, 4, 17, "2015:13:15;2016:1:4", 22, "1:2", uc, manager);
             //attendance = new AttendanceDTO(student, event);
             //attendanceBean.save(attendance);
             //attendance = new AttendanceDTO(1, student, event, false);
             //userBean.addAttendanceStudent(attendance);
             //eventBean.addAttendanceEvent(attendance);
-
             System.out.println("DB seeded");
         } catch (EntityValidationException | EntityNotFoundException e) {
             System.out.println("MigrationBean.populateDB() - !!! Exception while populating the database");

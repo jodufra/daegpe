@@ -4,6 +4,7 @@ import pt.ipleiria.dae.gpe.lib.core.AbstractEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Calendar;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,11 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
-import pt.ipleiria.dae.gpe.lib.utilities.EventType;
-import pt.ipleiria.dae.gpe.lib.utilities.Room;
 
 @Entity
 @NamedQueries({})
@@ -37,8 +36,9 @@ public class Event extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    protected String internalId;
+    private String internalId;
 
+    @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @NotNull
     private EventType eventType;
@@ -48,47 +48,19 @@ public class Event extends AbstractEntity implements Serializable {
     @Size(min = 1, max = 255)
     private String name;
 
-    @Enumerated(EnumType.STRING)
+    @Basic(optional = false)
     @NotNull
-    private EventDayWeek eventDayWeek;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Room room;
+    private String room;
 
     @Basic(optional = false)
     @NotNull
-    private Integer startHour;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Calendar eventDate;
 
     @Basic(optional = false)
     @NotNull
-    private Integer endHour;
-
-    @Basic(optional = false)
-    @NotNull
-    private String startWeek;
-
-    @Basic(optional = false)
-    @NotNull
-    private Integer endWeek;
-
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 5)
-    private String Semester;
-
-    @Size(max = 255)
-    private String search;
-
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "IDUC")
-    @NotNull
-    private UC uc;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "IDUSER")
-    @NotNull
-    private Manager manager;
+    @Temporal(javax.persistence.TemporalType.TIME)
+    private Calendar eventDuration;
 
     @Basic(optional = false)
     @NotNull
@@ -102,54 +74,60 @@ public class Event extends AbstractEntity implements Serializable {
     @NotNull
     private String attendancePassword;
 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "IDUC")
+    @NotNull
+    private UC uc;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "IDUSER")
+    @NotNull
+    private Manager manager;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private Collection<Attendance> participants;
 
+    @Size(max = 255)
+    private String search;
+
     public Event() {
-        this.participants = new ArrayList<>();
-        this.attendanceActive = false;        
+        this.attendanceActive = false;
         this.attendanceActivated = false;
         this.attendancePassword = "";
-
+        this.participants = new ArrayList<>();
     }
 
-    public Event(String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
+    public Event(String internalId, EventType eventType, String name, String room, Calendar eventDate, Calendar eventDuration, String search, UC uc, Manager manager) {
         this.internalId = internalId;
         this.eventType = eventType;
         this.name = name;
-        this.eventDayWeek = eventDayWeek;
         this.room = room;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.startWeek = startWeek;
-        this.endWeek = endWeek;
-        this.Semester = semester;
-        this.uc = uc;
-        this.manager = null;
-        this.participants = new ArrayList<>();
-        this.attendanceActive = false;        
+        this.eventDate = eventDate;
+        this.eventDuration = eventDuration;
+        this.attendanceActive = false;
         this.attendanceActivated = false;
         this.attendancePassword = "";
+        this.uc = uc;
+        this.manager = manager;
+        this.participants = new ArrayList<>();
+        this.search = search;
     }
 
-    public Event(Integer idEvent, String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour, String startWeek, Integer endWeek, String semester, UC uc, Manager manager) {
+    public Event(Integer idEvent, String internalId, EventType eventType, String name, String room, Calendar eventDate, Calendar eventDuration, String search, UC uc, Manager manager) {
         this.idEvent = idEvent;
         this.internalId = internalId;
         this.eventType = eventType;
         this.name = name;
-        this.eventDayWeek = eventDayWeek;
         this.room = room;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.startWeek = startWeek;
-        this.endWeek = endWeek;
-        this.Semester = semester;
-        this.uc = uc;
-        this.manager = null;
-        this.participants = new ArrayList<>();
-        this.attendanceActive = false;        
+        this.eventDate = eventDate;
+        this.eventDuration = eventDuration;
+        this.attendanceActive = false;
         this.attendanceActivated = false;
         this.attendancePassword = "";
+        this.uc = uc;
+        this.manager = manager;
+        this.participants = new ArrayList<>();
+        this.search = search;
     }
 
     public Integer getIdEvent() {
@@ -160,12 +138,52 @@ public class Event extends AbstractEntity implements Serializable {
         this.idEvent = idEvent;
     }
 
+    public String getInternalId() {
+        return internalId;
+    }
+
+    public void setInternalId(String internalId) {
+        this.internalId = internalId;
+    }
+
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public Calendar getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Calendar eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public Calendar getEventDuration() {
+        return eventDuration;
+    }
+
+    public void setEventDuration(Calendar eventDuration) {
+        this.eventDuration = eventDuration;
     }
 
     public String getSearch() {
@@ -192,6 +210,30 @@ public class Event extends AbstractEntity implements Serializable {
         this.manager = manager;
     }
 
+    public boolean isAttendanceActive() {
+        return attendanceActive;
+    }
+
+    public void setAttendanceActive(boolean attendanceActive) {
+        this.attendanceActive = attendanceActive;
+    }
+
+    public boolean isAttendanceActivated() {
+        return attendanceActivated;
+    }
+
+    public void setAttendanceActivated(boolean attendanceActivated) {
+        this.attendanceActivated = attendanceActivated;
+    }
+
+    public String getAttendancePassword() {
+        return attendancePassword;
+    }
+
+    public void setAttendancePassword(String attendancePassword) {
+        this.attendancePassword = attendancePassword;
+    }
+
     public Collection<Attendance> getParticipants() {
         return participants;
     }
@@ -200,8 +242,8 @@ public class Event extends AbstractEntity implements Serializable {
         this.participants = participants;
     }
 
-    public void addParticipant(Attendance a) {
-        this.participants.add(a);
+    public void addParticipant(Attendance participant) {
+        this.participants.add(participant);
     }
 
     @Override
@@ -229,102 +271,6 @@ public class Event extends AbstractEntity implements Serializable {
             return false;
         }
         return true;
-    }
-
-    public String getInternalId() {
-        return internalId;
-    }
-
-    public void setInternalId(String internalId) {
-        this.internalId = internalId;
-    }
-
-    public EventType getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(EventType eventType) {
-        this.eventType = eventType;
-    }
-
-    public Integer getStartHour() {
-        return startHour;
-    }
-
-    public void setStartHour(Integer startHour) {
-        this.startHour = startHour;
-    }
-
-    public Integer getEndHour() {
-        return endHour;
-    }
-
-    public void setEndHour(Integer endHour) {
-        this.endHour = endHour;
-    }
-
-    public String getStartWeek() {
-        return startWeek;
-    }
-
-    public void setStartWeek(String startWeek) {
-        this.startWeek = startWeek;
-    }
-
-    public Integer getEndWeek() {
-        return endWeek;
-    }
-
-    public void setEndWeek(Integer endWeek) {
-        this.endWeek = endWeek;
-    }
-
-    public EventDayWeek getEventDayWeek() {
-        return eventDayWeek;
-    }
-
-    public void setEventDayWeek(EventDayWeek eventDayWeek) {
-        this.eventDayWeek = eventDayWeek;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public String getSemester() {
-        return Semester;
-    }
-
-    public void setSemester(String Semester) {
-        this.Semester = Semester;
-    }
-
-    public boolean isAttendanceActive() {
-        return attendanceActive;
-    }
-
-    public void setAttendanceActive(boolean attendanceActive) {
-        this.attendanceActive = attendanceActive;
-    }
-
-    public boolean isAttendanceActivated() {
-        return attendanceActivated;
-    }
-
-    public void setAttendanceActivated(boolean attendanceActivated) {
-        this.attendanceActivated = attendanceActivated;
-    }
-
-    public String getAttendancePassword() {
-        return attendancePassword;
-    }
-
-    public void setAttendancePassword(String attendancePassword) {
-        this.attendancePassword = attendancePassword;
     }
 
     @Override

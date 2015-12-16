@@ -7,10 +7,8 @@ package pt.ipleiria.dae.gpe.lib.core;
 
 import java.io.Serializable;
 
-/**
- *
- * @author Joel
- */
+
+
 public abstract class AbstractDTO implements Serializable {
 
     protected boolean New;
@@ -19,6 +17,9 @@ public abstract class AbstractDTO implements Serializable {
 
     public AbstractDTO(AbstractEntity entity) {
         this.New = (entity == null || entity.isNew());
+    }
+    
+    public AbstractDTO() {
     }
 
     public boolean isNew() {

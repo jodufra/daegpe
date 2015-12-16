@@ -23,13 +23,13 @@ import pt.ipleiria.dae.gpe.lib.entities.Attendance;
 import pt.ipleiria.dae.gpe.lib.entities.Manager;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.utilities.Security;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
-import pt.ipleiria.dae.gpe.lib.utilities.AdminUserFindOptions;
-import pt.ipleiria.dae.gpe.lib.utilities.ManagerUserFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.AdminUserFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.ManagerUserFindOptions;
 
 /**
  *
@@ -68,8 +68,8 @@ public class UserBean extends AbstractBean<User, UserDTO> {
                 // Do nothing. This exception means that there are no users with repeated InternalId.
             }
         }
-        if (dto.getType() == null) {
-            errors.add(EntityValidationError.USER_USERTYPE_INVALID);
+        if (dto.getGroup() == null) {
+            errors.add(EntityValidationError.USER_USERGROUP_INVALID);
         }
         if (dto.getName().isEmpty()) {
             errors.add(EntityValidationError.USER_NAME_REQUIRED);
@@ -80,137 +80,33 @@ public class UserBean extends AbstractBean<User, UserDTO> {
 
         if (errors.isEmpty()) {
             User user;
-            String userType = "";
             if (dto.isNew()) {
                 if (UserDTO.IsAdministrator(dto)) {
                     user = new Administrator();
-                    userType = "Administrator";
                 } else if (UserDTO.IsManager(dto)) {
                     user = new Manager();
-                    userType = "Manager";
-                } else if (UserDTO.IsStudent(dto)) {
-                    user = new Student();
-                    userType = "Student";
                 } else {
-                    user = new User();
+                    user = new Student();
                 }
             } else {
                 user = getEntityFromDTO(dto);
             }
-            user.setType(dto.getType());
             user.setInternalId(dto.getInternalId());
             user.setName(dto.getName());
             user.setEmail(dto.getEmail());
             if (dto.hasNewPassword()) {
                 user.setPassword(dto.getNewPassword());
             }
-            user.setSearch(GenerateSlug(" " + user.getInternalId() + " " + user.getName() + " " + user.getEmail() + " " + userType + " ", true, true));
+            user.setSearch(GenerateSlug(user.getInternalId() + " " + user.getName() + " " + user.getEmail() + " " + user.getUserGroup().getGroupName().toString(), true, true));
             if (dto.isNew()) {
                 super.create(user);
+                em.persist(user.getUserGroup());
             } else {
                 super.edit(user);
             }
         } else {
             throw new EntityValidationException(errors);
         }
-    }
-
-    public void addUCStudent(UserDTO userDTO, UCDTO UCdto) throws EntityNotFoundException, EntityValidationException {
-        List<EntityValidationError> errors = new ArrayList<>();
-        if (userDTO.isNew()) {
-            errors.add(EntityValidationError.UC_IS_NEW);
-        }
-        if (userDTO.getType() != UserType.Student) {
-            errors.add(EntityValidationError.USER_IS_NOT_STUDENT);
-        }
-        if (UCdto.isNew()) {
-            errors.add(EntityValidationError.USER_IS_NEW);
-        }
-
-        if (errors.isEmpty()) {
-
-        }
-
-        if (errors.isEmpty()) {
-            Student student = em.find(Student.class, userDTO.getIdUser());
-            UC uc = em.find(UC.class, UCdto.getIdUC());
-            if (!student.getUcs().contains(uc)) {
-                student.addUc(uc);
-                edit(student);
-            }
-        }
-        if (!errors.isEmpty()) {
-            throw new EntityValidationException(errors);
-        }
-    }
-
-    public void addAttendanceStudent(AttendanceDTO dto) throws EntityValidationException {
-        List<EntityValidationError> errors = new ArrayList<>();
-
-        if (dto.getStudent() == null || dto.getStudent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_NULL_STUDENT);
-        }
-        if (dto.getEvent() == null || dto.getEvent().isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_NULL_EVENT);
-        }
-        if (dto.isNew()) {
-            errors.add(EntityValidationError.ATTENDANCE_IS_NEW);
-        }
-
-        if (errors.isEmpty()) {
-            Attendance attendance = em.find(Attendance.class, dto.getIdAttendance());
-            Student student = em.find(Student.class, dto.getStudent().getIdUser());
-            if (!student.getAttendances().contains(attendance)) {
-                student.addAttendance(attendance);
-                super.edit(student);
-            }
-        } else {
-            throw new EntityValidationException(errors);
-        }
-    }
-
-    public UserDTO find(String internalId) throws EntityNotFoundException {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT u FROM User u WHERE u.internalId = \"").append(internalId).append("\"");
-        TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
-        List<User> users = query.getResultList();
-        if (users.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-        User user = users.get(0);
-        if (User.IsAdministrator(user)) {
-            return generateDTO((Administrator) user);
-        }
-        if (User.IsManager(user)) {
-            return generateDTO((Manager) user);
-        }
-        if (User.IsStudent(user)) {
-            return generateDTO((Student) user);
-        }
-        return generateDTO(user);
-    }
-
-    public UserDTO find(String username, String password) throws EntityNotFoundException {
-        password = Security.GenerateMD5Hash(password);
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT u FROM User u WHERE (u.internalId = \"").append(username).append("\" OR u.email = \"").append(username).append("\") ");
-        sb.append("AND u.password = \"").append(password).append("\"");
-        TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
-        List<User> users = query.getResultList();
-        if (users.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-        User user = users.get(0);
-        if (User.IsAdministrator(user)) {
-            return generateDTO((Administrator) user);
-        }
-        if (User.IsManager(user)) {
-            return generateDTO((Manager) user);
-        }
-        if (User.IsStudent(user)) {
-            return generateDTO((Student) user);
-        }
-        return generateDTO(user);
     }
 
     public List<UserDTO> find(AdminUserFindOptions options) {
@@ -327,8 +223,85 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         return generateDTOList(em.createQuery(query, User.class).getResultList());
     }
 
-    public List<UserDTO> getAllManagers() {
-        return generateDTOList(em.createNamedQuery("User.findByManagers").getResultList());
+    public void addUCStudent(UserDTO userDTO, UCDTO UCdto) throws EntityNotFoundException, EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+        if (userDTO.isNew()) {
+            errors.add(EntityValidationError.UC_IS_NEW);
+        }
+        if (userDTO.getGroup() != GROUP.Student) {
+            errors.add(EntityValidationError.USER_IS_NOT_STUDENT);
+        }
+        if (UCdto.isNew()) {
+            errors.add(EntityValidationError.USER_IS_NEW);
+        }
+
+        if (errors.isEmpty()) {
+
+        }
+
+        if (errors.isEmpty()) {
+            Student student = em.find(Student.class, userDTO.getIdUser());
+            UC uc = em.find(UC.class, UCdto.getIdUC());
+            if (!student.getUcs().contains(uc)) {
+                student.addUc(uc);
+                edit(student);
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new EntityValidationException(errors);
+        }
+    }
+
+    public void addAttendanceStudent(AttendanceDTO dto) throws EntityValidationException {
+        List<EntityValidationError> errors = new ArrayList<>();
+
+        if (dto.getStudent() == null || dto.getStudent().isNew()) {
+            errors.add(EntityValidationError.ATTENDANCE_NULL_STUDENT);
+        }
+        if (dto.getEvent() == null || dto.getEvent().isNew()) {
+            errors.add(EntityValidationError.ATTENDANCE_NULL_EVENT);
+        }
+        if (dto.isNew()) {
+            errors.add(EntityValidationError.ATTENDANCE_IS_NEW);
+        }
+
+        if (errors.isEmpty()) {
+            Attendance attendance = em.find(Attendance.class, dto.getIdAttendance());
+            Student student = em.find(Student.class, dto.getStudent().getIdUser());
+            if (!student.getAttendances().contains(attendance)) {
+                student.addAttendance(attendance);
+                super.edit(student);
+            }
+        } else {
+            throw new EntityValidationException(errors);
+        }
+    }
+
+    public UserDTO find(String internalId) throws EntityNotFoundException {
+        List<User> users = em.createNamedQuery("User.findByInternalid").setParameter("internalId", internalId).getResultList();
+        if (users.isEmpty() || users.size() > 1) {
+            throw new EntityNotFoundException();
+        }
+        return generateDTO(users.get(0));
+    }
+
+    public UserDTO findByUsername(String username) throws EntityNotFoundException {
+        List<User> users = em.createNamedQuery("User.findByUsername").setParameter("email", username).setParameter("internalId", username).getResultList();
+        if (users.isEmpty() || users.size() > 1) {
+            throw new EntityNotFoundException();
+        }
+        return generateDTO(users.get(0));
+    }
+
+    public UserDTO findFirstManager() {
+        String q = "SELECT u.* FROM USERS u JOIN USERS_GROUPS g ON u.INTERNALID = g.USERNAME WHERE g.GROUPNAME = '" + GROUP.Manager + "'";
+        List<User> list = em.createNativeQuery(q, User.class).setFirstResult(0).setMaxResults(1).getResultList();
+        return list.isEmpty() ? null : generateDTO(list.get(0));
+    }
+
+    public List<UserDTO> findAllManagers() {
+        String q = "SELECT u.* FROM USERS u JOIN USERS_GROUPS g ON u.INTERNALID = g.USERNAME WHERE g.GROUPNAME = '" + GROUP.Manager + "'";
+        return generateDTOList(em.createNativeQuery(q, User.class).getResultList());
     }
 
     public List<UserDTO> findFromUC(AdminUserFindOptions options) {

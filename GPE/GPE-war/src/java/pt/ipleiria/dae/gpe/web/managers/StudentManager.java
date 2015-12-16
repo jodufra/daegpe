@@ -69,6 +69,19 @@ public class StudentManager extends AbstractManager {
             PresentErrorMessage("userdetailform", "Utilizador a ser editado, não foi encontrado ou foi removido.");
         }
     }
+    
+    public void updateAttendanceState(ActionEvent e)  throws IOException {
+        AttendanceDTO attedance = (AttendanceDTO) ((UIParameter) e.getComponent().findComponent("attendance")).getValue();
+        attedance.setPresent(true);
+        try {
+            attendanceBean.save(attedance);
+            PresentSuccessMessage("eventattendancesform", "Participação registada com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("eventattendancesform", "Verifique se o evento ainda existe ou se os registos de presenças estão abertos.");
+        }
+    }
 
     public void updateAttendanceState(ActionEvent e)  throws IOException {
         AttendanceDTO attedance = (AttendanceDTO) ((UIParameter) e.getComponent().findComponent("attendance")).getValue();

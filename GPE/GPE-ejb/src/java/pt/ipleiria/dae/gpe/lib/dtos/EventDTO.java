@@ -1,128 +1,83 @@
 package pt.ipleiria.dae.gpe.lib.dtos;
 
+import java.util.Calendar;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Event;
-import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
-import pt.ipleiria.dae.gpe.lib.utilities.EventType;
-import pt.ipleiria.dae.gpe.lib.utilities.Room;
-import pt.ipleiria.dae.gpe.lib.utilities.Security;
+import pt.ipleiria.dae.gpe.lib.entities.EventType;
 
-/**
- *
- * @author joeld
- */
+@XmlRootElement(name = "evento")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class EventDTO extends AbstractDTO {
 
-    private Integer idEvent;
+    private final Integer idEvent;
     private String internalId;
     private EventType eventType;
     private String name;
-    private EventDayWeek eventDayWeek;
-    private Room room;
-    private Integer startHour;
-    private Integer endHour;
-    private String startWeek;
-    private Integer endWeek;
-    private String semester;
-    private UCDTO uc;
-    private ManagerDTO manager;
+    private String room;
+    private Calendar eventDate;
+    private Calendar eventDuration;
     private boolean attendanceActive;
     private boolean attendanceActivated;
     private String attendancePassword;
+    private UCDTO uc;
+    private UserDTO manager;
 
-    public EventDTO(Integer idEvent, String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour,
-            String startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
+    
+    public EventDTO() {
         super(null);
-        this.idEvent = idEvent;
-        this.internalId = internalId;
-        this.eventType = eventType;
-        this.name = name;
-        this.eventDayWeek = eventDayWeek;
-        this.room = room;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.startWeek = startWeek;
-        this.endWeek = endWeek;
-        this.semester = semester;
-        this.uc = uc;
-        this.manager = manager;
-        this.attendanceActive = false;        
-        this.attendanceActivated = false;
-        this.attendancePassword = "";
-        this.New = idEvent == 0;
+        idEvent = 0;
+        internalId = "";
+        eventType = null;
+        name = "";
+        room = "";
+        eventDate = null;
+        eventDuration = null;
+        attendanceActive = false;
+        attendanceActivated = false;
+        attendancePassword = "";
+        uc = null;
+        manager = null;
     }
 
-    public EventDTO(String internalId, EventType eventType, String name, EventDayWeek eventDayWeek, Room room, Integer startHour, Integer endHour,
-            String startWeek, Integer endWeek, String semester, UCDTO uc, ManagerDTO manager) {
+    public EventDTO(Event event) {
+        super(event);
+        idEvent = event.getIdEvent();
+        internalId = event.getInternalId();
+        eventType = event.getEventType();
+        name = event.getName();
+        room = event.getRoom();
+        eventDate = event.getEventDate();
+        eventDuration = event.getEventDuration();
+        attendanceActive = event.isAttendanceActive();
+        attendanceActivated = event.isAttendanceActivated();
+        attendancePassword = event.getAttendancePassword();
+        uc = new UCDTO(event.getUc());
+        manager = new ManagerDTO(event.getManager());
+    }
+
+    public EventDTO(String internalId, EventType eventType, String name, String room,
+            Calendar eventDate, Calendar eventDuration, boolean attendanceActive,
+            boolean attendanceActivated, String attendancePassword, UCDTO uc, UserDTO manager) {
         super(null);
         this.idEvent = 0;
         this.internalId = internalId;
         this.eventType = eventType;
         this.name = name;
-        this.eventDayWeek = eventDayWeek;
         this.room = room;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.startWeek = startWeek;
-        this.endWeek = endWeek;
-        this.semester = semester;
+        this.eventDate = eventDate;
+        this.eventDuration = eventDuration;
+        this.attendanceActive = attendanceActive;
+        this.attendanceActivated = attendanceActivated;
+        this.attendancePassword = attendancePassword;
         this.uc = uc;
         this.manager = manager;
-        this.attendanceActive = false;        
-        this.attendanceActivated = false;
-        this.attendancePassword = "";
-    }
-
-    public EventDTO(Event event) {
-        super(event);
-        this.idEvent = event.getIdEvent();
-        this.internalId = event.getInternalId();
-        this.eventType = event.getEventType();
-        this.name = event.getName();
-        this.eventDayWeek = event.getEventDayWeek();
-        this.room = event.getRoom();
-        this.startHour = event.getStartHour();
-        this.endHour = event.getEndHour();
-        this.startWeek = event.getStartWeek();
-        this.endWeek = event.getEndWeek();
-        this.semester = event.getSemester();
-        this.uc = new UCDTO(event.getUc());
-        this.manager = new ManagerDTO(event.getManager());
-        this.attendanceActive = event.isAttendanceActive();        
-        this.attendanceActivated = event.isAttendanceActivated(); ;
-        this.attendancePassword = event.getAttendancePassword();
     }
 
     public Integer getIdEvent() {
         return idEvent;
-    }
-
-    public void setIdEvent(Integer idEvent) {
-        this.idEvent = idEvent;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public UCDTO getUc() {
-        return uc;
-    }
-
-    public void setUc(UCDTO uc) {
-        this.uc = uc;
-    }
-
-    public ManagerDTO getManager() {
-        return manager;
-    }
-
-    public void setManager(ManagerDTO manager) {
-        this.manager = manager;
     }
 
     public String getInternalId() {
@@ -141,60 +96,36 @@ public class EventDTO extends AbstractDTO {
         this.eventType = eventType;
     }
 
-    public EventDayWeek getEventDayWeek() {
-        return eventDayWeek;
+    public String getName() {
+        return name;
     }
 
-    public void setEventDayWeek(EventDayWeek eventDayWeek) {
-        this.eventDayWeek = eventDayWeek;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Room getRoom() {
+    public String getRoom() {
         return room;
     }
 
-    public void setRoom(Room room) {
+    public void setRoom(String room) {
         this.room = room;
     }
 
-    public Integer getStartHour() {
-        return startHour;
+    public Calendar getEventDate() {
+        return eventDate;
     }
 
-    public void setStartHour(Integer startHour) {
-        this.startHour = startHour;
+    public void setEventDate(Calendar eventDate) {
+        this.eventDate = eventDate;
     }
 
-    public Integer getEndHour() {
-        return endHour;
+    public Calendar getEventDuration() {
+        return eventDuration;
     }
 
-    public void setEndHour(Integer endHour) {
-        this.endHour = endHour;
-    }
-
-    public String getStartWeek() {
-        return startWeek;
-    }
-
-    public void setStartWeek(String startWeek) {
-        this.startWeek = startWeek;
-    }
-
-    public Integer getEndWeek() {
-        return endWeek;
-    }
-
-    public void setEndWeek(Integer endWeek) {
-        this.endWeek = endWeek;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
+    public void setEventDuration(Calendar timetableDuration) {
+        this.eventDuration = timetableDuration;
     }
 
     public boolean isAttendanceActive() {
@@ -218,7 +149,23 @@ public class EventDTO extends AbstractDTO {
     }
 
     public void setAttendancePassword(String attendancePassword) {
-        this.attendancePassword = Security.GenerateMD5Hash(attendancePassword);
+        this.attendancePassword = attendancePassword;
+    }
+
+    public UCDTO getUc() {
+        return uc;
+    }
+
+    public void setUc(UCDTO uc) {
+        this.uc = uc;
+    }
+
+    public UserDTO getManager() {
+        return manager;
+    }
+
+    public void setManager(UserDTO manager) {
+        this.manager = manager;
     }
 
     @Override

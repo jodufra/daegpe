@@ -6,15 +6,14 @@
 package pt.ipleiria.dae.gpe.lib.dtos;
 
 import java.util.Collection;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import pt.ipleiria.dae.gpe.lib.core.AbstractDTO;
-import pt.ipleiria.dae.gpe.lib.entities.Student;
 import pt.ipleiria.dae.gpe.lib.entities.UC;
-import static pt.ipleiria.dae.gpe.lib.entities.UserType.Student;
 
-/**
- *
- * @author joeld
- */
+@XmlRootElement(name = "uc")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class UCDTO extends AbstractDTO {
 
     private Integer idUC;
@@ -22,6 +21,10 @@ public class UCDTO extends AbstractDTO {
     private String name;
     private Collection<StudentDTO> student;
 
+    public UCDTO(){
+        super();
+    }
+    
     public UCDTO(Integer idUc, String internalId, String name) {
         super(null);
         this.idUC = idUc;

@@ -10,8 +10,8 @@ import javax.faces.context.FacesContext;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
-import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
-import pt.ipleiria.dae.gpe.lib.utilities.ManagerEventFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.EventOrderBy;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.ManagerEventFindOptions;
 
 /**
  *

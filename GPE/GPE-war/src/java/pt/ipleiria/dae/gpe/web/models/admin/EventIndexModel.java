@@ -8,8 +8,8 @@ package pt.ipleiria.dae.gpe.web.models.admin;
 import java.util.List;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
-import pt.ipleiria.dae.gpe.lib.utilities.AdminEventFindOptions;
-import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.AdminEventFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.EventOrderBy;
 
 /**
  *
@@ -18,6 +18,8 @@ import pt.ipleiria.dae.gpe.lib.utilities.EventOrderBy;
 public class EventIndexModel {
 
     private final EventBean eventBean;
+    
+    public String internalId;
 
     public int pageId;
     public final int pageSize = 20;
@@ -34,6 +36,10 @@ public class EventIndexModel {
         this.orderBy = EventOrderBy.InternalIdAsc;
         this.search = "";
         this.count = 0;
+    }
+    
+    public void setInternalId(String internalId){
+        this.internalId = internalId;
     }
 
     public void setPageId(int pageId) {
@@ -128,8 +134,8 @@ public class EventIndexModel {
     }
 
     public List<EventDTO> getEvents() {
-        AdminEventFindOptions options = new AdminEventFindOptions(pageId, pageSize, orderBy, search);
-        List<EventDTO> list = eventBean.findUnique(options);
+        AdminEventFindOptions options = new AdminEventFindOptions(pageId, pageSize, orderBy, search,internalId);
+        List<EventDTO> list = eventBean.find(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
         return list;

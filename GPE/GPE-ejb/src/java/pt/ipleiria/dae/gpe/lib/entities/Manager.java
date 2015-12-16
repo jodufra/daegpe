@@ -23,19 +23,17 @@ public class Manager extends User {
 
     public Manager() {
         super();
-        this.type = UserType.Manager;
+        this.userGroup = new UserGroup(GROUP.Manager, this);
         this.events = new ArrayList<>();
     }
 
     public Manager(String internalId, String name, String email, String password) {
-        super(internalId, name, email, password);
-        this.type = UserType.Manager;
+        super(internalId, name, email, password, GROUP.Manager);
         this.events = new ArrayList<>();
     }
 
     public Manager(Integer idUser, String internalId, String name, String email, String password, String search) {
-        super(idUser, internalId, name, email, password, search);
-        this.type = UserType.Manager;
+        super(idUser, internalId, name, email, password, GROUP.Manager, search);
         this.events = new ArrayList<>();
     }
 

@@ -24,16 +24,16 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <h:inputText required="true" a:required="true" value="#{sessionManager.username}" class="form-control" a:placeholder="Id utilizador / Email" />
+                                <h:inputText required="true" a:required="true" value="#{userManager.username}" class="form-control" a:placeholder="Id utilizador / Email" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
-                                <h:inputSecret required="true" a:required="true" value="#{sessionManager.password}" class="form-control" a:placeholder="Password" />
+                                <h:inputSecret required="true" a:required="true" value="#{userManager.password}" class="form-control" a:placeholder="Password" />
                             </div>
                         </div>
-                        <h:commandButton action="#{sessionManager.login()}" class="btn btn-danger btn-circle fa" value="&#xf178;"/>
+                        <h:commandButton action="#{userManager.login()}" class="btn btn-danger btn-circle fa" value="&#xf178;"/>
                         <h:messages globalOnly="true" />
                     </h:form>
                 </div>

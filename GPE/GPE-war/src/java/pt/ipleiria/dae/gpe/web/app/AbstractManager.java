@@ -7,11 +7,14 @@ package pt.ipleiria.dae.gpe.web.app;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.EnumMap;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
+import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 
 /**
  *
@@ -22,7 +25,7 @@ public abstract class AbstractManager implements Serializable {
     protected String GenerateURL(String url) {
         url += (url.contains("?") ? "&" : "?") + "faces-redirect=true";
         return url;
-    } 
+    }
 
     protected String GenerateRelativeURL(String url) {
         if (url.isEmpty()) {
@@ -76,4 +79,27 @@ public abstract class AbstractManager implements Serializable {
         }
     }
 
+    protected Principal GetAuthenticatedPrincipal() {
+        return FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+    }
+
+    protected boolean IsUserAuthenticated() {
+        return GetAuthenticatedPrincipal() != null;
+    }
+
+    protected boolean IsUserInRole(String role) {
+        return (IsUserAuthenticated() && FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role));
+    }
+
+    protected boolean IsUserAdministrator() {
+        return (IsUserAuthenticated() && IsUserInRole(GROUP.Administrator.toString()));
+    }
+
+    protected boolean IsUserManager() {
+        return (IsUserAuthenticated() && IsUserInRole(GROUP.Manager.toString()));
+    }
+
+    protected boolean IsUserStudent() {
+        return (IsUserAuthenticated() && IsUserInRole(GROUP.Student.toString()));
+    }
 }

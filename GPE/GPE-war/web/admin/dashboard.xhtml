@@ -12,6 +12,8 @@
         <title><ui:insert name="title">Dashboard</ui:insert> | Gestão de Presenças</title>
         <h:outputStylesheet library="plugins" name="bootstrap/css/bootstrap.css"/>
         <h:outputStylesheet library="plugins" name="font-awesome/css/font-awesome.css"/>
+        <h:outputStylesheet library="plugins" name="timepicker/css/jquery.timepicker.css"/>
+        <h:outputStylesheet library="plugins" name="datepicker/css/bootstrap-datepicker3.css"/>
         <h:outputStylesheet library="css" name="style.css"/>
     </h:head>
 
@@ -19,24 +21,24 @@
         <div class="loader"></div>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
-                <h:link class="brand" outcome='#{redirectManager.GenerateRelativeURL("/student/dashboard.html")}' >
+                <h:link class="brand" outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard.html")}' >
                     <h1>GESTOR <small>DE</small> PRESENÇAS</h1>
                 </h:link>
                 <span class="user-nav">
                     <div class="btn-group">
                         <h:form>
                             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                #{sessionManager.user.name} <span class="caret"></span>
+                                #{userManager.user.name} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li>
                                     <h:commandLink  class="" value="Minha Conta" action='#{redirectManager.GenerateRelativeURL("admin/users-detail")}' >
-                                        <f:setPropertyActionListener target="#{adminManager.userDetailModel.user}" value="#{sessionManager.user}"/>
+                                        <f:setPropertyActionListener target="#{adminManager.userDetailModel.user}" value="#{userManager.user}"/>
                                     </h:commandLink>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
-                                    <h:commandLink action="#{sessionManager.logout()}" class="" value="Logout"/>
+                                    <h:commandLink action="#{userManager.logout()}" class="" value="Logout"/>
                                 </li>
                             </ul>
                         </h:form>
@@ -54,7 +56,7 @@
                         </ui:insert>
                         <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/dashboard")}' ><i class="fa fa-home"></i>Dashboard </h:link></li>
                         <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/ucs-index")}' ><i class="fa fa-book"></i>UCs</h:link></li>
-                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' ><i class="fa fa-bell"></i>Eventos</h:link></li>
+                        <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-group-index")}' ><i class="fa fa-bell"></i>Eventos</h:link></li>
                         <li><h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/users-index")}' ><i class="fa fa-users"></i>Utilizadores</h:link></li>
                     </ul>
                 </div>
@@ -78,6 +80,9 @@
         <h:outputScript library="plugins" name="jquery-ui/jquery-ui.min.js"/>
         <h:outputScript library="plugins" name="bootstrap/js/bootstrap.min.js"/>
         <h:outputScript library="plugins" name="jquery.growl/jquery.growl.js"/>
+        <h:outputScript library="plugins" name="timepicker/js/jquery.timepicker.js"/>
+        <h:outputScript library="plugins" name="datepicker/js/bootstrap-datepicker.js"/>
+        <h:outputScript library="plugins" name="datepicker/locales/bootstrap-datepicker.pt.min.js"/>
         <h:outputScript library="js" name="live-edit.js"/>
         <h:outputScript library="js" name="app.js"/>
     </h:body>

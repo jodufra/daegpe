@@ -16,15 +16,16 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Student;
-import pt.ipleiria.dae.gpe.lib.entities.UserType;
+import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
-import pt.ipleiria.dae.gpe.lib.utilities.AdminUCFindOptions;
-import pt.ipleiria.dae.gpe.lib.utilities.StudentUCFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.AdminUCFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentUCFindOptions;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
-import pt.ipleiria.dae.gpe.lib.utilities.UCOrderBy;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.UCOrderBy;
 
 @Stateless
 public class UCBean extends AbstractBean<UC, UCDTO> {
@@ -89,7 +90,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
         if (userDTO.isNew()) {
             errors.add(EntityValidationError.USER_IS_NEW);
         }
-        if (userDTO.getType() != UserType.Student) {
+        if (userDTO.getGroup() != GROUP.Student) {
             errors.add(EntityValidationError.USER_IS_NOT_STUDENT);
         }
         if (ucDTO.isNew()) {
@@ -107,7 +108,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
             throw new EntityValidationException(errors);
         }
     }
-
+    
     public UCDTO find(String internalId) throws EntityNotFoundException {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT u FROM UC u WHERE u.internalId = \"").append(internalId).append("\"");
@@ -206,11 +207,14 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
 
         return generateDTOList(em.createQuery(query, UC.class).getResultList());
     }
-
-    public List<Student> getStudentList(UCDTO dto) throws EntityNotFoundException {
-        UC uc = getEntityFromDTO(dto);
-        List<Student> list = (List<Student>) uc.getStudents();
-        return list;
+    
+    public List<StudentDTO> getUCStudents(UCDTO ucDTO) throws EntityNotFoundException{
+        UC uc = getEntityFromDTO(ucDTO);
+        List<StudentDTO> studentsDTO = new ArrayList<>();
+        for (Student s : uc.getStudents()) {
+            studentsDTO.add(new StudentDTO(s));
+        }
+        return studentsDTO;
     }
 
     public void removeStudentUC(UCDTO unidade, UserDTO userDTO) throws EntityValidationException {
@@ -218,7 +222,7 @@ public class UCBean extends AbstractBean<UC, UCDTO> {
         if (userDTO.isNew()) {
             errors.add(EntityValidationError.UC_IS_NEW);
         }
-        if (userDTO.getType() != UserType.Student) {
+        if (userDTO.getGroup() != GROUP.Student) {
             errors.add(EntityValidationError.USER_IS_NOT_STUDENT);
         }
         if (userDTO.isNew()) {

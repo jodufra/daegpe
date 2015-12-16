@@ -1,96 +1,95 @@
 package pt.ipleiria.dae.gpe.web.models.admin;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.GregorianCalendar;
 import java.util.List;
-import javax.faces.event.ValueChangeEvent;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
+import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
-import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.Attendance;
-import pt.ipleiria.dae.gpe.lib.utilities.EventDayWeek;
-import pt.ipleiria.dae.gpe.lib.utilities.EventType;
-import pt.ipleiria.dae.gpe.lib.utilities.Room;
+import pt.ipleiria.dae.gpe.lib.entities.EventType;
 
 public class EventDetailModel {
 
-    private EventBean eventBean;
-    private UCBean ucBean;
-    private UserBean userBean;
+    private final EventBean eventBean;
+    private final UCBean ucBean;
+    private final UserBean userBean;
 
     private Integer idEvent;
     private String internalId;
     private EventType eventType;
     private String name;
-    private EventDayWeek eventDayWeek;
-    private Room room;
-    private Integer startHour;
-    private Integer endHour;
-    private String startWeek;
-    private Integer endWeek;
-    private String semester;
+    private String room;
+    private Calendar eventDate;
+    private Calendar eventDuration;
+    private boolean attendanceActive;
+    private boolean attendanceActivated;
+    private String attendancePassword;
     private UCDTO uc;
-    private ManagerDTO manager;
+    private UserDTO manager;
     private boolean isNew;
-    private String stringIdImport;
-    private Collection<Attendance> studentsAttendance;
-    private Integer studentsUCDTO;
-    
+
+    private Collection<AttendanceDTO> attendants;
+
     private String tab;
 
     public EventDetailModel(EventBean eventBean, UCBean ucBean, UserBean userBean) {
         this.eventBean = eventBean;
         this.ucBean = ucBean;
         this.userBean = userBean;
-        this.studentsAttendance = new LinkedList<>();
+        this.attendants = new ArrayList<>();
         this.tab = "details";
     }
 
-    public void setEvent(EventDTO eventDTO) {
-        if (eventDTO != null && !eventDTO.isNew()) {
-            this.idEvent = eventDTO.getIdEvent();
-            this.internalId = eventDTO.getInternalId();
-            this.eventType = eventDTO.getEventType();
-            this.name = eventDTO.getName();
-            this.eventDayWeek = eventDTO.getEventDayWeek();
-            this.room = eventDTO.getRoom();
-            this.startHour = eventDTO.getStartHour();
-            this.endHour = eventDTO.getEndHour();
-            this.startWeek = eventDTO.getStartWeek();
-            this.endWeek = eventDTO.getEndWeek();
-            this.semester = eventDTO.getSemester();
-            this.uc = eventDTO.getUc();
-            this.manager = eventDTO.getManager();
-            this.isNew = eventDTO.isNew();
+    public void setEvent(EventDTO event) {
+        if (event != null && !event.isNew()) {
+            this.idEvent = event.getIdEvent();
+            this.internalId = event.getInternalId();
+            this.eventType = event.getEventType();
+            this.name = event.getName();
+            this.room = event.getRoom();
+            this.eventDate = event.getEventDate();
+            this.eventDuration = event.getEventDuration();
+            this.attendanceActive = event.isAttendanceActive();
+            this.attendanceActivated = event.isAttendanceActivated();
+            this.attendancePassword = event.getAttendancePassword();
+            this.uc = event.getUc();
+            this.manager = event.getManager();
+            this.isNew = event.isNew();
         } else {
             this.idEvent = 0;
             this.internalId = "";
             this.eventType = EventType.AULATEORICA;
             this.name = "";
-            this.eventDayWeek = EventDayWeek.SEGUNDA;
-            this.room = Room.A;
-            this.startHour = 9;
-            this.endHour = 10;
-            this.startWeek = "2015#13:14;2016#1:2";
-            this.endWeek = 20;
-            this.semester = "1";
-            this.uc = new UCDTO("a", "a");
-            this.manager = new ManagerDTO("a", "a", "a@a.com", "a");
+            this.room = "";
+            this.eventDate = Calendar.getInstance();
+            this.eventDuration = new GregorianCalendar(0, 0, 0, 2, 0);
+            this.attendanceActive = false;
+            this.attendanceActivated = false;
+            this.attendancePassword = "";
+            this.uc = ucBean.findFirst();
+            this.manager = userBean.findFirstManager();
             this.isNew = true;
         }
     }
 
     public String title() {
-        return isNew ? "Adicionar Unidade Curricular" : name;
+        return isNew ? "Adicionar Evento" : name;
     }
-    
+
     public EventDTO provideEventDTO() {
-        EventDTO eventDTO = new EventDTO(idEvent, internalId, eventType, name, eventDayWeek, room, startHour, endHour, startWeek, endWeek, semester, uc, manager);
-        return eventDTO;
+        return new EventDTO(internalId, eventType, name, room, eventDate, eventDuration, attendanceActive, attendanceActivated, attendancePassword, uc, manager);
+    }
+
+    public Collection<Attendance> getStudentsAttendance() {
+        EventDTO eventDTO = this.provideEventDTO();
+        return eventBean.findStudentsAttendance(eventDTO);
     }
 
     public Integer getIdEvent() {
@@ -109,30 +108,6 @@ public class EventDetailModel {
         this.internalId = internalId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isIsNew() {
-        return isNew;
-    }
-
-    public void setIsNew(boolean isNew) {
-        this.isNew = isNew;
-    }
-
-    public String getStringIdImport() {
-        return stringIdImport;
-    }
-
-    public void setStringIdImport(String stringIdImport) {
-        this.stringIdImport = stringIdImport;
-    }
-
     public EventType getEventType() {
         return eventType;
     }
@@ -141,60 +116,52 @@ public class EventDetailModel {
         this.eventType = eventType;
     }
 
-    public EventDayWeek getEventDayWeek() {
-        return eventDayWeek;
+    public String getName() {
+        return name;
     }
 
-    public void setEventDayWeek(EventDayWeek eventDayWeek) {
-        this.eventDayWeek = eventDayWeek;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Room getRoom() {
+    public String getRoom() {
         return room;
     }
 
-    public void setRoom(Room room) {
+    public void setRoom(String room) {
         this.room = room;
     }
 
-    public Integer getStartHour() {
-        return startHour;
+    public Calendar getEventDate() {
+        return eventDate;
     }
 
-    public void setStartHour(Integer startHour) {
-        this.startHour = startHour;
+    public Calendar getEventDuration() {
+        return eventDuration;
+    }
+    
+    public boolean isAttendanceActive() {
+        return attendanceActive;
     }
 
-    public Integer getEndHour() {
-        return endHour;
+    public void setAttendanceActive(boolean attendanceActive) {
+        this.attendanceActive = attendanceActive;
     }
 
-    public void setEndHour(Integer endHour) {
-        this.endHour = endHour;
+    public boolean isAttendanceActivated() {
+        return attendanceActivated;
     }
 
-    public String getStartWeek() {
-        return startWeek;
+    public void setAttendanceActivated(boolean attendanceActivated) {
+        this.attendanceActivated = attendanceActivated;
     }
 
-    public void setStartWeek(String startWeek) {
-        this.startWeek = startWeek;
+    public String getAttendancePassword() {
+        return attendancePassword;
     }
 
-    public Integer getEndWeek() {
-        return endWeek;
-    }
-
-    public void setEndWeek(Integer endWeek) {
-        this.endWeek = endWeek;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
+    public void setAttendancePassword(String attendancePassword) {
+        this.attendancePassword = attendancePassword;
     }
 
     public UCDTO getUc() {
@@ -205,37 +172,28 @@ public class EventDetailModel {
         this.uc = uc;
     }
 
-    public ManagerDTO getManager() {
+    public UserDTO getManager() {
         return manager;
     }
 
-    public void setManager(ManagerDTO manager) {
+    public void setManager(UserDTO manager) {
         this.manager = manager;
     }
 
-    public Collection<Attendance> getStudentsAttendance() {
-        EventDTO eventDTO = this.provideEventDTO();
-        return eventBean.findStudentsAttendance(eventDTO);
+    public boolean isIsNew() {
+        return isNew;
     }
 
-    public EventBean getEventBean() {
-        return eventBean;
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
     }
 
-    public void setEventBean(EventBean eventBean) {
-        this.eventBean = eventBean;
+    public Collection<AttendanceDTO> getAttendants() {
+        return attendants;
     }
 
-    public EventType[] getEventTypes() {
-        return EventType.values();
-    }
-
-    public EventDayWeek[] getEventDayWeekTypes() {
-        return EventDayWeek.values();
-    }
-
-    public Room[] getRoomTypes() {
-        return Room.values();
+    public void setAttendants(Collection<AttendanceDTO> attendants) {
+        this.attendants = attendants;
     }
 
     public List<UCDTO> getAllUCs() {
@@ -243,25 +201,18 @@ public class EventDetailModel {
     }
 
     public List<UserDTO> getAllManagers() {
-        List<UserDTO> managers = userBean.getAllManagers();
-        return managers;
-    }
-
-    public Integer getStudentsUCDTO() {
-        return studentsUCDTO;
-    }
-
-    public void setStudentsUCDTO(Integer studentsUCDTO) {
-        this.studentsUCDTO = studentsUCDTO;
+        return userBean.findAllManagers();
     }
 
     public String getTab() {
         return tab;
     }
-
+    
     public void setTab(String tab) {
         this.tab = tab;
     }
-    
-    
+    public EventType[] getEventTypes()
+    {
+        return EventType.values();
+    }
 }

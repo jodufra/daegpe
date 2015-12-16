@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.GET;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
 
@@ -32,6 +33,11 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
     public AbstractBean(Class<Entity> entityClass, Class<DTO> dtoClass) {
         this.entityClass = entityClass;
         this.dtoClass = dtoClass;
+    }
+    
+    public AbstractBean(){
+        this.entityClass = null;
+        this.dtoClass = null;
     }
 
     protected abstract EntityManager getEntityManager();
@@ -100,6 +106,15 @@ public abstract class AbstractBean<Entity extends AbstractEntity, DTO extends Ab
         return generateDTO(entity);
     }
 
+    public DTO findFirst() {
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        List<Entity> list = getEntityManager().createQuery(cq).setFirstResult(0).setMaxResults(1).getResultList();
+        if(list.isEmpty())
+            return null;
+        return generateDTO(list.get(0));
+    }
+   
     public List<DTO> findAll() {
         CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));

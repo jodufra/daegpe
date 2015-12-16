@@ -43,6 +43,8 @@ var Content = new (function () {
         contentCtrl.initTabs();
         contentCtrl.initTooltips();
         contentCtrl.initLiveEdit();
+        contentCtrl.initDatepickers();
+        contentCtrl.initTimepickers();
 
         if (typeof onComplete !== "undefined")
             onComplete();
@@ -127,7 +129,7 @@ var Content = new (function () {
         });
 
         element.find('[data-plugin="multiple-selectize"]').selectize();
-    }
+    };
 
     contentCtrl.initTooltips = function () {
         // Bootstrap Tooltips
@@ -136,7 +138,7 @@ var Content = new (function () {
                 $(this).tooltip();
             });
         }
-    }
+    };
 
     contentCtrl.initLiveEdit = function () {
         if (element.find('*[data-plugin*="live-edit"]').length) {
@@ -144,7 +146,33 @@ var Content = new (function () {
                 $(this).liveEdit();
             });
         }
-    }
+    };
+
+    contentCtrl.initDatepickers = function () {
+        // Bootstrap Tooltips
+        var elements = element.find('.datepicker');
+        if (elements.length) {
+            elements.each(function () {
+                $(this).datepicker({
+                    format: "dd/mm/yyyy",
+                    language: "pt",
+                    calendarWeeks: true,
+                    autoclose: true,
+                    todayHighlight: true
+                });
+            });
+        }
+    };
+
+    contentCtrl.initTimepickers = function () {
+        // Bootstrap Tooltips
+        var elements = element.find('.timepicker');
+        if (elements.length) {
+            elements.each(function () {
+                $(this).timepicker({'timeFormat': 'H:i'});
+            });
+        }
+    };
 
     return contentCtrl;
 })();
@@ -202,4 +230,6 @@ var App = new (function () {
 $(function () {
     App.init();
     $('[data-toggle="tooltip"]').tooltip()
+
+
 });

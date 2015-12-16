@@ -23,13 +23,35 @@
             <ui:define name="content">
                 <div class="panel">
                     <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div style="padding-top: 12.5px;">
-                                    <h:link class="btn btn-primary btn-circle fa " value="&#xf177;" title="Voltar" a:data-placement="left" a:data-toggle="tooltip" outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' />
+                        <h:form id ="importstudentsform">
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <div style="padding-top: 12.5px;">
+                                        <h:link class="btn btn-primary btn-circle fa " value="&#xf177;" title="Voltar" a:data-placement="left" a:data-toggle="tooltip" outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' />
+                                    </div>
+                                </div>
+                                <div class="col-sm-11">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <h:outputLabel class="pull-right" style = "color: grey">
+                                                Importar estudantes da UC  
+                                                <span>#{adminManager.eventIndividualListModel.eventDTO.uc.name}</span> para a lista de Eventos
+                                            </h:outputLabel>
+                                        </div>
+                                    </div>
+                                    <div class="row"> 
+                                        <div class="col-xs-12">
+                                            <h:commandButton value = "Importar Estudantes" action = "#{adminManager.addStudentsToEvents()}" class="btn btn-info pull-right" title="Importar todos os estudantes da UC para o Evento(Todas as semanas do Evento)"/>
+                                        </div>                                      
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <h:messages for="importstudentsform" rendered="true" errorClass="text-danger" infoClass="text-success" globalOnly="true" />
+                                </div>
+                            </div>
+                        </h:form>
                     </div>
                     <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndividualListModel.events}" style = "width: 100%;">
                         <h:inputHidden value="#{Event.idEvent}" />

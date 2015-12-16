@@ -12,21 +12,19 @@ import javax.persistence.Entity;
  * @author joeld
  */
 @Entity
-public class Administrator extends User{
+public class Administrator extends User {
 
     public Administrator() {
         super();
-        this.type = UserType.Administrator;
+        this.userGroup = new UserGroup(GROUP.Administrator, this);
     }
 
     public Administrator(String internalId, String name, String email, String password) {
-        super(internalId, name, email, password);
-        this.type = UserType.Administrator;
+        super(internalId, name, email, password, GROUP.Administrator);
     }
 
     public Administrator(Integer idUser, String internalId, String name, String email, String password, String search) {
-        super(idUser, internalId, name, email, password, search);
-        this.type = UserType.Administrator;
+        super(idUser, internalId, name, email, password, GROUP.Administrator, search);
     }
-    
+
 }

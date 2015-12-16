@@ -123,7 +123,16 @@ public class ManagerManager extends AbstractManager {
     }
 
     public void updateAttendanceState(ActionEvent e) throws IOException {
-       
+       AttendanceDTO attedance = (AttendanceDTO) ((UIParameter) e.getComponent().findComponent("attendance")).getValue();
+       attedance.setPresent(!attedance.isPresent());
+       try {
+            attendanceBean.save(attedance);
+            PresentSuccessMessage("eventattendancesform", "Adicionado com sucesso");
+        } catch (EntityValidationException eve) {
+            PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
+        } catch (EntityNotFoundException enf) {
+            PresentErrorMessage("eventattendancesform", "Verifique que o Estudante e o Evento ainda existem.");
+        }
     }
 
     ////////////////////////////////////////////
