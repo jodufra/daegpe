@@ -1,0 +1,5 @@
+X:\Dropbox\EI\3ºAno\DAE\Project\GPEMobile\GPEMobile\bin\Debug\GPEMobile.dll
+X:\Dropbox\EI\3ºAno\DAE\Project\GPEMobile\GPEMobile\bin\Debug\GPEMobile.pdb
+X:\Dropbox\EI\3ºAno\DAE\Project\GPEMobile\GPEMobile\obj\Debug\GPEMobile.csprojResolveAssemblyReference.cache
+X:\Dropbox\EI\3ºAno\DAE\Project\GPEMobile\GPEMobile\obj\Debug\GPEMobile.dll
+X:\Dropbox\EI\3ºAno\DAE\Project\GPEMobile\GPEMobile\obj\Debug\GPEMobile.pdb
