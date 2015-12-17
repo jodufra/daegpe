@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -43,8 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="www\js\app\student\dashboard.tpl.html" />
+    <Content Include="www\js\app\student\event\event-detail.ctrl.js" />
+    <Content Include="www\js\app\student\event\event-detail.tpl.html" />
+    <Content Include="www\js\app\student\event\event-list.ctrl.js" />
+    <Content Include="www\js\app\student\event\event-list.tpl.html" />
     <Content Include="www\js\app\student\leftsidebar.tpl.html" />
     <Content Include="www\js\app\student\uc\uc-detail.ctrl.js" />
+    <Content Include="www\js\app\student\uc\uc-detail.tpl.html" />
     <Content Include="www\js\app\student\uc\uc-list.ctrl.js" />
     <Content Include="www\js\app\student\dashboard.ctrl.js" />
     <Content Include="www\js\app\main.ctrl.js" />
@@ -54,7 +59,14 @@
     <Content Include="www\icon.png" />
     <Content Include="www\img\logo.png" />
     <Content Include="www\index.html" />
+    <Content Include="www\js\app\student\uc\uc-list.tpl.html" />
+    <Content Include="www\js\app\student\user\user-detail.ctrl.js" />
+    <Content Include="www\js\app\student\user\user-detail.tpl.html" />
+    <Content Include="www\js\app\student\user\user-list.ctrl.js" />
+    <Content Include="www\js\app\student\user\user-list.tpl.html" />
     <Content Include="www\js\index.js" />
+    <Content Include="www\js\services\event.svc.js" />
+    <Content Include="www\js\services\uc.svc.js" />
     <Content Include="www\js\services\login.svc.js" />
     <Content Include="www\lib\angular-ui\css\mobile-angular-ui-base.css" />
     <Content Include="www\lib\angular-ui\fonts\fontawesome-webfont.svg" />

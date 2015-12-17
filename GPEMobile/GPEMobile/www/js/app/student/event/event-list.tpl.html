@@ -1,12 +1,21 @@
-<div ui-content-for="leftSidebar">
-    <div ng-include="'js/app/student/leftsidebar.tpl.html'" ui-track-as-search-param='true'></div>
-</div>
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
 <div ui-content-for="title">
     <span>Eventos</span>
 </div>
 <div class="scrollable">
+    <div ng-show="hasInternalId()" class="scrollable-header">
+        <div class="scrollable-header-content">
+            <h3 class="pull-left">Eventos {{internalId}}</h3>
+            <span>&nbsp;</span>
+            <span class="pull-right" ng-click="clear()"><i class="fa fa-times close-icon"></i></span>
+        </div>
+    </div>
     <div class="scrollable-content section">
-        <h1>Eventos</h1>
+        <div ng-repeat="event in events" ng-click="load(event)" class="btn btn-default btn-lg btn-block" style="text-align:left">
+            <p><strong>{{event.internalId}}</strong></p>
+            <p><small><em>{{event.name}}</em></small></p>
+        </div>
         <div ui-content-for="navbarAction"></div>
     </div>
 </div>

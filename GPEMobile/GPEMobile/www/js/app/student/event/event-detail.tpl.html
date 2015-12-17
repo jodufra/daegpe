@@ -1,0 +1,17 @@
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
+<div ui-content-for="title">
+    <span>Eventos</span>
+</div>
+<div class="scrollable">
+    <div class="scrollable-content section">
+        <div class="container-fluid">
+            <h4 style="padding-top:10px;">Id do Evento</h4>
+            <h3>{{event.internalId}}</h3>
+            <h4 style="padding-top:10px;">Nome do Evento</h4>
+            <h3>{{event.name}}</h3>
+        </div>
+
+        <div ui-content-for="navbarAction"></div>
+    </div>
+</div>

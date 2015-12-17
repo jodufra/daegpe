@@ -1,12 +1,41 @@
-<div ui-content-for="leftSidebar">
-    <div ng-include="'js/app/student/leftsidebar.tpl.html'" ui-track-as-search-param='true'></div>
-</div>
-<div ui-content-for="title">
-    <span>Dashboard</span>
-</div>
+<div ui-content-for="leftSidebar"><div ng-include="'js/app/student/leftsidebar.tpl.html'" ui-track-as-search-param='true'></div></div>
+<div ui-content-for="back"></div>
+<div ui-content-for="title"><span>Inicio</span></div>
+<div ui-content-for="navbarAction" ><div ng-click="back()" class="btn"><i class="fa fa-sign-out"></i></div></div>
+
 <div class="scrollable">
-    <div class="scrollable-content section">
-        <h1>Dashboard</h1>
-        <div ui-content-for="navbarAction"></div>
+    <div class="scrollable-content">
+        <div class="list-group text-center">
+            <div class="list-group-item list-group-item-home">
+                <h1>Gestao de Presencas em Eventos</h1>
+            </div>
+            <a class="list-group-item list-group-item-home" ng-click="go('/student/ucs')">
+                <div>
+                    <i class="fa fa-gamepad feature-icon text-ipl"></i>
+                </div>
+                <div>
+                    <h3 class="home-heading">Unidade Curriculares</h3>
+                    Listagem e detalhes das Unidade Curriculares.
+                </div>
+            </a>
+            <a class="list-group-item list-group-item-home" ng-click="go('/student/events')">
+                <div>
+                    <i class="fa fa-bell feature-icon text-ipl"></i>
+                </div>
+                <div>
+                    <h3 class="home-heading">Eventos</h3>
+                    Listagem e detalhes dos Eventos.
+                </div>
+            </a>
+            <a class="list-group-item list-group-item-home" ng-click="go('/student/users')">
+                <div>
+                    <i class="fa fa-user feature-icon text-ipl"></i>
+                </div>
+                <div>
+                    <h3 class="home-heading">A minha conta</h3>
+                    Ver e alterar os detalhes da conta.
+                </div>
+            </a>
+        </div>
     </div>
 </div>

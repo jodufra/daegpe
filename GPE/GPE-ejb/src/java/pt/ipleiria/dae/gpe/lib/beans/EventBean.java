@@ -94,7 +94,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
             if ((dto.isNew() || event.getUc().getIdUC() != (int) dto.getUc().getRelationalId()) && dto.getUc() != null) {
                 event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
-            }else{
+            } else {
                 event.setUc(null);
             }
             if (dto.isNew() || event.getManager().getIdUser() != (int) dto.getManager().getRelationalId()) {
@@ -564,8 +564,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
 
         }
-        return generateDTOList(em.createQuery(query, Event.class
-        ).getResultList());
+        return generateDTOList(em.createQuery(query, Event.class).getResultList());
     }
 
     public List<EventDTO> findEventsManager(ManagerEventFindOptions options) {
@@ -655,11 +654,9 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         return null;
     }
 
-    public
-            void remove(Integer idEvent) {
+    public void remove(Integer idEvent) {
         Event event = em.find(Event.class, idEvent);
-        if (event
-                == null) {
+        if (event == null) {
             return;
         }
 

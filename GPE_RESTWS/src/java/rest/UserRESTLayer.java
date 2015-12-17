@@ -26,13 +26,13 @@ public class UserRESTLayer {
     
     
     @GET
+    @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("all")
     public List<UserDTO> getAll(){
         return userBean.findAll();
     }
     
-    
+    /*
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{id}/ucs")
@@ -41,5 +41,5 @@ public class UserRESTLayer {
         StudentUCFindOptions options = new StudentUCFindOptions(1, 100, UCOrderBy.NameAsc, userBean.find(idUser), "");
         return ucBean.findFromStudent(options);
     }
-   
+   */
 }
