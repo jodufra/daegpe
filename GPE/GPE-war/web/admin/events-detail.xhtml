@@ -119,12 +119,14 @@
 
                                             <div class="form-group">
                                                 <h:panelGroup layout ="block" rendered="#{adminManager.eventDetailModel.allUCs.size() > 0}">
-                                                    <h:outputLabel for = "tipo">Importar alunos de</h:outputLabel>        
+                                                    <h:outputLabel for = "tipo">Importar alunos de: </h:outputLabel>        
                                                     <h:selectOneMenu  value = "#{adminManager.eventDetailModel.studentsAttendance}" class="form-control" style = "height: 35px">
                                                         <f:selectItems value="#{adminManager.eventDetailModel.allUCs}" var = "UCC" itemLabel="#{UCC.name}" itemValue="#{UCC.idUC}"/>
                                                     </h:selectOneMenu>
 
-
+                                                    <h:commandButton value = "Importar Agora"  class="btn btn-primary" action = "#{adminManager.importStudentsFromUC()}">
+                                                        <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
+                                                    </h:commandButton>                
                                                 </h:panelGroup> 
                                             </div>
 
