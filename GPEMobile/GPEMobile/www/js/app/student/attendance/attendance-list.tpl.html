@@ -1,0 +1,23 @@
+<div ui-content-for="leftSidebar">
+    <div ng-include="'js/app/student/leftsidebar.tpl.html'" ui-track-as-search-param='true'></div>
+    <div ui-content-for="back"></div>
+</div>
+<div ui-content-for="title">
+    <span>Participações</span>
+</div>
+<div class="scrollable">
+    <div ng-show="hasAttendances()">
+        <div class="scrollable-content section">
+            <div ng-repeat="attendance in attendances" ng-click="load(attendance)" class="btn btn-default btn-lg btn-block" style="text-align:left">
+                ATTENDACE ITEM
+            </div>
+            <div ui-content-for="navbarAction"></div>
+        </div>
+    </div>
+    <br ng-hide="hasAttendances() == false">
+    <div class="scrollable-content section">
+        <div><h3>Não tem Participações</h3></div>
+        <div ui-content-for="navbarAction"></div>
+    </div>
+    </div>
+</div>
