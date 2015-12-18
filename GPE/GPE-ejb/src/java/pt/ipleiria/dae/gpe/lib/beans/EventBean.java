@@ -80,7 +80,6 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             errors.add(EntityValidationError.USER_IS_NOT_MANAGER);
         }
         if (errors.isEmpty()) {
-            System.out.println("EV: " + dto.isNew());    
             Event event = dto.isNew() ? new Event() : getEntityFromDTO(dto);
             event.setIdEvent(dto.getIdEvent());
             event.setInternalId(dto.getInternalId());
@@ -102,10 +101,8 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
                 event.setManager(em.find(Manager.class, dto.getManager().getRelationalId()));
             }
             if (event.isNew()) {
-                System.out.println("Vou criar");
                 this.create(event);
             } else {
-                System.out.println("Vou editar");
                 this.edit(event);
             }
         } else {
@@ -389,19 +386,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         }
     }
 
-    public EventDTO find(String internalId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT u FROM Event u WHERE u.internalId = \"").append(internalId).append("\"");
-        TypedQuery<Event> query = em.createQuery(sb.toString(), Event.class
-        );
-        List<Event> events = query.getResultList();
-
-        if (events.isEmpty()) {
-            return null;
-        }
-
-        return generateDTO(events.get(0));
-    }
+    
 
     public List<EventDTO> find(int pageId, int pageSize, EventOrderBy orderBy) {
         return find(new AdminEventFindOptions(pageId, pageSize, orderBy, null));
