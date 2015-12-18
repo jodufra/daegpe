@@ -50,29 +50,28 @@ public class UserRESTLayer {
         }
         return null;
     }
+  
     @POST
     @Path("/login")
-    @Produces({MediaType.APPLICATION_JSON})
-    public UserDTO loginUser(String username, String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-
-
+    @Consumes({MediaType.APPLICATION_JSON})
+    public UserDTO loginUser(UserDTO user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         try {
-            UserDTO dto = userBean.findByUsername(username);
+            System.out.println("dasd");
+            UserDTO dto = userBean.findByUsername(user.getInternalId());
             if(dto!= null)
             {
-                String str = Security.GenerateSHA256Hash(password);
-                if(dto.getPassword()== str) {
+                String str = Security.GenerateSHA256Hash(user.getNewPassword());
+                if(dto.getPassword().equals(str)) {
                 } else {
                     return dto;
                 }
             }
-
+           
         } catch (EntityNotFoundException ex) {
             System.out.println("ERROR: " + ex);
         }
         return null;
     }
-
 
 
     @GET
