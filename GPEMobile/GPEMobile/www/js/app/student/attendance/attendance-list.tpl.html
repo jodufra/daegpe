@@ -9,13 +9,14 @@
     <div ng-show="hasAttendances()">
         <div class="scrollable-content section">
             <div ng-repeat="attendance in attendances" ng-click="load(attendance)" class="btn btn-default btn-lg btn-block" style="text-align:left">
-                ATTENDACE ITEM
+                <p><strong>{{attendance.event.uc.name}}</strong></p>
+                <p><small><em>{{attendance.event.name}}</em></small></p>
             </div>
             <div ui-content-for="navbarAction"></div>
         </div>
     </div>
-    <br ng-hide="hasAttendances() == false">
-    <div class="scrollable-content section">
+    <br/>
+    <div class="scrollable-content section" ng-hide="hasAttendances()">
         <div><h3>Não tem Participações</h3></div>
         <div ui-content-for="navbarAction"></div>
     </div>

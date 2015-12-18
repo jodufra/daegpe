@@ -12,6 +12,7 @@ import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
+import pt.ipleiria.dae.gpe.lib.dtos.StudentDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.entities.EventGroup;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
@@ -324,27 +326,32 @@ public class AdminManager extends AbstractManager {
             PresentErrorMessage("importstudentsform", "A UC Seleccionada não têm Alunos");
         }
     }*/
-    public void importStudentsFromUC() {
-        System.out.println("AQUI");    
-        try {
+    
+    
+   
+    public void importStudentsFromUC() throws EntityNotFoundException {
+        EventDTO eventDTO = eventDetailModel.provideEventDTO();
+        Collection<AttendanceDTO> attendances;
+        if(eventDetailModel.getStudentsUCDTO() != 0 && eventDetailModel.getStudentsUCDTO() != null){
+            try {
+                UCDTO ucDTO = ucBean.find(eventDetailModel.getStudentsUCDTO());
+                List<StudentDTO> students = ucBean.getUCStudents(ucDTO);
+                if(students == null || students.isEmpty()){
+                   PresentErrorMessage("eventstudentsform", "A UC Seleccionada não tem estudantes inscritos");
+                }
                 
-                EventDTO eventDTO = eventDetailModel.provideEventDTO();
-                Collection<AttendanceDTO> attendances;
-                UCDTO ucDTO = ucBean.find(eventDetailModel.getUc());
                 try {
                     attendances = attendanceBean.findFromEvent(eventDTO);
                     eventBean.addStudentsToEvent(attendances, ucDTO, eventDTO);
-                    System.out.println("PASSEI AQUI");
                 } catch (EntityValidationException ex) {
                     PresentErrorMessage("eventstudentsform", "O Aluno já se encontra na lista de presenças do Evento");
                 }
                 
-                
             } catch (EntityNotFoundException ex) {
-                Logger.getLogger(AdminManager.class.getName()).log(Level.SEVERE, null, ex);
+                PresentErrorMessage("eventstudentsform", "UC não disponivel");
             }
-           
-        
+        }        
+         
     }
 
     ////////////////////////////////////////////

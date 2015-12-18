@@ -50,7 +50,7 @@ gpe.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'js/app/student/attendance/attendance-list.tpl.html',
         controller: 'StudentAttendanceListController'
     });
-    $routeProvider.when('/student/attendances/:idAttendance', {
+    $routeProvider.when('/student/attendances/:attendanceID', {
         templateUrl: 'js/app/student/attendance/attendance-detail.tpl.html',
         controller: 'StudentAttendanceDetailController'
     });
