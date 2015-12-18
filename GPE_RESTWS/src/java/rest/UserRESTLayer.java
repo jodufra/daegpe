@@ -1,9 +1,13 @@
 package rest;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,20 +24,21 @@ import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import pt.ipleiria.dae.gpe.lib.utilities.Security;
 
 @Path("users")
 public class UserRESTLayer {
-    
+
     @EJB
     private UserBean userBean;
-    
+
     @EJB
     private UCBean ucBean;
-    
+
     @EJB
     private AttendanceBean attendanceBean;
-    
-    
+
+
     @GET
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -45,15 +50,39 @@ public class UserRESTLayer {
         }
         return null;
     }
-    
+    @POST
+    @Path("/login")
+    @Produces({MediaType.APPLICATION_JSON})
+    public UserDTO loginUser(String username, String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+
+        try {
+            UserDTO dto = userBean.findByUsername(username);
+            if(dto!= null)
+            {
+                String str = Security.GenerateSHA256Hash(password);
+                if(dto.getPassword()== str) {
+                } else {
+                    return dto;
+                }
+            }
+
+        } catch (EntityNotFoundException ex) {
+            System.out.println("ERROR: " + ex);
+        }
+        return null;
+    }
+
+
+
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON})
     public List<UserDTO> getAll(){
         return userBean.findAll();
     }
-    
-    
+
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{id}/ucs")
@@ -62,8 +91,8 @@ public class UserRESTLayer {
         StudentUCFindOptions options = new StudentUCFindOptions(1, 100, UCOrderBy.NameAsc, userBean.find(idUser), "");
         return ucBean.findFromStudent(options);
     }
-   
-    
+
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{id}/participacoes")
@@ -72,6 +101,6 @@ public class UserRESTLayer {
         StudentAttendanceFindOptions options = new StudentAttendanceFindOptions(1, 100, AttendanceOrderBy.UCNameAsc, userBean.find(idUser), "");
         return attendanceBean.findStudentAttendances(options);
     }
-    
-    
+
+
 }

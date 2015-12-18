@@ -1,11 +1,22 @@
-﻿'use strict';
+'use strict';
 
 gpeServices.factory('LoginFactory', ['$resource', function ($resource) {
 
-    var login = { method: 'POST', params: { username: '@username', password: '@password' }, isArray: false };
-    var logout = { method: 'GET', params: {}, isArray: false };
+    var login = {
+        method: 'POST',
+        params: {
+            username: '@username',
+            password: '@password'
+        },
+        isArray: false
+    };
+    var logout = {
+        method: 'GET',
+        params: {},
+        isArray: false
+    };
 
-    return $resource(baseUrl + 'webapi/session/', {}, {
+    return $resource(baseUrl + '/gpeapi/users/login', {}, {
         create: login,
         show: logout
     });
