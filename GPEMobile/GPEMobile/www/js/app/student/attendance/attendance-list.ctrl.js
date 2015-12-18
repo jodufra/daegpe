@@ -15,8 +15,8 @@ gpeAppStudentAttendance.controller('StudentAttendanceListController', ['$scope',
      * go to dedicated page of attendance
      */
     $scope.load = function(attendance){
-        console.log("TESTE: " + attendance.idAttendance);
-        $scope.go('student/attendances/' + attendance.idAttendance);
+        //TODO - obter o login
+        $scope.go('student/attendances/' + attendance.idAttendance + "/" + attendance.event.idEvent + "/" + "student");
     }
 
 
