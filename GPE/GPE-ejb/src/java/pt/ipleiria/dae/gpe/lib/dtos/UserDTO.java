@@ -41,6 +41,10 @@ public class UserDTO extends AbstractDTO {
         super();
         this.password = "";
     }
+
+    public String getPassword() {
+        return password;
+    }
     
     public UserDTO(Integer idUser, GROUP type, String internalId, String name, String email) {
         super(null);

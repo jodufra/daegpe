@@ -1,9 +1,15 @@
 package rest;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import static javax.ws.rs.HttpMethod.POST;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,6 +25,7 @@ import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import pt.ipleiria.dae.gpe.lib.utilities.Security;
 
 @Path("users")
 public class UserRESTLayer {
@@ -44,6 +51,30 @@ public class UserRESTLayer {
         }
         return null;
     }
+    @POST
+    @Path("/login")
+    @Produces({MediaType.APPLICATION_JSON})
+    public UserDTO loginUser(String username, String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+       
+        
+        try {
+            UserDTO dto = userBean.findByUsername(username);
+            if(dto!= null)
+            {
+                String str = Security.GenerateSHA256Hash(password);
+                if(dto.getPassword()== str) {
+                } else {
+                    return dto;
+                }
+            }
+           
+        } catch (EntityNotFoundException ex) {
+            System.out.println("ERROR: " + ex);
+        }
+        return null;
+    }
+    
+    
     
     @GET
     @Path("all")
