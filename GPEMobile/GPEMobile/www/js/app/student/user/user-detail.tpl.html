@@ -1,0 +1,29 @@
+<div ui-content-for="leftSidebar">
+    <div ng-include="'js/app/student/leftsidebar.tpl.html'" ui-track-as-search-param='true'></div>
+</div>
+<div ui-content-for="back"></div>
+<div ui-content-for="title">
+    <span>User</span>
+</div>
+<div class="scrollable">
+    <div class="scrollable-content section">
+        <div class="scrollable-header">
+            <div class="scrollable-header-content">
+                <h3 class="pull-left">{{user.name}}</h3>
+                <span>&nbsp;</span>
+                <span class="pull-right" ng-click="clear()"><i></i></span>
+            </div>
+        </div>
+        <div>
+            <h5 style="padding-top:10px;">Numero</h4>
+            <h4>{{user.internalId}}</h3>
+<!--
+<h4 style="padding-top:10px;">Nome</h4>
+<h3>{{user.name}}</h3>
+-->
+            <h5 style="padding-top:10px;">Email</h4>
+            <h4>{{user.email}}</h3>
+        </div>
+        <div ui-content-for="navbarAction"></div>
+    </div>
+</div>

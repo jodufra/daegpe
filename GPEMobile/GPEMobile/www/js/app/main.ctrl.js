@@ -1,5 +1,4 @@
-﻿'use strict';
-
+'use strict';
 gpeApp.controller('MainController', ['$scope', '$rootScope', '$window', '$location', function ($scope, $rootScope, $window, $location) {
 
     $rootScope.loading = false;

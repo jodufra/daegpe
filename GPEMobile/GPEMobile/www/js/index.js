@@ -1,4 +1,4 @@
-var baseUrl = "http://192.168.1.75:8080/GPE_RESTWS";
+var baseUrl = "http://192.168.0.78:8080/GPE_RESTWS";
 
 var gpe = angular.module('GPE', ['ngRoute', "mobile-angular-ui", 'mobile-angular-ui.gestures', 'GPE.app', 'GPE.app.student', 'GPE.app.student.uc', 'GPE.app.student.event', 'GPE.app.student.user']);
 var gpeServices = angular.module('GPE.services', ['ngResource']);
@@ -37,9 +37,9 @@ gpe.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'js/app/student/event/event-detail.tpl.html',
         controller: 'StudentEventDetailController'
     });
-    $routeProvider.when('/student/users', {
-        templateUrl: 'js/app/student/user/user-list.tpl.html',
-        controller: 'StudentUserListController'
+    $routeProvider.when('/student/users/uc/:idUC', {
+        templateUrl: 'js/app/student/user/user-detail.tpl.html',
+        controller: 'StudentUserDetailController'
     });
     $routeProvider.when('/student/users/:idUser', {
         templateUrl: 'js/app/student/user/user-detail.tpl.html',
