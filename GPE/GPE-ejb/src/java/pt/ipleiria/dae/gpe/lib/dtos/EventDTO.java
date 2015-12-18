@@ -58,6 +58,25 @@ public class EventDTO extends AbstractDTO {
         manager = new ManagerDTO(event.getManager());
     }
 
+    //TODO - By Pedro
+    public EventDTO(Integer idEvent, String internalId, EventType eventType, String name, String room,
+            Calendar eventDate, Calendar eventDuration, boolean attendanceActive,
+            boolean attendanceActivated, String attendancePassword, UCDTO uc, UserDTO manager) {
+        super(null);
+        this.idEvent = idEvent;
+        this.internalId = internalId;
+        this.eventType = eventType;
+        this.name = name;
+        this.room = room;
+        this.eventDate = eventDate;
+        this.eventDuration = eventDuration;
+        this.attendanceActive = attendanceActive;
+        this.attendanceActivated = attendanceActivated;
+        this.attendancePassword = attendancePassword;
+        this.uc = uc;
+        this.manager = manager;
+    }
+    
     public EventDTO(String internalId, EventType eventType, String name, String room,
             Calendar eventDate, Calendar eventDuration, boolean attendanceActive,
             boolean attendanceActivated, String attendancePassword, UCDTO uc, UserDTO manager) {

@@ -22,7 +22,8 @@ public class EventIndexModel {
     public String internalId;
 
     public int pageId;
-    public final int pageSize = 20;
+    //TODO - By Pedro
+    public final int pageSize = 50;
     public EventOrderBy orderBy;
     public List<EventDTO> users;
     public String search;
@@ -134,7 +135,7 @@ public class EventIndexModel {
     }
 
     public List<EventDTO> getEvents() {
-        AdminEventFindOptions options = new AdminEventFindOptions(pageId, pageSize, orderBy, search,internalId);
+        AdminEventFindOptions options = new AdminEventFindOptions(pageId, pageSize, orderBy, search, internalId);
         List<EventDTO> list = eventBean.find(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);

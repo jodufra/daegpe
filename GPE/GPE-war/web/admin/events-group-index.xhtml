@@ -156,17 +156,15 @@
                                                 <f:setPropertyActionListener target="#{adminManager.eventGroupIndexModel.orderBy}" value="#{9}"/>
                                             </c:otherwise>
                                         </c:choose>
-                                    </h:commandLink>
+                                    </h:commandLink> 
                                 </f:facet>
                                 <h:outputText value="#{Event.manager.name}"/>
                             </h:column>
-                            <h:column >
+                            <h:column>
                                 <f:facet name = "header"></f:facet>
-                                <h:form>
-                                    <h:commandButton value = "Visualizar Eventos" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}'>
+                                    <h:commandButton value = "Visualizar Eventos Assoc" class="btn btn-info" style = "float: right; margin-right: 10px;" action='#{redirectManager.GenerateRelativeURL("/admin/events-index")}'>
                                         <f:setPropertyActionListener target="#{adminManager.eventIndexModel.internalId}" value="#{Event.internalId}"/>
                                     </h:commandButton>
-                                </h:form>
                             </h:column>
                         </h:dataTable>
                         <div class="row text-center pagination">

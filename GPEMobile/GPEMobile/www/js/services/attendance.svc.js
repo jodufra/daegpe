@@ -12,3 +12,4 @@ gpeServices.factory('AttendanceUnique', function ($resource) {
         unique: {method: 'GET', params: {attendanceID: '@attendanceID'}}
     });
 });
+
