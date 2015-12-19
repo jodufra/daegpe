@@ -343,9 +343,9 @@ public class AdminManager extends AbstractManager {
             if (eventAttendance != null) {
                 eventBean.removeStudentFromEvent(attendance);
                 attendanceBean.remove(attendance);
-                PresentErrorMessage("eventstudentsform", "Estudante removido com sucesso");
+                PresentErrorMessage("eventparticipantsform", "Estudante removido com sucesso");
             } else {
-                PresentErrorMessage("eventstudentsform", "Impossivel removel o estudante do Evento");
+                PresentErrorMessage("eventparticipantsform", "Impossivel removel o estudante do Evento");
             }
         }
     }
