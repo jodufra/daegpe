@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
-
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
@@ -22,10 +21,16 @@
     <script type="text/javascript" src="js/app/student/uc/uc-list.ctrl.js"></script>
     <script type="text/javascript" src="js/app/student/uc/uc-detail.ctrl.js"></script>
     <script type="text/javascript" src="js/app/student/event/event-list.ctrl.js"></script>
-    <script type="text/javascript" src="js/app/student/user/user-detail.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/event/event-detail.ctrl.js"></script>
     <script type="text/javascript" src="js/app/student/user/user-list.ctrl.js"></script>
-
+    <script type="text/javascript" src="js/app/student/user/user-detail.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/attendance/attendance-list.ctrl.js"></script>
+    <script type="text/javascript" src="js/app/student/attendance/attendance-detail.ctrl.js"></script>
     <script type="text/javascript" src="js/services/login.svc.js"></script>
+    <script type="text/javascript" src="js/services/uc.svc.js"></script>
+    <script type="text/javascript" src="js/services/event.svc.js"></script>
+    <script type="text/javascript" src="js/services/user.svc.js"></script>
+    <script type="text/javascript" src="js/services/attendance.svc.js"></script>
     <title>GPE</title>
 </head>
 
@@ -34,15 +39,17 @@
     <div class="app">
         <div class="navbar navbar-app navbar-absolute-top">
             <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
-                <span class="ng-scope">Forms</span>
+                <span class="ng-scope">G. P. E.</span>
             </div>
             <div class="btn-group pull-left">
-                <div ui-toggle="uiSidebarLeft" class="btn sidebar-toggle">
+                <div ui-toggle="uiSidebarLeft" ui-yield-to="sidebarToggle" class="btn sidebar-toggle">
                     <i class="fa fa-bars"></i>
+                </div>
+                <div ui-yield-to="back" ng-click="back()" class="btn">
+                    <i class="fa fa-long-arrow-left"></i>
                 </div>
             </div>
             <div class="btn-group pull-right" ui-yield-to="navbarAction">
-                <a class="btn ng-scope" ng-click="login()">Login</a>
             </div>
         </div>
         <div class='app-body' ng-class="{loading: loading}">

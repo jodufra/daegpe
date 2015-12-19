@@ -51,9 +51,9 @@ public class StudentManager extends AbstractManager {
 
     @PostConstruct
     public void constructModels() {
-        ucIndexModel = new UCIndexModel(ucBean);
+        ucIndexModel = new UCIndexModel(ucBean, userBean);
         userDetailModel = new UserDetailModel();
-        attendanceIndexModel = new AttendanceIndexModel(attendanceBean);
+        attendanceIndexModel = new AttendanceIndexModel(attendanceBean, userBean);
     }
 
     ////////////////////////////////////////////

@@ -8,10 +8,12 @@ package pt.ipleiria.dae.gpe.web.models.student;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
+import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.beans.query.order.UCOrderBy;
 import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentUCFindOptions;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 
 /**
  *
@@ -19,6 +21,8 @@ import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentUCFindOptions;
  */
 public class UCIndexModel {
 
+    private final UserBean userBean;
+    
     private final UCBean ucBean;
 
     public int pageId;
@@ -29,8 +33,9 @@ public class UCIndexModel {
     public long count;
     public int pagesCount;
 
-    public UCIndexModel(UCBean ucBean) {
+    public UCIndexModel(UCBean ucBean, UserBean userBean) {
         this.ucBean = ucBean;
+        this.userBean = userBean;
         this.pageId = 1;
         this.orderBy = UCOrderBy.InternalIdAsc;
         this.search = "";
@@ -98,8 +103,10 @@ public class UCIndexModel {
         return pagesCount;
     }
 
-    public List<UCDTO> getUcs() {
-        StudentUCFindOptions options = new StudentUCFindOptions(pageId, pageSize, orderBy, (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"), search);
+    //TODO - Melhorar
+    public List<UCDTO> getUcs() throws EntityNotFoundException {
+        UserDTO userDTO = userBean.findByUsername(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+        StudentUCFindOptions options = new StudentUCFindOptions(pageId, pageSize, orderBy, userDTO, search);
         List<UCDTO> list = ucBean.findFromStudent(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);

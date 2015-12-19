@@ -1,0 +1,30 @@
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
+<div ui-content-for="title">
+    <span>Eventos</span>
+</div>
+<div class="scrollable" ng-controller = "StudentEventDetailController as stu">
+    <div class="scrollable-content section">
+        <div class="container-fluid">
+            <!--<h4 style="padding-top:10px;">Id do Evento</h4>
+            <h3>{{event.internalId}}</h3>-->
+            <h4 style="padding-top:10px;">Nome do Evento</h4>
+            <h3>{{event.name}}</h3>
+            <h4 style="padding-top:10px;">Tipo de Evento</h4>
+            <h3>{{event.eventType}}</h3>
+            <h4 style="padding-top:10px;">Sala</h4>
+            <h3>{{event.room}}</h3>
+            <h4 style="padding-top:10px;">Dia do Evento</h4>
+            <h3>{{event.eventDate}}</h3>
+            <h4 style="padding-top:10px;">Duração:</h4>
+            <h3>{{event.eventDuration}}</h3>
+            <h4 style="padding-top:10px;">UC</h4>
+            <h3>{{event.uc.name}}</h3>
+            <button class="btn btn-primary btn-block" ng-click="subscribeUC()">
+                Inscrever
+            </button>
+        </div>
+
+        <div ui-content-for="navbarAction"></div>
+    </div>
+</div>

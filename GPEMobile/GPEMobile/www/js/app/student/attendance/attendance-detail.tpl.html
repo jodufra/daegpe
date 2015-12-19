@@ -1,0 +1,22 @@
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
+<div ui-content-for="title">
+    <span>Participação</span>
+</div>
+<div class="scrollable" ng-controller = "StudentEventDetailController as stu">
+    <div class="scrollable-content section">
+        <div class="container-fluid">
+            Detalhes de uma participação
+
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <button class="btn btn-primary btn-block" ng-click="assignAttendance()">
+                PArticipar
+            </button>
+        </div>
+
+        <div ui-content-for="navbarAction"></div>
+    </div>
+</div>

@@ -215,4 +215,6 @@ public class EventDetailModel {
     {
         return EventType.values();
     }
+    
+    
 }

@@ -78,6 +78,9 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
             } else {
                 attendance = getEntity(dto.getIdAttendance());
             }
+            System.out.println("TA");
+            System.out.println("USER: " + em.find(Student.class, dto.getStudent().getIdUser()));
+            System.out.println("TA2");
             attendance.setStudent(em.find(Student.class, dto.getStudent().getIdUser()));
             attendance.setEvent(em.find(Event.class, dto.getEvent().getIdEvent()));
             attendance.setPresent(dto.isPresent());
