@@ -20,7 +20,7 @@
             <div class="form-group">
                 <div>
                     {{isPresent}}
-                    <button type="button" ng-class="buttonClass" ng-click="changeIntention()">{{presence}}</button>
+                    <button ng-show="attendance.event.attendanceActive=1" type="button" ng-class="buttonClass" ng-click="changeIntention()">{{presence}}</button>
                 </div>
             </div>
         </div>
