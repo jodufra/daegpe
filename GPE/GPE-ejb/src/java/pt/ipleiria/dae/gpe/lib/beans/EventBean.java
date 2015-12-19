@@ -687,4 +687,12 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
 
         em.remove(event);
     }
+    
+     public void remove(String internalID) throws EntityNotFoundException {
+        List<EventDTO> events = findEventsByInternalId(0, 0, EventOrderBy.NameAsc, internalID);
+        System.out.println("EVENTOS SIZE: " + events.size());
+        for(EventDTO eventDTO: events){
+            em.remove(getEntity(eventDTO.getIdEvent()));
+        }
+    }
 }
