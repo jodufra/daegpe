@@ -1,0 +1,17 @@
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
+<div ui-content-for="title">
+    <span>Unidades Curriculares</span>
+</div>
+<div class="scrollable">
+    <div class="scrollable-content section">
+        <div class="container-fluid">
+            <h4 style="padding-top:10px;">Id da Unidade Curricular</h4>
+            <h3>{{uc.internalId}}</h3>
+            <h4 style="padding-top:10px;">Nome da Unidade Curricular</h4>
+            <h3>{{uc.name}}</h3>
+        </div>
+
+        <div ui-content-for="navbarAction"></div>
+    </div>
+</div>

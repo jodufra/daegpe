@@ -20,7 +20,8 @@ public class EventGroupIndexModel {
     private final EventBean eventBean;
 
     public int pageId;
-    public final int pageSize = 20;
+    //TODO - By Pedro
+    public final int pageSize = 50;
     public EventOrderBy orderBy;
     public List<EventDTO> users;
     public String search;

@@ -1,0 +1,15 @@
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
+<div ui-content-for="title">
+    <span>Presenças</span>
+</div>
+<div class="scrollable">
+    <div class="scrollable-content section">
+        <div ng-hide="hasAttendances()"><h3>Não tem Presenças</h3></div>
+        <div ng-repeat="attendance in attendances" ng-click="load(attendance)" class="btn btn-default btn-lg btn-block" style="text-align:left">
+            <p><strong>{{attendance.event.uc.name}}</strong></p>
+            <p><small><em>{{attendance.event.name}}</em></small></p>
+        </div>
+        <div ui-content-for="navbarAction"></div>
+    </div>
+</div>

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
 import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
@@ -78,8 +79,12 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
             } else {
                 attendance = getEntity(dto.getIdAttendance());
             }
+            System.out.println("TA");
+            System.out.println("USER: " + em.find(Student.class, dto.getStudent().getIdUser()));
+            System.out.println("TA2");
             attendance.setStudent(em.find(Student.class, dto.getStudent().getIdUser()));
             attendance.setEvent(em.find(Event.class, dto.getEvent().getIdEvent()));
+            System.out.println("DTO PRESENT: " + dto.isPresent());
             attendance.setPresent(dto.isPresent());
 
             if (dto.isNew()) {
@@ -130,6 +135,7 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
             throw new EntityValidationException(errors);
         }
     }
+    
 
     public AttendanceDTO find(EventDTO event, UserDTO student) {
         List<EntityValidationError> errors = new ArrayList<>();
@@ -140,6 +146,7 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
         String query = "SELECT a FROM Attendance a JOIN a.event e, a.student s "
                 + "WHERE e.idEvent = " + event.getIdEvent() + " AND s.idUser = " + student.getIdUser();
         try {
+            AttendanceDTO att = generateDTO(em.createQuery(query, Attendance.class).getSingleResult());
             return generateDTO(em.createQuery(query, Attendance.class).getSingleResult());
         } catch (Exception e) {
             return null;

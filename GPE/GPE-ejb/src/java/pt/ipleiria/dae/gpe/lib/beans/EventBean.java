@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -94,7 +95,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             event.setSearch(GenerateSlug(dto.getInternalId() + " " + dto.getName() + " " + dto.getManager().getName() + " " + dto.getUc().getName(), true, true));
             if ((dto.isNew() || event.getUc().getIdUC() != (int) dto.getUc().getRelationalId()) && dto.getUc() != null) {
                 event.setUc(em.find(UC.class, dto.getUc().getRelationalId()));
-            }else{
+            } else {
                 event.setUc(null);
             }
             if (dto.isNew() || event.getManager().getIdUser() != (int) dto.getManager().getRelationalId()) {
@@ -355,6 +356,28 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             throw new EntityValidationException(errors);
         }
     }
+    
+    public void removeStudentFromEvent(AttendanceDTO attendanceDTO){
+        EventDTO eventDTO = attendanceDTO.getEvent();
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        Collection<Attendance> attendances = event.getParticipants();
+        
+        int counter = 0;
+        int attendanceFound = 0;
+        Attendance attendanceAux = null;
+        for(Attendance attendance: attendances){
+            counter++;
+            if(attendance.getIdAttendance().equals(attendanceDTO.getIdAttendance())){
+                attendanceFound = counter;
+                attendanceAux = attendance;
+                break;
+            }
+        }
+        if(attendanceFound != 0 && attendanceAux != null){
+            attendances.remove(attendanceAux);
+        }
+    }
+    
 
     public void addStudentsToEvent(Collection<AttendanceDTO> attendances, UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException {
         List<EntityValidationError> errors = new ArrayList<>();
@@ -386,19 +409,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         }
     }
 
-    public EventDTO find(String internalId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT u FROM Event u WHERE u.internalId = \"").append(internalId).append("\"");
-        TypedQuery<Event> query = em.createQuery(sb.toString(), Event.class
-        );
-        List<Event> events = query.getResultList();
-
-        if (events.isEmpty()) {
-            return null;
-        }
-
-        return generateDTO(events.get(0));
-    }
+    
 
     public List<EventDTO> find(int pageId, int pageSize, EventOrderBy orderBy) {
         return find(new AdminEventFindOptions(pageId, pageSize, orderBy, null));
@@ -564,8 +575,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(pageSize).getResultList());
 
         }
-        return generateDTOList(em.createQuery(query, Event.class
-        ).getResultList());
+        return generateDTOList(em.createQuery(query, Event.class).getResultList());
     }
 
     public List<EventDTO> findEventsManager(ManagerEventFindOptions options) {
@@ -654,12 +664,24 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
 
         return null;
     }
-
-    public
-            void remove(Integer idEvent) {
-        Event event = em.find(Event.class, idEvent);
+    
+    public List<AttendanceDTO> findStudentsAttendanceDTO(EventDTO eventDTO) {
+        List<AttendanceDTO> attendancesDTO = new LinkedList<>();
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
         if (event
-                == null) {
+                != null) {
+            for(Attendance attendance: event.getParticipants()){
+                attendancesDTO.add(new AttendanceDTO(attendance));
+            }
+            return attendancesDTO;
+        }
+
+        return null;
+    }
+
+    public void remove(Integer idEvent) {
+        Event event = em.find(Event.class, idEvent);
+        if (event == null) {
             return;
         }
 

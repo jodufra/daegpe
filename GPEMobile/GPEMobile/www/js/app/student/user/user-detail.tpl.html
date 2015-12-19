@@ -1,0 +1,21 @@
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
+<div ui-content-for="title">A minha conta</div>
+<div class="scrollable">
+    <div class="scrollable-content section">
+        <div class="scrollable-header">
+            <div class="scrollable-header-content">
+                <h3 class="pull-left">{{user.name}}</h3>
+                <span>&nbsp;</span>
+                <span class="pull-right" ng-click="clear()"><i></i></span>
+            </div>
+        </div>
+        <div>
+            <h5 style="padding-top:10px;">Numero</h5>
+            <h4>{{user.internalId}}</h4>
+            <h5 style="padding-top:10px;">Email</h5>
+            <h4>{{user.email}}</h4>
+        </div>
+        <div ui-content-for="navbarAction"></div>
+    </div>
+</div>

@@ -53,6 +53,7 @@
                             </div>
                         </div>
                         <h:dataTable var = "Event" class = "table table-striped" cellpadding="8" value="#{adminManager.eventIndexModel.events}" style = "width: 100%;">
+                            
                             <h:inputHidden value="#{Event.idEvent}" />
                             <h:column>
                                 <f:facet name = "header">

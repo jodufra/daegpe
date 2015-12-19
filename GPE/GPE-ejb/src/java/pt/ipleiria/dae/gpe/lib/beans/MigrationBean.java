@@ -53,6 +53,9 @@ public class MigrationBean {
             ManagerDTO manager;
             manager = new ManagerDTO("manager", "Manager", "manager@gpe.pt", "manager");
             userBean.save(manager);
+            
+            manager = new ManagerDTO("manager2", "Manager2", "manager2@gpe.pt", "manager2");
+            userBean.save(manager);
 
             StudentDTO student;
             student = new StudentDTO("student", "Student", "student@my.ipleiria.pt", "student");
@@ -98,7 +101,16 @@ public class MigrationBean {
             eventBean.save(eventGroup);
 
             //UC to Students & Student to UCs
-            student = new StudentDTO(3, "student", "Student Dummy", "dummy@my.ipleiria.pt");
+            student = new StudentDTO(4, "", "", "");
+            userBean.addUCStudent(student, uc); //UC to Student
+            ucBean.addStudentUC(uc, student); //Student to UC
+            student = new StudentDTO(5, "", "", "");
+            userBean.addUCStudent(student, uc); //UC to Student
+            ucBean.addStudentUC(uc, student); //Student to UC
+            student = new StudentDTO(6, "", "", "");
+            userBean.addUCStudent(student, uc); //UC to Student
+            ucBean.addStudentUC(uc, student); //Student to UC
+            student = new StudentDTO(7, "", "", "");
             userBean.addUCStudent(student, uc); //UC to Student
             ucBean.addStudentUC(uc, student); //Student to UC
 

@@ -34,6 +34,8 @@ public class EventDetailModel {
     private UCDTO uc;
     private UserDTO manager;
     private boolean isNew;
+    private Integer studentsUCDTO;
+    private String stringIdImport;
 
     private Collection<AttendanceDTO> attendants;
 
@@ -48,6 +50,7 @@ public class EventDetailModel {
     }
 
     public void setEvent(EventDTO event) {
+        
         if (event != null && !event.isNew()) {
             this.idEvent = event.getIdEvent();
             this.internalId = event.getInternalId();
@@ -84,12 +87,20 @@ public class EventDetailModel {
     }
 
     public EventDTO provideEventDTO() {
-        return new EventDTO(internalId, eventType, name, room, eventDate, eventDuration, attendanceActive, attendanceActivated, attendancePassword, uc, manager);
+        //TODO - By Pedro
+        //return new EventDTO(internalId, eventType, name, room, eventDate, eventDuration, attendanceActive, attendanceActivated, attendancePassword, uc, manager);
+        return new EventDTO(idEvent, internalId, eventType, name, room, eventDate, eventDuration, attendanceActive, attendanceActivated, attendancePassword, uc, manager);
+
     }
 
     public Collection<Attendance> getStudentsAttendance() {
         EventDTO eventDTO = this.provideEventDTO();
         return eventBean.findStudentsAttendance(eventDTO);
+    }
+    
+    public List<AttendanceDTO> getStudentAttendancesDTO(){
+        EventDTO eventDTO = this.provideEventDTO();
+        return eventBean.findStudentsAttendanceDTO(eventDTO);
     }
 
     public Integer getIdEvent() {
@@ -215,4 +226,22 @@ public class EventDetailModel {
     {
         return EventType.values();
     }
+    
+    public Integer getStudentsUCDTO() {
+        return studentsUCDTO;
+    }
+    
+    public void setStudentsUCDTO(Integer studentsUCDTO) {
+        this.studentsUCDTO = studentsUCDTO;
+    }
+
+    public String getStringIdImport() {
+        return stringIdImport;
+    }
+
+    public void setStringIdImport(String stringIdImport) {
+        this.stringIdImport = stringIdImport;
+    }
+    
+    
 }

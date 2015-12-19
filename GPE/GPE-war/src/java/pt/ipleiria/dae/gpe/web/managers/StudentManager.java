@@ -7,7 +7,9 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 import pt.ipleiria.dae.gpe.lib.beans.AttendanceBean;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
@@ -51,9 +53,9 @@ public class StudentManager extends AbstractManager {
 
     @PostConstruct
     public void constructModels() {
-        ucIndexModel = new UCIndexModel(ucBean);
+        ucIndexModel = new UCIndexModel(ucBean, userBean);
         userDetailModel = new UserDetailModel();
-        attendanceIndexModel = new AttendanceIndexModel(attendanceBean);
+        attendanceIndexModel = new AttendanceIndexModel(attendanceBean, userBean);
     }
 
     ////////////////////////////////////////////
@@ -72,15 +74,23 @@ public class StudentManager extends AbstractManager {
     
     public void updateAttendanceState(ActionEvent e)  throws IOException {
         AttendanceDTO attedance = (AttendanceDTO) ((UIParameter) e.getComponent().findComponent("attendance")).getValue();
-        attedance.setPresent(true);
-        try {
-            attendanceBean.save(attedance);
-            PresentSuccessMessage("eventattendancesform", "Participação registada com sucesso");
-        } catch (EntityValidationException eve) {
-            PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
-        } catch (EntityNotFoundException enf) {
-            PresentErrorMessage("eventattendancesform", "Verifique se o evento ainda existe ou se os registos de presenças estão abertos.");
-        }
+        final FacesContext fc = FacesContext.getCurrentInstance();
+        if(((HttpServletRequest) fc.getExternalContext().getRequest()).getMethod().equals("POST")){
+            
+            if(attedance.isPresent()){
+                attedance.setPresent(false);
+            }else{
+                attedance.setPresent(true);
+            }
+            try {
+                attendanceBean.save(attedance);
+                PresentSuccessMessage("eventattendancesform", "Participação registada com sucesso");
+            } catch (EntityValidationException eve) {
+                PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
+            } catch (EntityNotFoundException enf) {
+                PresentErrorMessage("eventattendancesform", "Verifique se o evento ainda existe ou se os registos de presenças estão abertos.");
+            }
+        }    
     }
 
     public void updateAttendanceState(ActionEvent e)  throws IOException {

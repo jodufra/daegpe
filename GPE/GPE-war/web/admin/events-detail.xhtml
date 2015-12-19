@@ -67,7 +67,12 @@
                                                 <f:selectItems value="#{adminManager.eventDetailModel.eventTypes}"/>
                                             </h:selectOneMenu>
                                         </div> 
-
+                                        
+                                        <div class="form-group">
+                                                <h:outputLabel for="room">Sala:</h:outputLabel>
+                                                <h:inputText id = "room" value = "#{adminManager.eventDetailModel.room}" a:placeholder="Sala" class="form-control"></h:inputText>
+                                            </div> 
+                                        
                                         <div class="form-group">
                                             <h:outputLabel for = "tipo">UC</h:outputLabel>      
                                             <h:selectOneMenu id = "uc" value = "#{adminManager.eventDetailModel.uc.idUC}" class="form-control" style = "height: 35px">
@@ -114,21 +119,30 @@
                                                 </div>   
                                             </div>
                                             
+                                            <div class="form-group">
+                                                <h:outputLabel for = "tipo">Participantes por ID</h:outputLabel>
 
+                                                <h:inputTextarea value = "#{adminManager.eventDetailModel.stringIdImport}" class="form-control" ></h:inputTextarea>
+                                                <h:commandButton value = "Importar" action = "#{adminManager.importStudentsFromText}" class="btn btn-primary" >
+                                                    <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
+                                                </h:commandButton>
+                                            </div>
 
 
                                             <div class="form-group">
                                                 <h:panelGroup layout ="block" rendered="#{adminManager.eventDetailModel.allUCs.size() > 0}">
-                                                    <h:outputLabel for = "tipo">Importar alunos de</h:outputLabel>        
-                                                    <h:selectOneMenu  value = "#{adminManager.eventDetailModel.studentsAttendance}" class="form-control" style = "height: 35px">
+                                                    <h:outputLabel for = "tipo">Importar alunos de: </h:outputLabel>        
+                                                    <h:selectOneMenu  value = "#{adminManager.eventDetailModel.studentsUCDTO}" class="form-control" style = "height: 35px">
                                                         <f:selectItems value="#{adminManager.eventDetailModel.allUCs}" var = "UCC" itemLabel="#{UCC.name}" itemValue="#{UCC.idUC}"/>
                                                     </h:selectOneMenu>
-
-
+                                                          
+                                                        <h:commandButton value = "Importar Agora"  class="btn btn-primary" action = "#{adminManager.importStudentsFromUC()}">
+                                                            <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
+                                                        </h:commandButton>
                                                 </h:panelGroup> 
                                             </div>
 
-                                            <h:dataTable var="Attendance" value="#{adminManager.eventDetailModel.studentsAttendance}" rendered ="#{adminManager.eventDetailModel.studentsAttendance.size() > 0}" class="table table-striped" >
+                                            <h:dataTable var="Attendance" value="#{adminManager.eventDetailModel.getStudentAttendancesDTO()}" rendered ="#{adminManager.eventDetailModel.getStudentAttendancesDTO().size() > 0}" class="table table-striped" >
                                                 <h:column> 
                                                     <f:facet name="header">ID do Estudante</f:facet>
                                                     <h:outputText value="#{Attendance.student.internalId}"/>
@@ -140,6 +154,13 @@
                                                 <h:column> 
                                                     <f:facet name="header">Email do Estudante</f:facet>
                                                     <h:outputText value="#{Attendance.student.email}"/>
+                                                </h:column>
+                                                <h:column> 
+                                                    <f:facet name="header">Acções</f:facet>
+                                                    <h:commandLink value = "Remover"  class="btn btn-primary" actionListener = "#{adminManager.removeStudentFromAttendance}" onclick="return confirm('Conrfirma que pretende retirar este Utilizador ddo Evento?');">
+                                                            <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
+                                                            <f:param name="attendance" id="attendance" value="#{Attendance}" />
+                                                    </h:commandLink>
                                                 </h:column>
 
                                             </h:dataTable>
