@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.lib.beans.query.options;
 
-import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.beans.query.order.UCOrderBy;
 
 

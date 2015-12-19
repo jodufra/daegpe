@@ -162,6 +162,15 @@
                             </h:column>
                             <h:column >
                                 <f:facet name = "header"></f:facet>
+                                <h:commandLink 
+                                        actionListener="#{adminManager.removeEvent}" 
+                                        value = "Remove" class="pull-right btn btn-danger fa" 
+                                        style = "float: right; margin-right: 10px;"
+                                        onclick="if (!confirm('Do you really want DELETE the Event ?'))
+                                                    return false">
+
+                                        <f:param name = "deleteEventId" id = "deleteEventId" value = "#{Event.idEvent}"/>
+                                    </h:commandLink>
                                 <h:commandLink  class="pull-right btn btn-primary fa " value="&#xf040;" action='#{redirectManager.GenerateRelativeURL("/admin/events-detail")}' >
                                     <f:setPropertyActionListener target="#{adminManager.eventDetailModel.event}" value="#{Event}"/>
                                 </h:commandLink>

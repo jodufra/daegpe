@@ -5,8 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.web.models.manager;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
