@@ -237,8 +237,18 @@ public class AdminManager extends AbstractManager {
     }
 
     public void removeEvent(ActionEvent event) {
+        System.out.println("VOU REMOVER");
         UIParameter param = (UIParameter) event.getComponent().findComponent("deleteEventId");
         Integer id = (Integer) param.getValue();
+        System.out.println("VOU REMOVER: " + id);
+        eventBean.remove(id);
+    }
+    
+     public void removeEvents(ActionEvent event) throws EntityNotFoundException {
+        System.out.println("VOU REMOVER");
+        UIParameter param = (UIParameter) event.getComponent().findComponent("deleteEventId");
+        String id = String.valueOf((param.getValue()));
+        System.out.println("VOU REMOVER: " + id);
         eventBean.remove(id);
     }
 
