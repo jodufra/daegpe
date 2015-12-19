@@ -35,6 +35,7 @@ public class EventDetailModel {
     private UserDTO manager;
     private boolean isNew;
     private Integer studentsUCDTO;
+    private String stringIdImport;
 
     private Collection<AttendanceDTO> attendants;
 
@@ -95,6 +96,11 @@ public class EventDetailModel {
     public Collection<Attendance> getStudentsAttendance() {
         EventDTO eventDTO = this.provideEventDTO();
         return eventBean.findStudentsAttendance(eventDTO);
+    }
+    
+    public List<AttendanceDTO> getStudentAttendancesDTO(){
+        EventDTO eventDTO = this.provideEventDTO();
+        return eventBean.findStudentsAttendanceDTO(eventDTO);
     }
 
     public Integer getIdEvent() {
@@ -228,4 +234,14 @@ public class EventDetailModel {
     public void setStudentsUCDTO(Integer studentsUCDTO) {
         this.studentsUCDTO = studentsUCDTO;
     }
+
+    public String getStringIdImport() {
+        return stringIdImport;
+    }
+
+    public void setStringIdImport(String stringIdImport) {
+        this.stringIdImport = stringIdImport;
+    }
+    
+    
 }
