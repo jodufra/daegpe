@@ -21,7 +21,7 @@ gpeServices.factory('StudentAttendanceFactory', function ($resource, SessionFact
         },
         update: {
             method: 'PUT',
-            params: { attendanceID: '@attendanceID', state: '@state' },
+            params: { idAttendance: '@idAttendance', state: '@state' },
             isArray: false,
             headers: { "CurrentUser": SessionFactory.getUser().idUser }
         }

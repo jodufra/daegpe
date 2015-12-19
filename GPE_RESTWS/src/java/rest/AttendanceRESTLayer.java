@@ -47,31 +47,7 @@ public class AttendanceRESTLayer {
         AttendanceDTO att = attendanceBean.find(idAttendance);
         att.setPresent(state);
         attendanceBean.save(att);
-        return att;
+        return attendanceBean.find(idAttendance);
     }
-
-    /*
-    @GET
-    @Path("/{attendanceID}/{eventID}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public AttendanceDTO getAttendanceInfo(@PathParam("attendanceID") String attendanceID, @PathParam("eventID") Integer eventID) throws EntityNotFoundException {
-        EventDTO event = eventBean.find(eventID);
-        UserDTO user = Session.Current.getUser();
-        return attendanceBean.find(event, user);
-    }
-
-    @PUT
-    @Path("/{attendanceID}/{eventID}/{state}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    public AttendanceDTO updateAttendancePresence(@PathParam("attendanceID") String attendanceID, @PathParam("eventID") Integer eventID, @PathParam("state") boolean newState) throws EntityNotFoundException, EntityValidationException {
-        EventDTO event = eventBean.find(eventID);
-        UserDTO user = Session.Current.getUser();
-        AttendanceDTO attendance = attendanceBean.find(event, user);
-        attendance.setPresent(newState);
-        attendanceBean.save(attendance);
-        return attendanceBean.find(event, user);
-    }
-    */
     
 }

@@ -18,8 +18,7 @@ gpeAppStudentAttendance.controller('StudentAttendanceDetailController', ['$scope
 
 
     $scope.changeIntention = function () {
-        $scope.attendance.present = !$scope.attendance.present;
-        StudentAttendanceFactory.update({ idAttendance: $routeParams.idAttendance, state: $scope.attendance.present });
+        $scope.attendance = StudentAttendanceFactory.update({ idAttendance: $scope.attendance.idAttendance, state: !$scope.attendance.present });
         checkPresence();
     }
 
