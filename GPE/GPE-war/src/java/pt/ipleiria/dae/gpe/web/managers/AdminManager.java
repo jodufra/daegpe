@@ -375,6 +375,20 @@ public class AdminManager extends AbstractManager {
 
     }
 
+    public void changeEventState() throws EntityValidationException, EntityNotFoundException{
+        EventDTO eventDTO = eventDetailModel.provideEventDTO();
+        if(eventDTO != null){
+            if(eventDTO.isAttendanceActive()){
+                eventDTO.setAttendanceActive(false);
+                eventBean.save(eventDTO);
+            }else{
+                eventDTO.setAttendanceActive(true);
+                eventBean.save(eventDTO);
+            }
+        }
+    }    
+
+    
     ////////////////////////////////////////////
     ///////////////// Models ///////////////////
     public UCIndexModel getUcIndexModel() {

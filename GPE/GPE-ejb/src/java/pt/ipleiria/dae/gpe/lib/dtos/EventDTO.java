@@ -192,4 +192,10 @@ public class EventDTO extends AbstractDTO {
         return getIdEvent();
     }
 
+    @Override
+    public String toString() {
+        return "EventDTO{" + "idEvent=" + idEvent + ", internalId=" + internalId + ", eventType=" + eventType + ", name=" + name + ", room=" + room + ", eventDate=" + eventDate + ", eventDuration=" + eventDuration + ", attendanceActive=" + attendanceActive + ", attendanceActivated=" + attendanceActivated + ", attendancePassword=" + attendancePassword + ", uc=" + uc + ", manager=" + manager + '}';
+    }
+
+    
 }
