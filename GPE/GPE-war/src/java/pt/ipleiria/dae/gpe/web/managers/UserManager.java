@@ -23,7 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
-import static pt.ipleiria.dae.gpe.lib.utilities.Security.GenerateSHA256Hash;
 
 /**
  *

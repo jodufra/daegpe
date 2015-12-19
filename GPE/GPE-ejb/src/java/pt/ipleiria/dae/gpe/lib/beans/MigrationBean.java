@@ -5,8 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.lib.beans;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
