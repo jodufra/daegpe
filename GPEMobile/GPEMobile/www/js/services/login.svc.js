@@ -1,23 +1,31 @@
 'use strict';
 
 gpeServices.factory('LoginFactory', ['$resource', function ($resource) {
-
-    var login = {
-        method: 'POST',
-        params: {
-            username: '@username',
-            password: '@password'
-        },
-        isArray: false
-    };
-    var logout = {
-        method: 'GET',
-        params: {},
-        isArray: false
-    };
-
     return $resource(baseUrl + '/gpeapi/users/login', {}, {
-        create: login,
-        show: logout
+       update: {method: 'PUT', params: {internalId: '@internalId', newPassword: '@newPassword', name: '@name'}}
     });
 }]);
+
+
+
+
+/*
+ var login = {
+ method: 'POST',
+ params: {
+ internalID: '@username',
+ password: '@password'
+ },
+ isArray: false
+ };
+ console.log("TESTE: " + login.params.internalID);
+ var logout = {
+ method: 'GET',
+ params: {},
+ isArray: false
+ };
+
+ return $resource(baseUrl + '/gpeapi/users/login', {}, {
+ create: login,
+ show: logout
+ });*/
