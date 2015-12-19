@@ -5,7 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.web.models.manager;
 
-import pt.ipleiria.dae.gpe.web.models.admin.*;
 import java.util.List;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;

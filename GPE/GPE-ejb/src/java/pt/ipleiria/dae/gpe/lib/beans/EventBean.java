@@ -3,7 +3,6 @@ package pt.ipleiria.dae.gpe.lib.beans;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
@@ -397,7 +395,7 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
                     if (find == true) {
                         errors.add(EntityValidationError.ATTENDANCE_CANT_BE_REPEATED);
                     } else {
-                        Attendance attendeAttendance = new Attendance((Student) user, event, true);
+                        Attendance attendeAttendance = new Attendance((Student) user, event, false);
                         event.addParticipant(attendeAttendance);
                     }
                 }
