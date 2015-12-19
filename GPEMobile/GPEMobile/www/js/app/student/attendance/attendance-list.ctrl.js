@@ -1,4 +1,6 @@
-gpeAppStudentAttendance.controller('StudentAttendanceListController', ['$scope', '$routeParams', 'AttendanceFactory', function($scope, $routeParams, AttendanceFactory){
+gpeAppStudentAttendance.controller('StudentAttendanceListController', ['$scope', '$routeParams', 'AttendanceFactory', 'SessionFactory', function($scope, $routeParams, AttendanceFactory, SessionFactory){
+
+    console.log(SessionFactory.getUser());
 
     $scope.attendances = getAttendances();
 

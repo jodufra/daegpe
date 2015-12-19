@@ -38,11 +38,11 @@ gpe.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'js/app/student/event/event-detail.tpl.html',
         controller: 'StudentEventDetailController'
     });
-    $routeProvider.when('/student/users/uc/:idUC', {
+    $routeProvider.when('/student/users/:idUser', {
         templateUrl: 'js/app/student/user/user-detail.tpl.html',
         controller: 'StudentUserDetailController'
     });
-    $routeProvider.when('/student/users/:idUser', {
+    $routeProvider.when('/student/users/uc/:idUC', {
         templateUrl: 'js/app/student/user/user-detail.tpl.html',
         controller: 'StudentUserDetailController'
     });

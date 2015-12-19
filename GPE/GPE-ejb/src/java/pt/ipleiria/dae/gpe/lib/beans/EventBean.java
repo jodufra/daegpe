@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import javax.ejb.Stateless;
@@ -355,6 +356,28 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
             throw new EntityValidationException(errors);
         }
     }
+    
+    public void removeStudentFromEvent(AttendanceDTO attendanceDTO){
+        EventDTO eventDTO = attendanceDTO.getEvent();
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        Collection<Attendance> attendances = event.getParticipants();
+        
+        int counter = 0;
+        int attendanceFound = 0;
+        Attendance attendanceAux = null;
+        for(Attendance attendance: attendances){
+            counter++;
+            if(attendance.getIdAttendance().equals(attendanceDTO.getIdAttendance())){
+                attendanceFound = counter;
+                attendanceAux = attendance;
+                break;
+            }
+        }
+        if(attendanceFound != 0 && attendanceAux != null){
+            attendances.remove(attendanceAux);
+        }
+    }
+    
 
     public void addStudentsToEvent(Collection<AttendanceDTO> attendances, UCDTO ucDTO, EventDTO eventDTO) throws EntityValidationException {
         List<EntityValidationError> errors = new ArrayList<>();
@@ -637,6 +660,20 @@ public class EventBean extends AbstractBean<Event, EventDTO> {
         if (event
                 != null) {
             return event.getParticipants();
+        }
+
+        return null;
+    }
+    
+    public List<AttendanceDTO> findStudentsAttendanceDTO(EventDTO eventDTO) {
+        List<AttendanceDTO> attendancesDTO = new LinkedList<>();
+        Event event = em.find(Event.class, eventDTO.getIdEvent());
+        if (event
+                != null) {
+            for(Attendance attendance: event.getParticipants()){
+                attendancesDTO.add(new AttendanceDTO(attendance));
+            }
+            return attendancesDTO;
         }
 
         return null;

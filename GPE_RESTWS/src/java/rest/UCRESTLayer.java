@@ -12,7 +12,7 @@ import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 
 @Path("ucs")
-public class UCRESTLayer {
+public class UcRESTLayer {
 
     @EJB
     private UCBean ucBean;

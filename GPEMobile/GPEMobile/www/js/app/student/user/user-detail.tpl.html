@@ -1,10 +1,6 @@
-<div ui-content-for="leftSidebar">
-    <div ng-include="'js/app/student/leftsidebar.tpl.html'" ui-track-as-search-param='true'></div>
-</div>
-<div ui-content-for="back"></div>
-<div ui-content-for="title">
-    <span>User</span>
-</div>
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
+<div ui-content-for="title">A minha conta</div>
 <div class="scrollable">
     <div class="scrollable-content section">
         <div class="scrollable-header">
@@ -15,14 +11,10 @@
             </div>
         </div>
         <div>
-            <h5 style="padding-top:10px;">Numero</h4>
-            <h4>{{user.internalId}}</h3>
-<!--
-<h4 style="padding-top:10px;">Nome</h4>
-<h3>{{user.name}}</h3>
--->
-            <h5 style="padding-top:10px;">Email</h4>
-            <h4>{{user.email}}</h3>
+            <h5 style="padding-top:10px;">Numero</h5>
+            <h4>{{user.internalId}}</h4>
+            <h5 style="padding-top:10px;">Email</h5>
+            <h4>{{user.email}}</h4>
         </div>
         <div ui-content-for="navbarAction"></div>
     </div>

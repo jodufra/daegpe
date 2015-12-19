@@ -2,7 +2,7 @@
 
 gpeServices.factory('LoginFactory', ['$resource', function ($resource) {
     return $resource(baseUrl + '/gpeapi/users/login', {}, {
-       update: {method: 'PUT', params: {internalId: '@internalId', newPassword: '@newPassword', name: '@name'}}
+        update: { method: 'PUT', params: { username: '@username', password: '@password' } }
     });
 }]);
 
