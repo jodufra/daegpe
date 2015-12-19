@@ -10,25 +10,26 @@
 <div class="scrollable">
     <div class="scrollable-content">
         <div class="list-group text-center">
-<div class="list-group-item list-group-item-home">
-    <h3>Gestao de Presencas em Eventos</h1>
-            </div>            <a class="list-group-item list-group-item-home" ng-click="go('/student/ucs')">
+            <div class="list-group-item list-group-item-home">
+                <h3>Gestao de Presencas em Eventos</h3>
+            </div>
+            <a class="list-group-item list-group-item-home" ng-click="go('/student/ucs')">
                 <div>
                     <i class="fa fa-book feature-icon text-ipl"></i>
                 </div>
                 <div>
                     <h3 class="home-heading">Unidade Curriculares</h3> Listagem e detalhes das Unidade Curriculares.
-            </div>
-            </a>
-            <a class="list-group-item list-group-item-home" ng-click="go('/student/events')">
-                <div>
-                    <i class="fa fa-bell feature-icon text-ipl"></i>
-                </div>
-                <div>
-                    <h3 class="home-heading">Eventos</h3> Listagem e detalhes dos Eventos.
                 </div>
             </a>
-            <a class="list-group-item list-group-item-home" ng-click="go('/student/users/4')">
+            <a class="list-group-item list-group-item-home" ng-click="go('/student/attendances')">
+                <div>
+                    <i class="fa fa-check feature-icon text-ipl"></i>
+                </div>
+                <div>
+                    <h3 class="home-heading">Presencas</h3> Listagem e detalhes de Presencas.
+                </div>
+            </a>
+            <a class="list-group-item list-group-item-home" ng-click="go('/student/users/' + session.getUser().idUser)">
                 <div>
                     <i class="fa fa-user feature-icon text-ipl"></i>
                 </div>

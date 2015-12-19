@@ -8,10 +8,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
+import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentUCFindOptions;
+import pt.ipleiria.dae.gpe.lib.beans.query.order.UCOrderBy;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
+import ws.Session;
 
-@Path("ucs")
+@Path("student/ucs")
 public class UCRESTLayer {
 
     @EJB
@@ -20,7 +23,7 @@ public class UCRESTLayer {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public List<UCDTO> getAll() {
-        return ucBean.findAll();
+        return ucBean.findFromStudent(new StudentUCFindOptions(0, 0, UCOrderBy.NameAsc, Session.Current.getUser(), null));
     }
 
     @GET

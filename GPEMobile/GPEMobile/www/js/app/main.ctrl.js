@@ -1,7 +1,9 @@
 'use strict';
-gpeApp.controller('MainController', ['$scope', '$rootScope', '$window', '$location', function ($scope, $rootScope, $window, $location) {
+gpeApp.controller('MainController', ['$scope', '$rootScope', '$window', '$location', 'SessionFactory', function ($scope, $rootScope, $window, $location, SessionFactory) {
 
+    $rootScope.session = SessionFactory;
     $rootScope.loading = false;
+
     $rootScope.$on('$routeChangeStart', function () {
         $rootScope.loading = true;
     });
@@ -10,13 +12,11 @@ gpeApp.controller('MainController', ['$scope', '$rootScope', '$window', '$locati
         $rootScope.loading = false;
     });
 
-    $scope.slide = '';
     $rootScope.back = function () {
-        $scope.slide = 'slide-right';
         $window.history.back();
     }
+
     $rootScope.go = function (path) {
-        $scope.slide = 'slide-left';
         $location.url(path);
     }
 }]);

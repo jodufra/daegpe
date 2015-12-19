@@ -1,11 +1,10 @@
-var baseUrl = "http://192.168.0.78:8080/GPE_RESTWS";
+var baseUrl = "http://192.168.1.75:8080/GPE_RESTWS";
 
-var gpe = angular.module('GPE', ['ngRoute', "mobile-angular-ui", 'mobile-angular-ui.gestures', 'GPE.app', 'GPE.app.student', 'GPE.app.student.uc', 'GPE.app.student.event', 'GPE.app.student.user', 'GPE.app.student.attendance']);
+var gpe = angular.module('GPE', ['ngRoute', "mobile-angular-ui", 'mobile-angular-ui.gestures', 'GPE.app', 'GPE.app.student', 'GPE.app.student.uc', 'GPE.app.student.user', 'GPE.app.student.attendance']);
 var gpeServices = angular.module('GPE.services', ['ngResource']);
 var gpeApp = angular.module('GPE.app', ['GPE.services']);
 var gpeAppStudent = angular.module('GPE.app.student', ['GPE.services']);
 var gpeAppStudentUc = angular.module('GPE.app.student.uc', ['GPE.services']);
-var gpeAppStudentEvent = angular.module('GPE.app.student.event', ['GPE.services']);
 var gpeAppStudentUser = angular.module('GPE.app.student.user', ['GPE.services']);
 var gpeAppStudentAttendance = angular.module('GPE.app.student.attendance', ['GPE.services']);
 
@@ -30,18 +29,6 @@ gpe.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'js/app/student/uc/uc-detail.tpl.html',
         controller: 'StudentUcDetailController'
     });
-    $routeProvider.when('/student/events', {
-        templateUrl: 'js/app/student/event/event-list.tpl.html',
-        controller: 'StudentEventListController'
-    });
-    $routeProvider.when('/student/events/:idEvent', {
-        templateUrl: 'js/app/student/event/event-detail.tpl.html',
-        controller: 'StudentEventDetailController'
-    });
-    $routeProvider.when('/student/users/uc/:idUC', {
-        templateUrl: 'js/app/student/user/user-detail.tpl.html',
-        controller: 'StudentUserDetailController'
-    });
     $routeProvider.when('/student/users/:idUser', {
         templateUrl: 'js/app/student/user/user-detail.tpl.html',
         controller: 'StudentUserDetailController'
@@ -50,7 +37,7 @@ gpe.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'js/app/student/attendance/attendance-list.tpl.html',
         controller: 'StudentAttendanceListController'
     });
-    $routeProvider.when('/student/attendances/:attendanceID/:eventID/:userID', {
+    $routeProvider.when('/student/attendances/:idAttendance', {
         templateUrl: 'js/app/student/attendance/attendance-detail.tpl.html',
         controller: 'StudentAttendanceDetailController'
     });

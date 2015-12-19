@@ -1,12 +1,11 @@
-<div ui-content-for="leftSidebar">
-    <div ng-include="'js/app/student/leftsidebar.tpl.html'" ui-track-as-search-param='true'></div>
-</div>
-<div ui-content-for="back"></div>
+<div ui-content-for="leftSidebar"></div>
+<div ui-content-for="sidebarToggle"></div>
 <div ui-content-for="title">
     <span>Unidades Curriculares</span>
 </div>
 <div class="scrollable">
     <div class="scrollable-content section">
+        <div ng-hide="hasUCs"><h3>Não está inscrito em Unidades Curriculares</h3></div>
         <div ng-repeat="uc in ucs" ng-click="viewUC(uc.idUC);" class="btn btn-default btn-lg btn-block" style="text-align:left">
             <p><strong>{{uc.internalId}}</strong></p>
             <p><small><em>{{uc.name}}</em></small></p>
