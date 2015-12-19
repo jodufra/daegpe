@@ -1,7 +1,11 @@
 'use strict';
 
-gpeServices.factory('UserFactory', function ($resource) {
-    return $resource(baseUrl + '/gpeapi/users/:id', {}, {
-        show: { method: 'GET', params: { id: '@id' } }
+gpeServices.factory('StudentUserFactory', function ($resource, SessionFactory) {
+    return $resource(baseUrl + '/gpeapi/student/users/:id', {}, {
+        show: {
+            method: 'GET',
+            params: { id: '@id' },
+            headers: { "CurrentUser": SessionFactory.getUser().idUser }
+        }
     });
 });

@@ -1,36 +1,22 @@
-gpeAppStudentAttendance.controller('StudentAttendanceListController', ['$scope', '$routeParams', 'AttendanceFactory', 'SessionFactory', function($scope, $routeParams, AttendanceFactory, SessionFactory){
+'use strict';
 
-    console.log(SessionFactory.getUser());
+gpeAppStudentAttendance.controller('StudentAttendanceListController', ['$scope', '$routeParams', 'StudentAttendancesFactory', function ($scope, $routeParams, StudentAttendancesFactory) {
 
-    $scope.attendances = getAttendances();
+    $scope.attendances = StudentAttendancesFactory.query();
 
     /**
      * verify if the user has attendances associated
      */
-    $scope.hasAttendances = function(){
+    $scope.hasAttendances = function () {
         return $scope.attendances.length > 0;
     }
 
-
-
     /**
-     * go to dedicated page of attendance
+     * go to detail page of attendance
      */
-    $scope.load = function(attendance){
-        //TODO - obter o login
-        $scope.go('student/attendances/' + attendance.idAttendance + "/" + attendance.event.idEvent + "/" + "student");
+    $scope.load = function (attendance) {
+        $scope.go('student/attendances/' + attendance.idAttendance);
     }
-
-
-
-    /**
-     * //TODO - Define Student
-     * get all student attendances
-     */
-    function getAttendances(){
-        return $scope.attendances = AttendanceFactory.query({userID: "student"});
-    }
-
 
 }]);
 

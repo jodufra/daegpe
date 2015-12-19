@@ -4,11 +4,14 @@ var Session = function () {
     return { user: null };
 };
 
-gpeServices.factory('SessionFactory', [function () {
+gpeServices.factory('SessionFactory', [function ($scope) {
     var service = {};
     var session = new Session();
 
     service.getUser = function () {
+        if (!service.hasUser()) {
+            $scope.go("/");
+        }
         return session.user;
     }
 

@@ -40,10 +40,5 @@ public class UserLoginModel implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getHashedPassword() {
-        if(password == null) return "";
-        return Security.GenerateSHA256Hash(password);
-    }
     
 }
