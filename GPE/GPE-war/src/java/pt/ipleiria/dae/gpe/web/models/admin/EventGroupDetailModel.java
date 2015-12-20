@@ -260,7 +260,7 @@ public class EventGroupDetailModel {
         while (iterator.hasNext()) {
             sb.append(iterator.next());
             if (iterator.hasNext()) {
-                sb.append(";");
+                sb.append(",");
             }
         }
         return sb.toString();
@@ -268,7 +268,7 @@ public class EventGroupDetailModel {
 
     public void setIgnoredWeeks(String ignoredWeeks) {
         this.ignoredWeeks.clear();
-        for (String week : ignoredWeeks.split(";")) {
+        for (String week : ignoredWeeks.split(",")) {
             this.ignoredWeeks.add(Integer.parseInt(week));
         }
     }

@@ -314,4 +314,20 @@ public class UserBean extends AbstractBean<User, UserDTO> {
         return generateDTOList(users);
     }
 
+    
+    @Override
+    public void remove(UserDTO dto) throws EntityNotFoundException {
+        remove(getEntityFromDTO(dto));
+    }
+
+    @Override
+    public void removeById(Object id) throws EntityNotFoundException {
+        remove(getEntity(id));
+    }
+    
+    private void remove(User user){
+        if (!user.isNew()) {
+            em.remove(em.merge(user.getUserGroup()));
+        }
+    }
 }

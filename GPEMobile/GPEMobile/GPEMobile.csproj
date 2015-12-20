@@ -42,11 +42,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="www\js\app\student\attendance\attendance-detail.ctrl.js" />
+    <Content Include="www\js\app\student\attendance\attendance-detail.tpl.html" />
+    <Content Include="www\js\app\student\attendance\attendance-list.ctrl.js" />
+    <Content Include="www\js\app\student\attendance\attendance-list.tpl.html" />
     <Content Include="www\js\app\student\dashboard.tpl.html" />
-    <Content Include="www\js\app\student\event\event-detail.ctrl.js" />
-    <Content Include="www\js\app\student\event\event-detail.tpl.html" />
-    <Content Include="www\js\app\student\event\event-list.ctrl.js" />
-    <Content Include="www\js\app\student\event\event-list.tpl.html" />
     <Content Include="www\js\app\student\leftsidebar.tpl.html" />
     <Content Include="www\js\app\student\uc\uc-detail.ctrl.js" />
     <Content Include="www\js\app\student\uc\uc-detail.tpl.html" />
@@ -65,9 +65,11 @@
     <Content Include="www\js\app\student\user\user-list.ctrl.js" />
     <Content Include="www\js\app\student\user\user-list.tpl.html" />
     <Content Include="www\js\index.js" />
-    <Content Include="www\js\services\event.svc.js" />
+    <Content Include="www\js\services\attendance.svc.js" />
+    <Content Include="www\js\services\session.svc.js" />
     <Content Include="www\js\services\uc.svc.js" />
     <Content Include="www\js\services\login.svc.js" />
+    <Content Include="www\js\services\user.svc.js" />
     <Content Include="www\lib\angular-ui\css\mobile-angular-ui-base.css" />
     <Content Include="www\lib\angular-ui\fonts\fontawesome-webfont.svg" />
     <Content Include="www\lib\angular-ui\js\mobile-angular-ui.core.js" />
@@ -78,60 +80,15 @@
     <Content Include="www\lib\angular\angular-route.js" />
     <Content Include="www\lib\angular\angular-touch.js" />
     <Content Include="www\lib\angular\angular.js" />
-    <Content Include="www\res\icon\android\icon-36-ldpi.png" />
-    <Content Include="www\res\icon\android\icon-48-mdpi.png" />
-    <Content Include="www\res\icon\android\icon-72-hdpi.png" />
-    <Content Include="www\res\icon\android\icon-96-xhdpi.png" />
-    <Content Include="www\res\icon\bada-wac\icon-48-type5.png" />
-    <Content Include="www\res\icon\bada-wac\icon-50-type3.png" />
-    <Content Include="www\res\icon\bada-wac\icon-80-type4.png" />
-    <Content Include="www\res\icon\bada\icon-128.png" />
-    <Content Include="www\res\icon\blackberry\icon-80.png" />
-    <Content Include="www\res\icon\ios\icon-57-2x.png" />
-    <Content Include="www\res\icon\ios\icon-57.png" />
-    <Content Include="www\res\icon\ios\icon-72-2x.png" />
-    <Content Include="www\res\icon\ios\icon-72.png" />
-    <Content Include="www\res\icon\tizen\icon-128.png" />
-    <Content Include="www\res\icon\webos\icon-64.png" />
-    <Content Include="www\res\icon\windows-phone\icon-173-tile.png" />
-    <Content Include="www\res\icon\windows-phone\icon-48.png" />
-    <Content Include="www\res\icon\windows-phone\icon-62-tile.png" />
-    <Content Include="www\res\screen\android\screen-hdpi-landscape.png" />
-    <Content Include="www\res\screen\android\screen-hdpi-portrait.png" />
-    <Content Include="www\res\screen\android\screen-ldpi-landscape.png" />
-    <Content Include="www\res\screen\android\screen-ldpi-portrait.png" />
-    <Content Include="www\res\screen\android\screen-mdpi-landscape.png" />
-    <Content Include="www\res\screen\android\screen-mdpi-portrait.png" />
-    <Content Include="www\res\screen\android\screen-xhdpi-landscape.png" />
-    <Content Include="www\res\screen\android\screen-xhdpi-portrait.png" />
-    <Content Include="www\res\screen\bada-wac\screen-type3.png" />
-    <Content Include="www\res\screen\bada-wac\screen-type4.png" />
-    <Content Include="www\res\screen\bada-wac\screen-type5.png" />
-    <Content Include="www\res\screen\bada\screen-portrait.png" />
-    <Content Include="www\res\screen\blackberry\screen-225.png" />
-    <Content Include="www\res\screen\ios\screen-ipad-landscape-2x.png" />
-    <Content Include="www\res\screen\ios\screen-ipad-landscape.png" />
-    <Content Include="www\res\screen\ios\screen-ipad-portrait-2x.png" />
-    <Content Include="www\res\screen\ios\screen-ipad-portrait.png" />
-    <Content Include="www\res\screen\ios\screen-iphone-landscape-2x.png" />
-    <Content Include="www\res\screen\ios\screen-iphone-landscape.png" />
-    <Content Include="www\res\screen\ios\screen-iphone-portrait-2x.png" />
-    <Content Include="www\res\screen\ios\screen-iphone-portrait-568h-2x.png" />
-    <Content Include="www\res\screen\ios\screen-iphone-portrait.png" />
-    <Content Include="www\res\screen\webos\screen-64.png" />
-    <Content Include="www\res\screen\windows-phone\screen-portrait.jpg" />
+    <Content Include="www\lib\crypto\sha256.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="www\lib\angular-ui\fonts\fontawesome-webfont.eot" />
     <None Include="www\lib\angular-ui\fonts\fontawesome-webfont.ttf" />
     <None Include="www\lib\angular-ui\fonts\fontawesome-webfont.woff" />
     <None Include="www\lib\angular-ui\fonts\fontawesome-webfont.woff2" />
-    <None Include="www\res\.pgbomit" />
-    <None Include="www\res\screen\tizen\README.md" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="www\js\utilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
