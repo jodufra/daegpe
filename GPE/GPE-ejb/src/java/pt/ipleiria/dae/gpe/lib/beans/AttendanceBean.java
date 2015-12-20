@@ -6,12 +6,10 @@
 package pt.ipleiria.dae.gpe.lib.beans;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaQuery;
 import pt.ipleiria.dae.gpe.lib.core.AbstractBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.AttendanceDTO;
@@ -25,7 +23,6 @@ import pt.ipleiria.dae.gpe.lib.entities.UC;
 import pt.ipleiria.dae.gpe.lib.entities.GROUP;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 import pt.ipleiria.dae.gpe.lib.exceptions.EntityValidationException;
-import pt.ipleiria.dae.gpe.lib.beans.query.order.EventOrderBy;
 import pt.ipleiria.dae.gpe.lib.beans.query.options.StudentAttendanceFindOptions;
 import static pt.ipleiria.dae.gpe.lib.utilities.Text.GenerateSlug;
 
@@ -164,6 +161,63 @@ public class AttendanceBean extends AbstractBean<Attendance, AttendanceDTO> {
         return generateDTOList((List<Attendance>) event.getParticipants());
     }
 
+    public List<AttendanceDTO> findStudentActiveAttendances(StudentAttendanceFindOptions options) {
+        String query = "SELECT a FROM Attendance a JOIN a.event e, a.student s, e.manager m, e.uc u"
+                + " WHERE e.attendanceActive = 1 AND s.idUser = " + options.user.getIdUser();
+
+        if (options.search != null && !options.search.isEmpty()) {
+            for (String piece : options.search.split(" ")) {
+                if (piece.equals(" ") || piece.isEmpty()) {
+                    continue;
+                }
+                query += " AND e.search LIKE '%" + GenerateSlug(piece, true, true) + "%'";
+            }
+        }
+        options.count = (long) em.createQuery(query.replace("SELECT a", "SELECT COUNT(a)")).getSingleResult();
+
+        switch (options.orderBy) {
+            case DateEndAsc:
+                break;
+            case DateEndDesc:
+                break;
+            case DateStartAsc:
+                break;
+            case DateStartDesc:
+                break;
+            case EventNameAsc:
+                query += " ORDER BY e.name";
+                break;
+            case EventNameDesc:
+                query += " ORDER BY e.name desc";
+                break;
+            case IsPresentAsc:
+                query += " ORDER BY a.present";
+                break;
+            case IsPresentDesc:
+                query += " ORDER BY a.present desc";
+                break;
+            case ManagerNameAsc:
+                query += " ORDER BY m.name";
+                break;
+            case ManagerNameDesc:
+                query += " ORDER BY m.name desc";
+                break;
+            case UCNameAsc:
+                query += " ORDER BY u.name";
+                break;
+            case UCNameDesc:
+                query += " ORDER BY u.name desc";
+                break;
+        }
+
+        if (options.pageId > 0 && options.pageSize > 0) {
+            int offset = (options.pageId - 1) * options.pageSize;
+            return generateDTOList(em.createQuery(query).setFirstResult(offset).setMaxResults(options.pageSize).getResultList());
+        }
+        return generateDTOList(em.createQuery(query, Attendance.class).getResultList());
+    }
+    
+    
     public List<AttendanceDTO> findStudentAttendances(StudentAttendanceFindOptions options) {
         String query = "SELECT a FROM Attendance a JOIN a.event e, a.student s, e.manager m, e.uc u"
                 + " WHERE s.idUser = " + options.user.getIdUser();

@@ -15,8 +15,6 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -59,7 +57,6 @@ public class AdminManager extends AbstractManager {
     private UserBean userBean;
     @EJB
     private EventBean eventBean;
-
     @EJB
     private AttendanceBean attendanceBean;
 
@@ -195,12 +192,13 @@ public class AdminManager extends AbstractManager {
             UIParameter param = (UIParameter) event.getComponent().findComponent("userId");
             Object id = param.getValue();
             userBean.removeById(id);
-
-            UserDTO user = (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-            if (Objects.equals(user.getIdUser(), id)) {
+            String username = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
+            try {
+                userBean.findByUsername(username);
+            } catch (EntityNotFoundException e) {
                 UserManager sessionManager = new UserManager();
                 sessionManager.logout();
-            } else {
+            } finally {
                 PresentSuccessMessage("userindexform", "Utilizador removido com sucesso.");
             }
         } catch (EntityNotFoundException e) {
@@ -239,12 +237,21 @@ public class AdminManager extends AbstractManager {
     }
 
     public void removeEvent(ActionEvent event) {
+        System.out.println("VOU REMOVER");
         UIParameter param = (UIParameter) event.getComponent().findComponent("deleteEventId");
         Integer id = (Integer) param.getValue();
+        System.out.println("VOU REMOVER: " + id);
+        eventBean.remove(id);
+    }
+    
+     public void removeEvents(ActionEvent event) throws EntityNotFoundException {
+        System.out.println("VOU REMOVER");
+        UIParameter param = (UIParameter) event.getComponent().findComponent("deleteEventId");
+        String id = String.valueOf((param.getValue()));
+        System.out.println("VOU REMOVER: " + id);
         eventBean.remove(id);
     }
 
-    
     public void importStudentsFromText() {
         List<EntityValidationError> errors = new LinkedList<>();
         EventDTO eventDTO = eventDetailModel.provideEventDTO();
@@ -301,74 +308,87 @@ public class AdminManager extends AbstractManager {
         }
     }
     /*
-    public void importStudentsFromUC() {
+     public void importStudentsFromUC() {
+     EventDTO eventDTO = eventDetailModel.provideEventDTO();
+     Collection<AttendanceDTO> attendances;
+     if (eventDetailModel.getStudentsUCDTO() != 0 && eventDetailModel.getStudentsUCDTO() != null) {
+     try {
+     UCDTO ucDTO = ucBean.find(eventDetailModel.getStudentsUCDTO());
+     try {
+     attendances = attendanceBean.findFromEvent(eventDTO);
+     eventBean.addStudentsToEvent(attendances, ucDTO, eventDTO);
+     } catch (EntityValidationException ex) {
+     PresentErrorMessage("eventstudentsform", "O Aluno já se encontra na lista de presenças do Evento");
+     }
+     } catch (EntityNotFoundException ex) {
+     PresentErrorMessage("eventstudentsform", "UC não disponivel");
+     }
+     }
+     }
+
+     public void addStudentsToEvents() {
+     EventDTO eventDTO = this.eventIndividualListModel.getEventDTO();
+     try {
+     attendanceBean.addStudentsToEvents(eventDTO.getUc(), eventDTO);
+     PresentSuccessMessage("importstudentsform", "Estudantes adicionados com Sucesso");
+     } catch (EntityValidationException ex) {
+     PresentErrorMessage("importstudentsform", "A UC Seleccionada não têm Alunos");
+     }
+     }*/
+
+    public void removeStudentFromAttendance(ActionEvent event) throws EntityNotFoundException {
+        AttendanceDTO attendance = (AttendanceDTO) ((UIParameter) event.getComponent().findComponent("attendance")).getValue();
+        if (attendance != null) {
+            EventDTO eventAttendance = attendance.getEvent();
+            if (eventAttendance != null) {
+                eventBean.removeStudentFromEvent(attendance);
+                attendanceBean.remove(attendance);
+                PresentErrorMessage("eventparticipantsform", "Estudante removido com sucesso");
+            } else {
+                PresentErrorMessage("eventparticipantsform", "Impossivel removel o estudante do Evento");
+            }
+        }
+    }
+
+    public void importStudentsFromUC() throws EntityNotFoundException {
         EventDTO eventDTO = eventDetailModel.provideEventDTO();
         Collection<AttendanceDTO> attendances;
         if (eventDetailModel.getStudentsUCDTO() != 0 && eventDetailModel.getStudentsUCDTO() != null) {
             try {
                 UCDTO ucDTO = ucBean.find(eventDetailModel.getStudentsUCDTO());
-                try {
-                    attendances = attendanceBean.findFromEvent(eventDTO);
-                    eventBean.addStudentsToEvent(attendances, ucDTO, eventDTO);
-                } catch (EntityValidationException ex) {
-                    PresentErrorMessage("eventstudentsform", "O Aluno já se encontra na lista de presenças do Evento");
-                }
-            } catch (EntityNotFoundException ex) {
-                PresentErrorMessage("eventstudentsform", "UC não disponivel");
-            }
-        }
-    }
-
-    public void addStudentsToEvents() {
-        EventDTO eventDTO = this.eventIndividualListModel.getEventDTO();
-        try {
-            attendanceBean.addStudentsToEvents(eventDTO.getUc(), eventDTO);
-            PresentSuccessMessage("importstudentsform", "Estudantes adicionados com Sucesso");
-        } catch (EntityValidationException ex) {
-            PresentErrorMessage("importstudentsform", "A UC Seleccionada não têm Alunos");
-        }
-    }*/
-    
-    
-    public void removeStudentFromAttendance(ActionEvent event) throws EntityNotFoundException{
-        AttendanceDTO attendance = (AttendanceDTO) ((UIParameter) event.getComponent().findComponent("attendance")).getValue();
-        if(attendance != null){
-            EventDTO eventAttendance = attendance.getEvent();
-            if(eventAttendance != null){
-                eventBean.removeStudentFromEvent(attendance);
-                attendanceBean.remove(attendance);
-                PresentErrorMessage("eventstudentsform", "Estudante removido com sucesso");
-            }else{
-                PresentErrorMessage("eventstudentsform", "Impossivel removel o estudante do Evento");
-            }
-        }
-    }
-   
-    public void importStudentsFromUC() throws EntityNotFoundException {
-        EventDTO eventDTO = eventDetailModel.provideEventDTO();
-        Collection<AttendanceDTO> attendances;
-        if(eventDetailModel.getStudentsUCDTO() != 0 && eventDetailModel.getStudentsUCDTO() != null){
-            try {
-                UCDTO ucDTO = ucBean.find(eventDetailModel.getStudentsUCDTO());
                 List<StudentDTO> students = ucBean.getUCStudents(ucDTO);
-                if(students == null || students.isEmpty()){
-                   PresentErrorMessage("eventstudentsform", "A UC Seleccionada não tem estudantes inscritos");
+                if (students == null || students.isEmpty()) {
+                    PresentErrorMessage("eventstudentsform", "A UC Seleccionada não tem estudantes inscritos");
                 }
-                
+
                 try {
                     attendances = attendanceBean.findFromEvent(eventDTO);
                     eventBean.addStudentsToEvent(attendances, ucDTO, eventDTO);
                 } catch (EntityValidationException ex) {
                     PresentErrorMessage("eventstudentsform", "O Aluno já se encontra na lista de presenças do Evento");
                 }
-                
+
             } catch (EntityNotFoundException ex) {
                 PresentErrorMessage("eventstudentsform", "UC não disponivel");
             }
-        }        
-         
+        }
+
     }
 
+    public void changeEventState() throws EntityValidationException, EntityNotFoundException{
+        EventDTO eventDTO = eventDetailModel.provideEventDTO();
+        if(eventDTO != null){
+            if(eventDTO.isAttendanceActive()){
+                eventDTO.setAttendanceActive(false);
+                eventBean.save(eventDTO);
+            }else{
+                eventDTO.setAttendanceActive(true);
+                eventBean.save(eventDTO);
+            }
+        }
+    }    
+
+    
     ////////////////////////////////////////////
     ///////////////// Models ///////////////////
     public UCIndexModel getUcIndexModel() {
@@ -403,5 +423,4 @@ public class AdminManager extends AbstractManager {
         return eventGroupDetailModel;
     }
 
-    
 }

@@ -144,6 +144,16 @@ public class AttendanceIndexModel {
     }
 
     //TODO - Melhorar
+    
+       public List<AttendanceDTO> getActiveAttendances() throws EntityNotFoundException {
+        UserDTO userDTO = userBean.findByUsername(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
+        StudentAttendanceFindOptions options = new StudentAttendanceFindOptions(pageId, pageSize, orderBy, userDTO, search);
+        List<AttendanceDTO> list = attendanceBean.findStudentActiveAttendances(options);
+        this.count = options.count;
+        this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);
+        return list;
+    }
+       
     public List<AttendanceDTO> getAttendances() throws EntityNotFoundException {
         UserDTO userDTO = userBean.findByUsername(FacesContext.getCurrentInstance().getExternalContext().getRemoteUser());
         StudentAttendanceFindOptions options = new StudentAttendanceFindOptions(pageId, pageSize, orderBy, userDTO, search);

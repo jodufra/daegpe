@@ -7,6 +7,7 @@ package pt.ipleiria.dae.gpe.lib.entities;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -28,8 +29,8 @@ public class UserGroup implements Serializable {
     private GROUP groupName;
 
     @Id
-    @OneToOne
-    @JoinColumn(name = "USERNAME", referencedColumnName = "INTERNALID")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "USERNAME",  referencedColumnName = "INTERNALID")
     private User user;
 
     public UserGroup() {

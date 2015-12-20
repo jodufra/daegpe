@@ -45,6 +45,8 @@ var Content = new (function () {
         contentCtrl.initLiveEdit();
         contentCtrl.initDatepickers();
         contentCtrl.initTimepickers();
+        contentCtrl.initDatetimepickers();
+        contentCtrl.initSelectize();
 
         if (typeof onComplete !== "undefined")
             onComplete();
@@ -149,7 +151,6 @@ var Content = new (function () {
     };
 
     contentCtrl.initDatepickers = function () {
-        // Bootstrap Tooltips
         var elements = element.find('.datepicker');
         if (elements.length) {
             elements.each(function () {
@@ -165,11 +166,40 @@ var Content = new (function () {
     };
 
     contentCtrl.initTimepickers = function () {
-        // Bootstrap Tooltips
         var elements = element.find('.timepicker');
         if (elements.length) {
             elements.each(function () {
                 $(this).timepicker({'timeFormat': 'H:i'});
+            });
+        }
+    };
+
+    contentCtrl.initDatetimepickers = function () {
+        var elements = element.find('.datetimepicker');
+        if (elements.length) {
+            elements.each(function () {
+                $(this).datetimepicker({
+                    locale: "pt",
+                });
+            });
+        }
+    };
+
+    contentCtrl.initSelectize = function () {
+        var elements = element.find('.selectize');
+        if (elements.length) {
+            elements.each(function () {
+                $(this).selectize({
+                    plugins: ['restore_on_backspace'],
+                    delimiter: ',',
+                    persist: false,
+                    create: function (input) {
+                        return {
+                            value: input,
+                            text: input
+                        }
+                    }
+                });
             });
         }
     };

@@ -33,11 +33,11 @@
                     </c:if>
                     <div class="tab-content" >
                         <div id="details" class='tab-pane fade #{adminManager.eventDetailModel.tab == "details" ? "in active" : ""} '>
-                            <div class = "panel">
+                            <div class="panel">
                                 <div>
-                                    <h3 style = "text-align: center;">#{adminManager.eventDetailModel.isNew ? "Adicionar Evento" : adminManager.eventDetailModel.name}</h3>
+                                    <h3 style="text-align: center;">#{adminManager.eventDetailModel.isNew ? "Adicionar Evento" : adminManager.eventDetailModel.name}</h3>
                                 </div>
-                                <h:form id = "eventdetailform" style = "margin: 30px 20% 20px 20%">
+                                <h:form id="eventdetailform" style="margin: 30px 20% 20px 20%">
                                     <h:inputText class="hidden" value="#{adminManager.eventDetailModel.tab}" a:value="details" />
 
                                     <div class="row ">
@@ -49,54 +49,61 @@
                                     <h:panelGroup layout="block"> 
                                         <c:if test="#{!adminManager.eventDetailModel.isNew}">
                                             <div class="form-group">
-                                                <h:outputLabel for="internalId">Internal ID:</h:outputLabel>
-                                                <h:inputText id = "internalId" value = "#{adminManager.eventDetailModel.internalId}" a:placeholder="Id Event" class="form-control" disabled="true"></h:inputText>
+                                                <h:outputLabel for="internalId">ID do Evento:</h:outputLabel>
+                                                <h:inputText id="internalId" value="#{adminManager.eventDetailModel.internalId}" a:placeholder="Id Event" class="form-control" disabled="true"></h:inputText>
                                             </div> 
                                         </c:if> 
                                         <c:if test="#{adminManager.eventDetailModel.isNew}">
                                             <div class="form-group">
-                                                <h:outputLabel for="internalId">Internal ID:</h:outputLabel>
-                                                <h:inputText id = "internalId" value = "#{adminManager.eventDetailModel.internalId}" a:placeholder="Id Event" class="form-control"></h:inputText>
+                                                <h:outputLabel for="internalId">ID do Evento:</h:outputLabel>
+                                                <h:inputText id="internalId" value="#{adminManager.eventDetailModel.internalId}" a:placeholder="Id Event" class="form-control"></h:inputText>
                                             </div> 
                                         </c:if>
 
                                         <div class="form-group">
-                                            <h:outputLabel for = "tipo">Tipo de Evento</h:outputLabel>
+                                            <h:outputLabel for="name">Nome do Evento</h:outputLabel>
+                                            <h:inputText id="name" value="#{adminManager.eventDetailModel.name}" a:placeholder="Nome do Evento" class="form-control"></h:inputText>
+                                        </div>
 
-                                            <h:selectOneMenu id = "tipo" value = "#{adminManager.eventDetailModel.eventType}" class="form-control" style = "height: 35px">
+                                        <div class="form-group">
+                                            <h:outputLabel for="tipo">Tipo de Evento</h:outputLabel>
+                                            <h:selectOneMenu id="tipo" value="#{adminManager.eventDetailModel.eventType}" class="form-control" style="height: 35px">
                                                 <f:selectItems value="#{adminManager.eventDetailModel.eventTypes}"/>
                                             </h:selectOneMenu>
                                         </div> 
-                                        
+
                                         <div class="form-group">
-                                                <h:outputLabel for="room">Sala:</h:outputLabel>
-                                                <h:inputText id = "room" value = "#{adminManager.eventDetailModel.room}" a:placeholder="Sala" class="form-control"></h:inputText>
-                                            </div> 
-                                        
+                                            <h:outputLabel for="room">Data e Hora do Evento:</h:outputLabel>
+                                            <h:inputText id="datetime" value="#{adminManager.eventDetailModel.eventDate}" a:placeholder="Data e Hora do Evento" class="form-control datetimepicker"></h:inputText>
+                                        </div> 
+
                                         <div class="form-group">
-                                            <h:outputLabel for = "tipo">UC</h:outputLabel>      
-                                            <h:selectOneMenu id = "uc" value = "#{adminManager.eventDetailModel.uc.idUC}" class="form-control" style = "height: 35px">
-                                                <f:selectItems value="#{adminManager.eventDetailModel.allUCs}" var = "UC" itemValue = "#{UC.idUC}" itemLabel="#{UC.name}"/>
+                                            <h:outputLabel for="room">Duração do Evento:</h:outputLabel>
+                                            <h:inputText id="duration" value="#{adminManager.eventDetailModel.eventDuration}" a:placeholder="Duração do Evento" class="form-control timepicker"></h:inputText>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h:outputLabel for="room">Sala:</h:outputLabel>
+                                            <h:inputText id="room" value="#{adminManager.eventDetailModel.room}" a:placeholder="Sala" class="form-control"></h:inputText>
+                                        </div> 
+
+                                        <div class="form-group">
+                                            <h:outputLabel for="tipo">UC</h:outputLabel>      
+                                            <h:selectOneMenu id="uc" value="#{adminManager.eventDetailModel.uc.idUC}" class="form-control" style="height: 35px">
+                                                <f:selectItems value="#{adminManager.eventDetailModel.allUCs}" var="UC" itemValue="#{UC.idUC}" itemLabel="#{UC.name}"/>
                                             </h:selectOneMenu>
                                         </div> 
 
                                         <div class="form-group">
-                                            <h:outputLabel for = "name">Name</h:outputLabel>
-                                            <h:inputText id = "name" value = "#{adminManager.eventDetailModel.name}" a:placeholder="Name of Event" class="form-control"></h:inputText>
-                                        </div>
-
-
-                                        <div class="form-group">
-                                            <h:outputLabel for = "tipo">Responsavel</h:outputLabel>
-
-                                            <h:selectOneMenu id = "responsavelEvento" value = "#{adminManager.eventDetailModel.manager.idUser}" class="form-control" style = "height: 35px">
-                                                <f:selectItems value = "#{adminManager.eventDetailModel.allManagers}" var = "Manager" itemValue="#{Manager.idUser}" itemLabel="#{Manager.name}"/>
+                                            <h:outputLabel for="tipo">Responsavel</h:outputLabel>
+                                            <h:selectOneMenu id="responsavelEvento" value="#{adminManager.eventDetailModel.manager.idUser}" class="form-control" style="height: 35px">
+                                                <f:selectItems value="#{adminManager.eventDetailModel.allManagers}" var="Manager" itemValue="#{Manager.idUser}" itemLabel="#{Manager.name}"/>
                                             </h:selectOneMenu>
                                         </div>
 
                                         <div>
                                             <h:link outcome='#{redirectManager.GenerateRelativeURL("/admin/events-index")}' class="btn btn-link" >Voltar</h:link>
-                                            <h:commandButton type="submit" value="#{adminManager.eventDetailModel.isNew ? 'Criar' : 'Guardar'}" action = "#{adminManager.saveEvent()}" class="btn btn-success" >
+                                            <h:commandButton type="submit" value="#{adminManager.eventDetailModel.isNew ? 'Criar' : 'Guardar'}" action="#{adminManager.saveEvent()}" class="btn btn-success" >
                                                 <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'details'}"/>
                                             </h:commandButton>
                                         </div>
@@ -109,7 +116,7 @@
                                 <div class="panel">                       
                                     <div class="panel-body"> 
 
-                                        <h:form id="eventstudentsform" class="form-horizontal" a:autocomplete="off" style = "margin: 30px 20% 20px 20%">
+                                        <h:form id="eventstudentsform" class="form-horizontal" a:autocomplete="off" style="margin: 30px 20% 20px 20%">
                                             <div class="form-group">
                                                 <h:inputText class="hidden" value="#{adminManager.eventDetailModel.tab}" a:value="students" />
                                                 <div class="row ">
@@ -118,12 +125,12 @@
                                                     </div>
                                                 </div>   
                                             </div>
-                                            
-                                            <div class="form-group">
-                                                <h:outputLabel for = "tipo">Participantes por ID</h:outputLabel>
 
-                                                <h:inputTextarea value = "#{adminManager.eventDetailModel.stringIdImport}" class="form-control" ></h:inputTextarea>
-                                                <h:commandButton value = "Importar" action = "#{adminManager.importStudentsFromText}" class="btn btn-primary" >
+                                            <div class="form-group">
+                                                <h:outputLabel for="tipo">Participantes por ID</h:outputLabel>
+
+                                                <h:inputTextarea value="#{adminManager.eventDetailModel.stringIdImport}" class="form-control" ></h:inputTextarea>
+                                                <h:commandButton value="Importar" action="#{adminManager.importStudentsFromText}" class="btn btn-primary" >
                                                     <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
                                                 </h:commandButton>
                                             </div>
@@ -131,14 +138,14 @@
 
                                             <div class="form-group">
                                                 <h:panelGroup layout ="block" rendered="#{adminManager.eventDetailModel.allUCs.size() > 0}">
-                                                    <h:outputLabel for = "tipo">Importar alunos de: </h:outputLabel>        
-                                                    <h:selectOneMenu  value = "#{adminManager.eventDetailModel.studentsUCDTO}" class="form-control" style = "height: 35px">
-                                                        <f:selectItems value="#{adminManager.eventDetailModel.allUCs}" var = "UCC" itemLabel="#{UCC.name}" itemValue="#{UCC.idUC}"/>
+                                                    <h:outputLabel for="tipo">Importar alunos de: </h:outputLabel>        
+                                                    <h:selectOneMenu  value="#{adminManager.eventDetailModel.studentsUCDTO}" class="form-control" style="height: 35px">
+                                                        <f:selectItems value="#{adminManager.eventDetailModel.allUCs}" var="UCC" itemLabel="#{UCC.name}" itemValue="#{UCC.idUC}"/>
                                                     </h:selectOneMenu>
-                                                          
-                                                        <h:commandButton value = "Importar Agora"  class="btn btn-primary" action = "#{adminManager.importStudentsFromUC()}">
-                                                            <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
-                                                        </h:commandButton>
+
+                                                    <h:commandButton value="Importar Agora"  class="btn btn-primary" action="#{adminManager.importStudentsFromUC()}">
+                                                        <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
+                                                    </h:commandButton>
                                                 </h:panelGroup> 
                                             </div>
 
@@ -157,9 +164,9 @@
                                                 </h:column>
                                                 <h:column> 
                                                     <f:facet name="header">Acções</f:facet>
-                                                    <h:commandLink value = "Remover"  class="btn btn-primary" actionListener = "#{adminManager.removeStudentFromAttendance}" onclick="return confirm('Conrfirma que pretende retirar este Utilizador ddo Evento?');">
-                                                            <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
-                                                            <f:param name="attendance" id="attendance" value="#{Attendance}" />
+                                                    <h:commandLink value="Remover"  class="btn btn-primary" actionListener="#{adminManager.removeStudentFromAttendance}" onclick="return confirm('Conrfirma que pretende retirar este Utilizador ddo Evento?');">
+                                                        <f:setPropertyActionListener target="#{adminManager.eventDetailModel.tab}" value="#{'students'}"/>
+                                                        <f:param name="attendance" id="attendance" value="#{Attendance}" />
                                                     </h:commandLink>
                                                 </h:column>
 

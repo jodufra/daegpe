@@ -5,8 +5,6 @@
  */
 package pt.ipleiria.dae.gpe.web.models.manager;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -78,12 +76,23 @@ public class EventDetailModel {
         return event.getRoom();
     }
 
-    public Calendar getEventDate() {
-        return event.getEventDate();
+    public String getEventDate() {
+        Calendar eventDate = event.getEventDate();
+        if(eventDate == null) return "";
+        int day = eventDate.get(Calendar.DAY_OF_MONTH);
+        int month = eventDate.get(Calendar.MONTH) + 1;
+        int year = eventDate.get(Calendar.YEAR);
+        int hour = eventDate.get(Calendar.HOUR_OF_DAY);
+        int minute = eventDate.get(Calendar.MINUTE);
+        return day + "/" + month + "/" + year + " " + hour + ":" + minute;
     }
 
-    public Calendar getEventDuration() {
-        return event.getEventDuration();
+    public String getEventDuration() {
+        Calendar eventDuration = event.getEventDuration();
+        if(eventDuration == null) return "";
+        int hour = eventDuration.get(Calendar.HOUR_OF_DAY);
+        int minute = eventDuration.get(Calendar.MINUTE);
+        return hour + ":" + minute;
     }
 
     public boolean isAttendanceActive() {

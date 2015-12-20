@@ -11,8 +11,6 @@ import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.core.EntityValidationError;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import java.util.EnumMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -66,7 +64,7 @@ public class ManagerManager extends AbstractManager {
 
     @PostConstruct
     public void constructModels() {
-        eventIndexModel = new EventIndexModel(eventBean);
+        eventIndexModel = new EventIndexModel(eventBean, userBean);
         eventDetailModel = new EventDetailModel(userBean, attendanceBean);
         eventIndividualListModel = new EventIndividualListModel(eventBean);
         userDetailModel = new UserDetailModel();
@@ -132,6 +130,20 @@ public class ManagerManager extends AbstractManager {
             PresentErrorMessages("eventattendancesform", eve.getEntityValidationErrors(), errorMessages);
         } catch (EntityNotFoundException enf) {
             PresentErrorMessage("eventattendancesform", "Verifique que o Estudante e o Evento ainda existem.");
+        }
+    }
+    
+    public void removeParticipantFromAttendance(ActionEvent event) throws EntityNotFoundException {
+        AttendanceDTO attendance = (AttendanceDTO) ((UIParameter) event.getComponent().findComponent("attendance")).getValue();
+        if (attendance != null) {
+            EventDTO eventAttendance = attendance.getEvent();
+            if (eventAttendance != null) {
+                eventBean.removeStudentFromEvent(attendance);
+                attendanceBean.remove(attendance);
+                PresentErrorMessage("eventstudentsform", "Estudante removido com sucesso");
+            } else {
+                PresentErrorMessage("eventstudentsform", "Impossivel removel o estudante do Evento");
+            }
         }
     }
 

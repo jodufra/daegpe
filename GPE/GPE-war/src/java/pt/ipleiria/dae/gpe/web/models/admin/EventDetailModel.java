@@ -50,7 +50,7 @@ public class EventDetailModel {
     }
 
     public void setEvent(EventDTO event) {
-        
+
         if (event != null && !event.isNew()) {
             this.idEvent = event.getIdEvent();
             this.internalId = event.getInternalId();
@@ -97,8 +97,8 @@ public class EventDetailModel {
         EventDTO eventDTO = this.provideEventDTO();
         return eventBean.findStudentsAttendance(eventDTO);
     }
-    
-    public List<AttendanceDTO> getStudentAttendancesDTO(){
+
+    public List<AttendanceDTO> getStudentAttendancesDTO() {
         EventDTO eventDTO = this.provideEventDTO();
         return eventBean.findStudentsAttendanceDTO(eventDTO);
     }
@@ -143,14 +143,42 @@ public class EventDetailModel {
         this.room = room;
     }
 
-    public Calendar getEventDate() {
-        return eventDate;
+    public String getEventDate() {
+        if(eventDate == null) return "";
+        int day = eventDate.get(Calendar.DAY_OF_MONTH);
+        int month = eventDate.get(Calendar.MONTH) + 1;
+        int year = eventDate.get(Calendar.YEAR);
+        int hour = eventDate.get(Calendar.HOUR_OF_DAY);
+        int minute = eventDate.get(Calendar.MINUTE);
+        return day + "/" + month + "/" + year + " " + hour + ":" + minute;
     }
 
-    public Calendar getEventDuration() {
-        return eventDuration;
+    public void setEventDate(String eventDate) {
+        String[] pieces = eventDate.split(" ");
+        String[] vals = pieces[0].split("/");
+        int day = Integer.valueOf(vals[0]);
+        int month = Integer.valueOf(vals[1]) - 1;
+        int year = Integer.valueOf(vals[2]);
+        vals = pieces[1].split(":");
+        int hour = Integer.valueOf(vals[0]);
+        int minute = Integer.valueOf(vals[1]);
+        this.eventDate = new GregorianCalendar(year, month, day, hour, minute);
     }
-    
+
+    public String getEventDuration() {
+        if(eventDuration == null) return "";
+        int hour = eventDuration.get(Calendar.HOUR_OF_DAY);
+        int minute = eventDuration.get(Calendar.MINUTE);
+        return hour + ":" + minute;
+    }
+
+    public void setEventDuration(String eventDuration) {
+        String[] vals = eventDuration.split(":");
+        int hour = Integer.valueOf(vals[0]);
+        int minute = Integer.valueOf(vals[1]);
+        this.eventDuration = new GregorianCalendar(0, 0, 0, hour, minute);
+    }
+
     public boolean isAttendanceActive() {
         return attendanceActive;
     }
@@ -218,19 +246,19 @@ public class EventDetailModel {
     public String getTab() {
         return tab;
     }
-    
+
     public void setTab(String tab) {
         this.tab = tab;
     }
-    public EventType[] getEventTypes()
-    {
+
+    public EventType[] getEventTypes() {
         return EventType.values();
     }
-    
+
     public Integer getStudentsUCDTO() {
         return studentsUCDTO;
     }
-    
+
     public void setStudentsUCDTO(Integer studentsUCDTO) {
         this.studentsUCDTO = studentsUCDTO;
     }
@@ -242,6 +270,5 @@ public class EventDetailModel {
     public void setStringIdImport(String stringIdImport) {
         this.stringIdImport = stringIdImport;
     }
-    
-    
+
 }

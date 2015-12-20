@@ -6,12 +6,16 @@
 package pt.ipleiria.dae.gpe.web.models.manager;
 
 import java.util.List;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import pt.ipleiria.dae.gpe.lib.beans.EventBean;
+import pt.ipleiria.dae.gpe.lib.beans.UserBean;
 import pt.ipleiria.dae.gpe.lib.dtos.EventDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.beans.query.order.EventOrderBy;
 import pt.ipleiria.dae.gpe.lib.beans.query.options.ManagerEventFindOptions;
+import pt.ipleiria.dae.gpe.lib.exceptions.EntityNotFoundException;
 
 /**
  *
@@ -20,6 +24,7 @@ import pt.ipleiria.dae.gpe.lib.beans.query.options.ManagerEventFindOptions;
 public class EventIndexModel {
 
     private final EventBean eventBean;
+    private final UserBean userBean;
 
     public int pageId;
     public final int pageSize = 20;
@@ -29,8 +34,9 @@ public class EventIndexModel {
     public long count;
     public int pagesCount;
 
-    public EventIndexModel(EventBean eventBean) {
+    public EventIndexModel(EventBean eventBean, UserBean userBean) {
         this.eventBean = eventBean;
+        this.userBean = userBean;
         this.pageId = 1;
         this.orderBy = EventOrderBy.NameAsc;
         this.search = "";
@@ -128,8 +134,13 @@ public class EventIndexModel {
         return pagesCount;
     }
 
-    public List<EventDTO> getEvents() {
-        ManagerEventFindOptions options = new ManagerEventFindOptions(pageId, pageSize, orderBy, (UserDTO) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user"), search);
+    public List<EventDTO> getEvents() throws EntityNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        
+        UserDTO user = userBean.findByUsername(request.getUserPrincipal().getName());
+        ManagerEventFindOptions options = new ManagerEventFindOptions(pageId, pageSize, orderBy, user, search);
         List<EventDTO> list = eventBean.findEventsManager(options);
         this.count = options.count;
         this.pagesCount = (int) Math.ceil((double) count / (double) pageSize);

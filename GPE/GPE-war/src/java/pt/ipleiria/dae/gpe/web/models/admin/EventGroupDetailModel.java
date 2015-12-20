@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import pt.ipleiria.dae.gpe.lib.beans.UCBean;
 import pt.ipleiria.dae.gpe.lib.beans.UserBean;
-import pt.ipleiria.dae.gpe.lib.dtos.ManagerDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UCDTO;
 import pt.ipleiria.dae.gpe.lib.dtos.UserDTO;
 import pt.ipleiria.dae.gpe.lib.entities.EventGroup;
@@ -261,7 +260,7 @@ public class EventGroupDetailModel {
         while (iterator.hasNext()) {
             sb.append(iterator.next());
             if (iterator.hasNext()) {
-                sb.append(";");
+                sb.append(",");
             }
         }
         return sb.toString();
@@ -269,7 +268,7 @@ public class EventGroupDetailModel {
 
     public void setIgnoredWeeks(String ignoredWeeks) {
         this.ignoredWeeks.clear();
-        for (String week : ignoredWeeks.split(";")) {
+        for (String week : ignoredWeeks.split(",")) {
             this.ignoredWeeks.add(Integer.parseInt(week));
         }
     }
